@@ -13,3 +13,5 @@
 
 Esto lo mostraremos el proximo lunes despues de semana santa al profesor para ver si tenemos vida.
 Tenemos que estar pendientes de contar los nodos expandidos y el tiempo usado para resolver el problema.
+
+=== Para compilar: gcc pruebas.c state.c -o pruebas ===
