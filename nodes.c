@@ -133,19 +133,22 @@ node_list succ(node n){
 	
 	node_list lista;
 	empty_list(&lista);
-	state pt;
-	node pt_n;
+	state* pt = (state*) malloc(sizeof (state));
+	node* pt_n = (node*) malloc(sizeof(node));
 	
+	state* pt1 = (state*) malloc(sizeof(state));
+	node* pt_n1 = (node*) malloc(sizeof(node));
+
 	switch( n.node_state->zero_index ){
 	
 	case 0:
-		pt = a_derecha(n.node_state);
-		pt_n = make_node(&n, new_action(DERECHA,1) , &pt);
-		push_front(&lista, &pt_n );
-		pt = a_abajo(n.node_state);
-		pt_n = make_node(&n, new_action(ABAJO,1) , &pt);
-		push_front(&lista, &pt_n);
-		break;
+	    *pt = a_derecha(n.node_state);
+	    *pt_n = make_node(&n, new_action(DERECHA,1) , pt);
+	    push_front(&lista, pt_n );
+	    *pt1 = a_abajo(n.node_state);
+	    *pt_n1 = make_node(&n, new_action(ABAJO,1) , pt1);
+	    push_front(&lista, pt_n1);
+	    break;
 	}
 	
 	return lista;

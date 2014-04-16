@@ -15,6 +15,7 @@ int main(){
     
     //print_action(act);
 
+
    /* Probando la lista */ 
     node_list nuevo; 
     empty_list(&nuevo);
@@ -25,21 +26,21 @@ int main(){
 	//printf("%d", fru.zero_index);
 	
 	print_state(&fru);
-	//node_list lista = succ(make_root_node(&fru));
+	node_list lista = succ(make_root_node(&fru));
 	
 	node ini_node = make_root_node(&fru);
 	state pt = a_derecha(&fru);
 	node pt_n = make_node(&ini_node, new_action(DERECHA,1) , &pt);
 	print_state(pt_n.node_state);
 	
-	//node_box* ptr = lista.first_elem;
-	//print_state(ptr->node->node_state);
+	node_box* ptr = lista.first_elem;
+	print_state(ptr->node->node_state);
 	
-	/*
+	
 	while ( ptr != NULL ){
 		print_state(ptr->node->node_state);
 		ptr = ptr->next;
-	}*/
+	}
 	
 }
 

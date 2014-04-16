@@ -17,6 +17,8 @@
  */
 
 #include <stdint.h>
+
+typedef enum { false, true } bool;
  
 enum posible_actions {
 	ARRIBA,
@@ -28,12 +30,13 @@ enum posible_actions {
 typedef struct{
 	enum posible_actions current_action;
 	int cost;
+        bool closed;
 } action; 
 
 typedef struct{
     /* Atributos de estado.  */
     int_fast64_t current_state;
-	char zero_index;
+    char zero_index;
 } state; /* Este seria el estado para el 15-puzzle  */
 
 state init(); /* Crea estado inicial  */

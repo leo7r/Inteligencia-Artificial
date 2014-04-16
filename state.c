@@ -80,11 +80,11 @@ void print_action( action a ){
 }
 
 action new_action(enum posible_actions na, int c){
-	action act;
+    action act;
     act.current_action = na;
     act.cost = c;
 	
-	return act;
+    return act;
 }
 
 char find_zero_index(state st){
