@@ -27,7 +27,7 @@ typedef struct{
 
 typedef struct{
     node* node;
-    struct node_box *next;
+    struct node_box* next;
 } node_box;
 
 typedef struct{
@@ -38,11 +38,11 @@ typedef struct{
 
 node make_root_node(state*); /* Crea la raiz del arbol de busqueda */
 
-node make_node(node*,action*,state*); /* Construye un nodo que representa al estado s que se genera a partir de n con la accion s */
+node make_node(node*,action,state*); /* Construye un nodo que representa al estado s que se genera a partir de n con la accion s */
 
 node_list extract_solution(node); /* Retorna el camino de la raiz a n */
 
-node_list succ(state); /* Retorna una lista de nodos. */
+node_list succ(node); /* Retorna la lista de nodos sucesores. */
 
 /* Funciones de la lista */
 

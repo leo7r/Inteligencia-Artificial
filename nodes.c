@@ -104,12 +104,12 @@ node make_root_node(state* s){
 /**
  * Construye un nodo que representa al estado s que se genera a partir de n con la accion s
  */
-node make_node(node* parent,action* a,state* s){
+node make_node(node* parent,action a,state* s){
     node new_node;
     new_node.parent = (struct node*) parent;
     new_node.node_state = s; 
-    new_node.a = a;
-    new_node.cost = a->cost + parent->cost; 
+    new_node.a = &a;
+    new_node.cost = a.cost + parent->cost; 
     return new_node;
 }
 /**
@@ -127,6 +127,26 @@ node_list extract_solution(node n){
 }
 
 /**
- * Retorna una lista de nodos. 
+ * Retorna la lista de sucesores de un nodo. 
  */
-node_list succ(state s){}
+node_list succ(node n){
+	
+	node_list lista;
+	empty_list(&lista);
+	state pt;
+	node pt_n;
+	
+	switch( n.node_state->zero_index ){
+	
+	case 0:
+		pt = a_derecha(n.node_state);
+		pt_n = make_node(&n, new_action(DERECHA,1) , &pt);
+		push_front(&lista, &pt_n );
+		pt = a_abajo(n.node_state);
+		pt_n = make_node(&n, new_action(ABAJO,1) , &pt);
+		push_front(&lista, &pt_n);
+		break;
+	}
+	
+	return lista;
+}
