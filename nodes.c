@@ -133,7 +133,7 @@ node_list succ(node n){
 	
 	node_list lista;
 	empty_list(&lista);
-	state* pt = (state*) malloc(sizeof (state));
+	state* pt = (state*) malloc(sizeof (state)); // Falta revisar si esta haciendo el malloc bien
 	node* pt_n = (node*) malloc(sizeof(node));
 	
 	state* pt1 = (state*) malloc(sizeof(state));

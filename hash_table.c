@@ -1,12 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  hash_table.h
+ *       Filename:  hash_table.c
  *
- *    Description:  Tabla de hash. Todavia no hay nada
+ *    Description:  
  *
  *        Version:  1.0
- *        Created:  07/05/14 19:09:56
+ *        Created:  16/04/14 18:53:28
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -16,4 +16,14 @@
  * =====================================================================================
  */
 
-long long fact(int); /* Impelementacion sencilla de factorial */
+long long fact(int n){
+    long long a = 1;
+    int b = 1;
+    while (b != n+1){
+        a = a * b;
+        b++;
+    }
+    return a;
+}
+
+
