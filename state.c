@@ -19,17 +19,26 @@
 #include "state.h"
 #include <stdio.h>
  
-/* Crea estado inicial  */
-state init( ){
-	state st;
-	st.current_state = 0x0b48765c3219deaf; // Esto debe ser un generador de estados iniciales validos ( quiza lector de archivos ).
-	st.zero_index = find_zero_index(st);
+/* Crea estado inicial 
+*(HAY QUE DECIDIR DONDE HACER LOS MALLOCS, me parece que deberian estar en init y devolver un state*) 
+*/ 
+state* init( ){
+	state* st = (state*) malloc(sizeof (state));
+	st->current_state = 0xb487f65c3219dea0; // Esto debe ser un generador de estados iniciales validos ( quiza lector de archivos ).
+	st->zero_index = find_zero_index(st);
 	return st;
 } 
 
+state* make_state(int_fast64_t st , char zero_index){
+	state* new_state = (state*) malloc(sizeof (state));
+	new_state->current_state = st;
+	new_state->zero_index = zero_index;
+	return new_state;
+}
+
 /* Chequea si estado es goal */
-int is_goal( state st ){
-	return st.current_state == 0x0123456789abcdef;
+int is_goal( state* st ){
+	return st->current_state == 0x0123456789abcdef;
 }
 
 /*succ(state);*/ /* Retorna una lista de pares de <estado sucesivo, accione> (falta el tipo lista y par). */
@@ -62,7 +71,7 @@ void print_state(state* st ){
 
 void print_action( action a ){
 	
-	switch( a.current_action ){
+	switch( a ){
 	
 	case ARRIBA:
 		printf("Arriba");
@@ -78,7 +87,7 @@ void print_action( action a ){
 		break;
 	}
 }
-
+/*
 action new_action(enum posible_actions na, int c){
     action act;
     act.current_action = na;
@@ -86,12 +95,12 @@ action new_action(enum posible_actions na, int c){
 	
     return act;
 }
-
-char find_zero_index(state st){
+*/
+char find_zero_index(state* st){
 	
-	long long int * object = &st.current_state;
+	long long int * object = &st->current_state;
 	
-	size_t size = sizeof st.current_state;
+	size_t size = sizeof st->current_state;
 	int i = (int) size-1;
 	char count = 0;
 		
@@ -115,58 +124,38 @@ char find_zero_index(state st){
   
 }
 
-state a_derecha( state* s ){
+state* a_derecha( state* s ){
 	
 	int_fast64_t temp = s->current_state;
-	
 	int_fast64_t mask = 15ULL << 4 * ( 14 - s->zero_index );
 	temp = (((temp & mask) << 4) | temp) & ~mask;
 	
-	state ret;
-	ret.current_state = temp;
-	ret.zero_index = s->zero_index+1;
-	
-	return ret;
+	return make_state(temp,s->zero_index+1);
 }
 
-state a_izquierda( state* s ){
+state* a_izquierda( state* s ){
 	
 	int_fast64_t temp = s->current_state;
-	
 	int_fast64_t mask = 15ULL << 4 * ( 16 - s->zero_index );
 	temp = (((temp & mask) >> 4) | temp) & ~mask;
 	
-	state ret;
-	ret.current_state = temp;
-	ret.zero_index = s->zero_index-1;
-	
-	return ret;
+	return make_state(temp,s->zero_index-1);
 }
 
-state a_arriba( state* s ){
+state* a_arriba( state* s ){
 
 	int_fast64_t temp = s->current_state;
-	
 	int_fast64_t mask = 15ULL << 4 * ( 19 - s->zero_index );
 	temp = (((temp & mask) >> 16) | temp) & ~mask;
 	
-	state ret;
-	ret.current_state = temp;
-	ret.zero_index = s->zero_index-4;
-	
-	return ret;
+	return make_state(temp,s->zero_index-4);
 }
 
-state a_abajo( state* s ){
+state* a_abajo( state* s ){
 
 	int_fast64_t temp = s->current_state;
-	
 	int_fast64_t mask = 15ULL << 4 * ( 11 - s->zero_index );
 	temp = (((temp & mask) << 16) | temp) & ~mask;
 	
-	state ret;
-	ret.current_state = temp;
-	ret.zero_index = s->zero_index+4;
-	
-	return ret;
+	return make_state(temp,s->zero_index+4);
 }

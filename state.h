@@ -20,18 +20,21 @@
 
 typedef enum { false, true } bool;
  
-enum posible_actions {
+typedef enum {
 	ARRIBA,
 	DERECHA,
 	ABAJO,
-	IZQUIERDA
-};
+	IZQUIERDA,
+	ROOT
+} action;
  
+/*
 typedef struct{
 	enum posible_actions current_action;
 	int cost;
         bool closed;
 } action; 
+*/
 
 typedef struct{
     /* Atributos de estado.  */
@@ -39,9 +42,11 @@ typedef struct{
     char zero_index;
 } state; /* Este seria el estado para el 15-puzzle  */
 
-state init(); /* Crea estado inicial  */
+state* init(); /* Crea estado inicial  */
 
-int is_goal(state); /* Chequea si estado es goal */
+state* make_state(int_fast64_t , char); /*aca se debera chequear si ya existe el estado en el hash*/
+
+int is_goal(state*); /* Chequea si estado es goal */
 
 /* Imprime una representacion de un estado */
 void print_state(state*);
@@ -49,11 +54,11 @@ void print_state(state*);
 /* Imprime la representacion de una accion */
 void print_action(action);
 
-action new_action(enum posible_actions, int);
+//action new_action(enum posible_actions, int);
 
-char find_zero_index(state);
+char find_zero_index(state*);
 
-state a_derecha(state*);
-state a_izquierda(state*);
-state a_arriba(state*);
-state a_abajo(state*);
+state* a_derecha(state*);
+state* a_izquierda(state*);
+state* a_arriba(state*);
+state* a_abajo(state*);
