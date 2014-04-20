@@ -32,10 +32,12 @@ int is_empty(node_list* list){
 /**
  * Inicializa una lista de nodos en vacio. 
  */
-void empty_list(node_list* list){
+node_list* empty_list(){
+	node_list* list = (node_list*) malloc(sizeof(node_list));
     list->first_elem = NULL;
     list->last_elem = NULL;
     list->current_elem = NULL;
+	return list;
 }
 
 /**
@@ -59,7 +61,7 @@ void push_back(node_list* list, node* elem){
 }
 
 /**
- * Coloca el elemento elem al frente de la cola. 
+ * Coloca el elemento elem al frente de la cola. (HAY QUE DECIDIR DONDE HACER LOS MALLOCS, me parece que deberian estar en make_node)
  */
 void push_front(node_list* list, node* elem){
     node_box* new_elem = (node_box*) malloc(sizeof(node_box));
@@ -67,7 +69,9 @@ void push_front(node_list* list, node* elem){
         fprintf (stderr, "Problemas en la asignacion de memoria; %s\n", strerror (errno));
         exit (EXIT_FAILURE);
     }
+	
     new_elem->node = elem;
+    new_elem->next = NULL;
     if (is_empty(list)){
         list->last_elem = new_elem;
         list->first_elem = new_elem;
@@ -91,63 +95,110 @@ node* next(node_list* list){
  * Crea la raiz del arbol de busqueda 
  * La funcion crea un nuevo nodo y lo retorna. Tal vez es posible optimizar si se
  * asigna memoria dinamicamente y retorna el apuntador. Aunque no lo creo.
+ * (ACA DEBERIA HABER UN MALLOC TAMBIEN Y DEVOLVER node*)
  */
-node make_root_node(state* s){
-    node new_node;
-    new_node.parent = NULL;
-    new_node.node_state = s; 
-    new_node.a = NULL;
-    new_node.cost = 0;
-    return new_node;
+node* make_root_node(state* s){
+
+	node* root_node = (node*) malloc(sizeof(node));
+    root_node->parent = NULL;
+    root_node->node_state = s; 
+    root_node->a = ROOT;
+    root_node->cost = 0;
+    return root_node;
 }
 
 /**
- * Construye un nodo que representa al estado s que se genera a partir de n con la accion s
+ * Construye un nodo que representa al estado s que se genera a partir de n con la accion s () 
+ *(HAY QUE DECIDIR DONDE HACER LOS MALLOCS, me parece que deberian estar aca y devolver un node*)
  */
-node make_node(node* parent,action a,state* s){
-    node new_node;
-    new_node.parent = (struct node*) parent;
-    new_node.node_state = s; 
-    new_node.a = &a;
-    new_node.cost = a.cost + parent->cost; 
+node* make_node(node* parent,action a,state* s){
+	node* new_node = (node*) malloc(sizeof(node));
+    new_node->parent = parent;
+    new_node->node_state = s; 
+    new_node->a = a;
+    new_node->cost = 1 + parent->cost; 
     return new_node;
 }
 /**
  * Retorna el camino de la raiz a n
  */
-node_list extract_solution(node n){
-    node_list result;
-    node *tmp = &n;
-    empty_list(&result);
+node_list* extract_solution(node* n){
+    node_list* result = empty_list();
+    node* tmp = n;
+    
     do{
-        push_front(&result,&n);
+        push_front(result,n);
         tmp = (node*) tmp->parent;
     }  while(tmp != NULL);
+	
     return result;
 }
 
 /**
- * Retorna la lista de sucesores de un nodo. 
+ * Retorna la lista de sucesores de un nodo. (retornar node_list* mejor ? ) 
  */
-node_list succ(node n){
+node_list* succ(node* n){
 	
-	node_list lista;
-	empty_list(&lista);
-	state* pt = (state*) malloc(sizeof (state));
-	node* pt_n = (node*) malloc(sizeof(node));
-	
-	state* pt1 = (state*) malloc(sizeof(state));
-	node* pt_n1 = (node*) malloc(sizeof(node));
+	node_list* lista = empty_list();
 
-	switch( n.node_state->zero_index ){
+	switch( n->node_state->zero_index ){
 	
 	case 0:
-	    *pt = a_derecha(n.node_state);
-	    *pt_n = make_node(&n, new_action(DERECHA,1) , pt);
-	    push_front(&lista, pt_n );
-	    *pt1 = a_abajo(n.node_state);
-	    *pt_n1 = make_node(&n, new_action(ABAJO,1) , pt1);
-	    push_front(&lista, pt_n1);
+	    push_front(lista, make_node(n, DERECHA , a_derecha(n->node_state)));
+	    push_front(lista, make_node(n, ABAJO , a_abajo(n->node_state)));
+	    break;
+		
+	case 1:
+	case 2:
+	    push_front(lista, make_node(n, DERECHA , a_derecha(n->node_state)));
+	    push_front(lista, make_node(n, ABAJO , a_abajo(n->node_state)));
+		push_front(lista, make_node(n, IZQUIERDA , a_izquierda(n->node_state)));
+	    break;
+		
+	case 3:
+	    push_front(lista, make_node(n, ABAJO , a_abajo(n->node_state)));
+		push_front(lista, make_node(n, IZQUIERDA , a_izquierda(n->node_state)));
+	    break;
+		
+	case 4:
+	case 8:
+	    push_front(lista, make_node(n, DERECHA , a_derecha(n->node_state)));
+	    push_front(lista, make_node(n, ABAJO , a_abajo(n->node_state)));
+	    push_front(lista, make_node(n, ARRIBA , a_arriba(n->node_state)));
+	    break;
+		
+	case 5:
+	case 6:
+	case 9:
+	case 10:
+	    push_front(lista, make_node(n, DERECHA , a_derecha(n->node_state)));
+	    push_front(lista, make_node(n, ABAJO , a_abajo(n->node_state)));
+		push_front(lista, make_node(n, IZQUIERDA , a_izquierda(n->node_state)));
+	    push_front(lista, make_node(n, ARRIBA , a_arriba(n->node_state)));
+	    break;
+		
+	case 7:
+	case 11:
+	    push_front(lista, make_node(n, ABAJO , a_abajo(n->node_state)));
+		push_front(lista, make_node(n, IZQUIERDA , a_izquierda(n->node_state)));
+	    push_front(lista, make_node(n, ARRIBA , a_arriba(n->node_state)));
+	    break;
+		
+	case 12:
+	    push_front(lista, make_node(n, DERECHA , a_derecha(n->node_state)));
+	    push_front(lista, make_node(n, ARRIBA , a_arriba(n->node_state)));
+	    break;
+		
+	case 13:
+	case 14:
+	    push_front(lista, make_node(n, DERECHA , a_derecha(n->node_state)));
+		push_front(lista, make_node(n, IZQUIERDA , a_izquierda(n->node_state)));
+	    push_front(lista, make_node(n, ARRIBA , a_arriba(n->node_state)));
+	    break;
+		
+	case 15:
+		push_front(lista, make_node(n, IZQUIERDA , a_izquierda(n->node_state)));
+	    push_front(lista, make_node(n, ARRIBA , a_arriba(n->node_state)));
 	    break;
 	}
 	
