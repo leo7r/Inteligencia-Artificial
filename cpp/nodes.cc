@@ -25,7 +25,7 @@ Node::Node( Node* p , action acc , State16* st ):parent(p),node_state(st),a(acc)
 }
 
 Node::Node( State16* st ):node_state(st){
-	parent = NULL;
+	parent = 0;
 	a = ROOT;
 	cost = 0;
 }
@@ -40,7 +40,7 @@ std::list<Node*> Node::extract_solution(){
     do{
 		result.push_front(tmp);
         tmp = (Node*) tmp->parent;
-    }  while(tmp != NULL);
+    }  while(tmp != 0);
 	
     return result;
 }
