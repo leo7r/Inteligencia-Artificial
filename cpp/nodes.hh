@@ -20,12 +20,12 @@
 #include <list>
 
 class Node {
-	public:
+    public:
 		Node* parent;
 		State16* node_state;
 		action a;
 		int cost;
-		
+	
 		Node( Node* , action , State16* );
 		Node( State16* );
 		~Node();
