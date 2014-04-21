@@ -45,7 +45,7 @@ priority_queue* make_pq(){
 /**
  * Devuelve el elemento minimo.
  */
-int find_min(priority_queue pq){
+char find_min(priority_queue pq){
     return pq.min->elem;
 }
 /**
@@ -101,6 +101,7 @@ void insert(priority_queue* p, char elem){
  * Remueve el elemento de la lista de roots.
  */
 void remove_from_rootl(heap_box* min){
+    if (min == NULL) return;
     heap_box* min_left = (heap_box*) min->left;
     heap_box* min_right = (heap_box*) min->right;
     min_left->right = (struct heap_box*) min_right;
@@ -114,7 +115,11 @@ void remove_from_rootl(heap_box* min){
 void link(heap_box* w, heap_box* v){
     w->parent = (struct heap_box*) v;
     heap_box* children = (heap_box*) v->children;
-    combine_queue(w,children);
+    if (children != NULL) {
+        combine_queue(children,w);
+    } else {
+        v->children = (struct heap_box*) w;
+    }
 }
 /**
  * Cambia dos elementos
@@ -127,15 +132,17 @@ void swap(heap_box* v, heap_box* w){
 /**
  * Enlaza duplicados.
  */
-void linkdupes(heap_box* v, heap_box** rank_array){
+void linkdupes(heap_box* v, heap_box** rank_array, long int *s){
     heap_box *w = rank_array[v->rank];
     while (w != NULL){
         rank_array[v->rank] = NULL;
         if (w->elem <= v->elem) swap(v,w);
         remove_from_rootl(w);
         link(w,v);
+        w = rank_array[v->rank];
     }
     rank_array[v->rank] = v;
+    *s = *s-1;
 }
 
 /**
@@ -155,15 +162,27 @@ void cleanup(heap_box* c,priority_queue* p){
     }
     // Para toda caja de la lista le quito su padre.
     heap_box* start = c;
-    do {
+    long int * s =(long int*) malloc(sizeof(long int));
+    *s = size+1;
+    while (*s != 0 && c != NULL){
         c->parent = NULL;
         if (p->min->elem > c->elem) p->min = c;
-        linkdupes(c,rank_array);
+        linkdupes(c,rank_array, s);
         c = (heap_box*) c->right;
-    } while ( c!= start);
+    }
 }
 
-
+void delete_from_rootl(heap_box* min){
+    if (min == NULL) return;
+    heap_box* min_left = (heap_box*) min->left;
+    heap_box* min_right = (heap_box*) min->right;
+    min_left->right = (struct heap_box*) min_right;
+    min_right->left = (struct heap_box*) min_left;
+    min->left = NULL;
+    min->right = NULL;
+    min->children = NULL;
+    free(min);
+}
 
 /**
  * Elimina el elemento minimo de la cola y lo retorna.
@@ -176,15 +195,31 @@ char* delete_min(priority_queue* p){
 
     heap_box* min = p->min;
     heap_box* min_left = (heap_box*) min->left;
-    remove_from_rootl(min);
     heap_box* children = (heap_box*) min->children;
+    delete_from_rootl(min);
+    p->nodes--;
     combine_queue(children,min_left);
-    cleanup(children,p);
-    min->left = NULL;
-    min->right = NULL;
-    min->children = NULL;
-    free(min);
+    cleanup(min_left,p); // Aqui todo esta perdido
     return result;
+}
+
+void showl(heap_box* min){
+    if (min == NULL) return;
+    heap_box* start = (heap_box*) min;
+    do{
+        printf("%c \n",min->elem);
+        if (min->children != NULL){
+            printf("hijos: \n");
+            showl((heap_box*)min->children);
+        }
+        min =(heap_box*) min->right;
+    } while (min != start);
+}
+
+void show(priority_queue* p){
+    printf("cola de prioridad:\n");
+    heap_box* min =  p->min;   
+    showl(min);
 }
 
 void main(){
@@ -193,9 +228,10 @@ void main(){
     insert(prueba,'s');
     insert(prueba,'d');
     insert(prueba,'a');
-    char* result; 
-    do{
+    char* result = malloc(sizeof(char)); 
+    while (result != NULL && prueba->nodes != 0){
+        show(prueba);
         result = delete_min(prueba);
-        printf("%c\n",*result);
-    }while (result != NULL);
+        //printf("%c\n",*result);
+    }
 }
