@@ -24,7 +24,7 @@
 */ 
 state* init( ){
 	state* st = (state*) malloc(sizeof (state));
-	st->current_state = 0xb487f65c3219dea0; // Esto debe ser un generador de estados iniciales validos ( quiza lector de archivos ).
+	st->current_state = 0x1203456789abcdef; // Esto debe ser un generador de estados iniciales validos ( quiza lector de archivos ).
 	st->zero_index = find_zero_index(st);
 	return st;
 } 

@@ -138,6 +138,10 @@ node_list* extract_solution(node* n){
  * Retorna la lista de sucesores de un nodo. (retornar node_list* mejor ? ) 
  */
 node_list* succ(node* n){
+<<<<<<< HEAD
+=======
+
+>>>>>>> cbb63749d07771fdc0eac3c9843f2de3de059dbc
 	
 	node_list* lista = empty_list();
 

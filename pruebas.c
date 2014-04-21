@@ -1,9 +1,10 @@
-#include "nodes.h"
 #include "windows.h"
 #include <stdio.h>
+#include "heuristic.h"
 
 int main(){
     state* fru = init();
+	printf("%d\n",dist_manhattan(fru));
     //print_state(fru);
 	
 	
@@ -14,15 +15,6 @@ int main(){
 	//int pos = find_zero_index(fru);
 	//printf("%d", fru.zero_index);
 	
-	print_state(fru);
-	node_list* lista = succ(make_root_node(fru));
-	node_box* ptr = lista->first_elem;
-	
-	while ( ptr != NULL ){
-		print_state(ptr->node->node_state);
-		//Sleep(1000);
-		ptr = ptr->next;
-	}
 	
 }
 
