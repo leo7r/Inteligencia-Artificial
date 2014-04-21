@@ -137,16 +137,7 @@ node_list* extract_solution(node* n){
 /**
  * Retorna la lista de sucesores de un nodo. (retornar node_list* mejor ? ) 
  */
-<<<<<<< HEAD
-node_list succ(node n){
-	
-	node_list lista;
-	empty_list(&lista);
-	state* pt = (state*) malloc(sizeof (state)); // Falta revisar si esta haciendo el malloc bien
-	node* pt_n = (node*) malloc(sizeof(node));
-=======
 node_list* succ(node* n){
->>>>>>> 47d6f0d4d210c9c92d802fccfbc09701c9e01461
 	
 	node_list* lista = empty_list();
 
