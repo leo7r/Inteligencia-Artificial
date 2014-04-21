@@ -53,7 +53,7 @@ bool State16::is_goal(){
 
 void State16::print_state(){
     
-    long int * object = &current_state;
+    long int * object = &current_state; // pendiente aca
 	
     size_t size = sizeof current_state;
     size_t i = size-1;
