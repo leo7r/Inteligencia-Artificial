@@ -1,6 +1,6 @@
 all: pruebas
 
-pruebas: nodes.o state.o pruebas.o heuristic.o
+pruebas: state.o nodes.o heuristic pruebas.o 
 
 	g++ -g -o pruebas state.o nodes.o heuristic.o pruebas.o
 

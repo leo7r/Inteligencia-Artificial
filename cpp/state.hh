@@ -28,6 +28,16 @@ typedef enum {
  
 void print_action(action);
 
+class State{
+    virtual bool is_goal() = 0;
+    virtual void print_state() = 0;
+    virtual char find_zero_index() = 0;
+    virtual State* a_derecha() = 0;
+    virtual State* a_izquierda() = 0;
+    virtual State* a_arriba() = 0;
+    virtual State* a_abajo() = 0;
+};
+
 class State16{
 private:
     int_fast64_t current_state;
