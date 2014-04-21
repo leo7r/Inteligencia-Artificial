@@ -1,24 +1,24 @@
 all: pruebas
 
-pruebas: nodes.o state.o pruebas.o heuristic.o
+pruebas: state.o nodes.o heuristic.o pruebas.o 
 
-	gcc -g -o pruebas state.o nodes.o heuristic.o pruebas.o
+	g++ -g -o pruebas state.o nodes.o heuristic.o pruebas.o
 
-nodes.o: state.h nodes.h nodes.c
+nodes.o: state.hh nodes.hh nodes.cc
 
-	gcc -g -c nodes.c
+	g++ -g -c nodes.cc
 
-state.o: state.h state.c
+state.o: state.hh state.cc
 
-	gcc -g -c state.c 
+	g++ -g -c state.cc 
 	
-heuristic.o: state.h heuristic.h heuristic.c
+heuristic.o: state.hh heuristic.hh heuristic.cc
 
-	gcc -g -c heuristic.c 
+	g++ -g -c heuristic.cc
 
-pruebas.o: state.h nodes.h pruebas.c
+pruebas.o: state.hh nodes.hh pruebas.cc
 
-	gcc -g -c pruebas.c
+	g++ -g -c pruebas.cc
 
 clean:
 
