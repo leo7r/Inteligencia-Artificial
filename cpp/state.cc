@@ -53,7 +53,7 @@ bool State16::is_goal(){
 
 void State16::print_state(){
     
-    long int * object = &current_state; // pendiente aca
+    int_fast64_t * object = &current_state; // pendiente aca
 	
     size_t size = sizeof current_state;
     size_t i = size-1;
@@ -80,7 +80,7 @@ void State16::print_state(){
 
 char State16::find_zero_index(){
 
-    long int * object = &current_state; //pendiente aca
+    int_fast64_t * object = &current_state; //pendiente aca
 	
     size_t size = sizeof current_state;
     int i = (int) size-1;

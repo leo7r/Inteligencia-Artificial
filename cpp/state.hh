@@ -39,10 +39,9 @@ class State{
 };
 
 class State16{
-private:
+public:
     int_fast64_t current_state;
     char zero_index;
-public:
     State16(); 
     State16(int_fast64_t,char);
     ~State16();

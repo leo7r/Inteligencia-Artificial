@@ -17,40 +17,19 @@
  */
 
 #include "state.hh"
+#include <list>
 
 class Node {
 	public:
 		Node* parent;
 		State16* node_state;
-		action action;
+		action a;
 		int cost;
 		
 		Node( Node* , action , State16* );
 		Node( State16* );
 		~Node();
-		Node_list* extract_solution();
-		Node_list* succ();
-}
+		std::list<Node*> extract_solution();
+		std::list<Node*> succ();
+};
 
-class Node_box {
-	public:
-		Node* node;
-		Node_box* next;
-		
-		Node_box( Node* , Node_box* );
-		~Node_box();
-}
-
-class Node_list {
-	public:
-		Node_box* first_elem;
-		Node_box* last_elem;
-		Node_box* current_elem;
-		
-		Node_list();
-		~Node_list();
-		void push_back( Node* );
-		void push_front( Node* );
-		bool is_empty();
-		Node* next();
-}
