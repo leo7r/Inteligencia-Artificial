@@ -22,6 +22,9 @@
 #include <stdint.h>
 mpz_t factorial16;
 
+<<<<<<< HEAD
+long long fact(int); /* Impelementacion sencilla de factorial */
+=======
 typedef struct{
 
 } hash_table16;
@@ -41,3 +44,4 @@ void unrank(int, mpz_t, int_fast64_t*);
 state* get(hash_table16*,int_fast64_t); /* Obtengo un estado a partir de la permutacion */
 
 int put(hash_table16*,state*);          /* Inserto un estado en la tabla */
+>>>>>>> 47d6f0d4d210c9c92d802fccfbc09701c9e01461
