@@ -18,7 +18,7 @@ heuristic.o: state.hh heuristic.hh heuristic.cc
 
 pruebas.o: state.hh nodes.hh pruebas.cc
 
-	g++ -g -c pruebas.c
+	g++ -g -c pruebas.cc
 
 clean:
 
