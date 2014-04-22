@@ -19,3 +19,6 @@
 #include <stdio.h>
 
 int dist_manhattan(State16*);
+
+std::list<Node*> ida_start(Node,int (*h)());
+

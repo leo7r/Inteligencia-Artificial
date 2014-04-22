@@ -1,8 +1,8 @@
-all: pruebas
+all: 15puzzle
 
-pruebas: state.o nodes.o heuristic.o algoritmos.o pruebas.o 
+15puzzle: state.o nodes.o heuristic.o 15puzzle.o 
 
-	g++ -g -o pruebas state.o nodes.o heuristic.o pruebas.o
+	g++ -g -o 15puzzle state.o nodes.o heuristic.o 15puzzle.o
 
 nodes.o: state.hh nodes.hh nodes.cc
 
@@ -12,18 +12,14 @@ state.o: state.hh state.cc
 
 	g++ -g -c state.cc 
 	
-heuristic.o: state.hh heuristic.hh heuristic.cc
+heuristic.o: nodes.hh heuristic.hh heuristic.cc
 
 	g++ -g -c heuristic.cc
 
-pruebas.o: state.hh nodes.hh pruebas.cc
+15puzzle.o: heuristic.hh 
 
-	g++ -g -c pruebas.cc
-
-algoritmos.o: nodes.hh algoritmos.hh algoritmos.cc
-
-	g++ -g -c algoritmos.cc
+	g++ -g -c 15puzzle.cc
 
 clean:
 
-	rm *.o *.h.gch
+	rm *.o *.h.gch *.exe
