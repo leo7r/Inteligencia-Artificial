@@ -16,7 +16,7 @@ heuristic.o: nodes.hh heuristic.hh heuristic.cc
 
 	g++ -g -c heuristic.cc
 
-15puzzle.o: heuristic.hh 
+15puzzle.o: heuristic.hh 15puzzle.cc
 
 	g++ -g -c 15puzzle.cc
 

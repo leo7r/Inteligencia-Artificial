@@ -1,9 +1,9 @@
 /*
  * =====================================================================================
  *
- *       Filename:  State.hh
+ *       Filename:  state.hh
  *
- *    Description:  
+ *    Description: Headers para los estados
  *
  *        Version:  1.0
  *        Created:  21/04/14 11:41:25
