@@ -1,9 +1,9 @@
 /*
  * =====================================================================================
  *
- *       Filename:  ida_start.hh
+ *       Filename:  algoritmos.hh
  *
- *    Description:  Headers para ida_start
+ *    Description:  Headers para los algoritmos de busqueda
  *
  *        Version:  1.0
  *        Created:  21/04/14 14:23:05

@@ -15,6 +15,7 @@
  *
  * =====================================================================================
  */
+#include <stdint.h>
 #include "heuristic.hh"
 
 int manhattan[16][16] = {  
@@ -39,7 +40,7 @@ int manhattan[16][16] = {
  
 int dist_manhattan(State16* st){
 
-	long long int * object = &st->current_state;
+        int_fast64_t * object = &st->current_state;
 	
 	size_t size = sizeof st->current_state;
 	int i = 0;

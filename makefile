@@ -1,6 +1,6 @@
 all: pruebas
 
-pruebas: state.o nodes.o heuristic.o pruebas.o 
+pruebas: state.o nodes.o heuristic.o algoritmos.o pruebas.o 
 
 	g++ -g -o pruebas state.o nodes.o heuristic.o pruebas.o
 
@@ -19,6 +19,10 @@ heuristic.o: state.hh heuristic.hh heuristic.cc
 pruebas.o: state.hh nodes.hh pruebas.cc
 
 	g++ -g -c pruebas.cc
+
+algoritmos.o: nodes.hh algoritmos.hh algoritmos.cc
+
+	g++ -g -c algoritmos.cc
 
 clean:
 

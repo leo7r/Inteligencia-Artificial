@@ -34,11 +34,11 @@ Node::~Node(){}
 
 std::list<Node*> Node::extract_solution(){
 
-	std::list<Node*> result;
+    std::list<Node*> result;
     Node* tmp = this;
     
     do{
-		result.push_front(tmp);
+	result.push_front(tmp);
         tmp = (Node*) tmp->parent;
     }  while(tmp != 0);
 	
