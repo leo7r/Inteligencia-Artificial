@@ -116,7 +116,7 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 
     std::list<Node*>::iterator it;
     for (it = succ.begin() ; it != succ.end(); ++it){
-        Node* n = new Node(node,node->a,node->node_state);
+        Node* n = new Node(node,(*it)->a,(*it)->node_state);
         std::pair<int,bool> t = search(n,g,bound,h); //Pendiente aca
         if (t.second == true) return t;
         if (t.first < min.first) min.first = t.first;

@@ -112,3 +112,71 @@ std::list<Node*> Node::succ(){
 	
 	return lista;
 }
+
+std::list<Node> Node::succN(){
+	
+	std::list<Node> lista;
+	
+	switch( node_state->zero_index ){
+	
+	case 0:
+		lista.push_front( Node(this, DERECHA , node_state->a_derecha()) );
+		lista.push_front(Node(this, ABAJO , node_state->a_abajo()) );
+	    break;
+		
+	case 1:
+	case 2:
+		lista.push_front(  Node(this, DERECHA , node_state->a_derecha()) );
+		lista.push_front(  Node(this, ABAJO , node_state->a_abajo()) );
+		lista.push_front(  Node(this, IZQUIERDA , node_state->a_izquierda()) );
+	    break;
+		
+	case 3:
+		lista.push_front(  Node(this, ABAJO , node_state->a_abajo()) );
+		lista.push_front(  Node(this, IZQUIERDA , node_state->a_izquierda()) );
+	    break;
+		
+	case 4:
+	case 8:
+		lista.push_front(  Node(this, DERECHA , node_state->a_derecha()) );
+		lista.push_front(  Node(this, ABAJO , node_state->a_abajo()) );
+		lista.push_front(  Node(this, ARRIBA , node_state->a_arriba()) );
+	    break;
+		
+	case 5:
+	case 6:
+	case 9:
+	case 10:
+		lista.push_front(  Node(this, DERECHA , node_state->a_derecha()) );
+		lista.push_front(  Node(this, ABAJO , node_state->a_abajo()) );
+		lista.push_front(  Node(this, IZQUIERDA , node_state->a_izquierda()) );
+		lista.push_front(  Node(this, ARRIBA , node_state->a_arriba()) );
+	    break;
+		
+	case 7:
+	case 11:
+		lista.push_front(  Node(this, ABAJO , node_state->a_abajo()) );
+		lista.push_front(  Node(this, IZQUIERDA , node_state->a_izquierda()) );
+		lista.push_front(  Node(this, ARRIBA , node_state->a_arriba()) );
+	    break;
+		
+	case 12:
+		lista.push_front(  Node(this, DERECHA , node_state->a_derecha()) );
+		lista.push_front(  Node(this, ARRIBA , node_state->a_arriba()) );
+	    break;
+		
+	case 13:
+	case 14:
+		lista.push_front(  Node(this, DERECHA , node_state->a_derecha()) );
+		lista.push_front(  Node(this, IZQUIERDA , node_state->a_izquierda()) );
+		lista.push_front(  Node(this, ARRIBA , node_state->a_arriba()) );
+	    break;
+		
+	case 15:
+		lista.push_front(  Node(this, IZQUIERDA , node_state->a_izquierda()) );
+		lista.push_front(  Node(this, ARRIBA , node_state->a_arriba()) );
+	    break;
+	}
+	
+	return lista;
+}

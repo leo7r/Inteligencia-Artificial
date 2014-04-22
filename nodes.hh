@@ -31,5 +31,6 @@ class Node {
 		~Node();
 		std::list<Node*> extract_solution();
 		std::list<Node*> succ();
+		std::list<Node> succN();
 };
 
