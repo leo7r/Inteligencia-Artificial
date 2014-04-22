@@ -20,5 +20,7 @@
 
 int dist_manhattan(State16*);
 
-std::list<Node*> ida_start(Node,int (*h)());
+std::list<Node*> ida_star(Node,int (*h)(State16*));
+
+bool ida_star1(Node*,int (*h)(State16*));
 

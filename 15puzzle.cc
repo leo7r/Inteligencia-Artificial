@@ -22,7 +22,20 @@
 #include <stdint.h>
 
 int_fast64_t toInt64(int* array){
-    
+   int_fast64_t tmp[16]; 
+   int i = 0;
+   while (i != 16){
+        tmp[i]  = 0x000000000000000;
+        tmp[i] = tmp[i] | array[i];
+        tmp[i] = tmp[i] << (60-(i*4));
+        i++;
+    }
+    i = 1;
+    while (i != 16){
+        tmp[0] = tmp[0] | tmp[i];
+        i++;
+    }
+    return tmp[0];
 }
 
 int main(int argc, char *argv[]){
@@ -42,10 +55,20 @@ int main(int argc, char *argv[]){
     int n,i;
     char zero_index;
     int array[16];
+    i = 0;
     while(!fs.eof()) {
         fs >> n;
-
+        if (n == 0) zero_index = i;
+        array[i] = n;
+        i++;
+        if (i == 16){
+            std::cout << "hola\n";
+            int_fast64_t a =  toInt64(array);
+            State16* s = new State16(a,zero_index);
+            Node *n = new Node(s);
+            ida_star1(n,dist_manhattan);
+            i = 0;
+        }
     }
     return 0;
-
 }
