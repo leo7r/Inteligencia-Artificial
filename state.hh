@@ -27,7 +27,6 @@ typedef enum {
 	ROOT
 } action;
 
-typedef unordered_map<int_fast64_t,State16*> stateMap;
  
 void print_action(action);
 
@@ -57,4 +56,16 @@ public:
     State16* a_abajo();
 };
 
+static std::unordered_map<int_fast64_t,State16*> stateMap;
+
+/*class hash_table16{
+public:
+    static hash_table16* get_hash_table16();
+    ~hash_table16();
+private:
+    hash_table();
+
+}*/
+
 State16* crear_estado(int_fast64_t , char);
+

@@ -47,12 +47,12 @@ std::list<Node*> Node::extract_solution(){
 
 std::list<Node*> Node::succ(){
 	
+
 	std::list<Node*> lista;
 	switch( a ) {
 		
 		case DERECHA:
 			switch( node_state->zero_index ){
-			// No puede haber una manera menos cara de guardar la verga?
 			case 0:
 				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
 				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
@@ -108,7 +108,7 @@ std::list<Node*> Node::succ(){
 			break;
 		case IZQUIERDA:
 			switch( node_state->zero_index ){
-			// No puede haber una manera menos cara de guardar la verga?
+			// 
 			case 0:
 				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
 				break;
@@ -164,7 +164,7 @@ std::list<Node*> Node::succ(){
 			break;
 		case ARRIBA:
 			switch( node_state->zero_index ){
-			// No puede haber una manera menos cara de guardar la verga?
+			// 
 			case 0:
 				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
 				break;
@@ -220,7 +220,7 @@ std::list<Node*> Node::succ(){
 			break;
 		case ABAJO:
 			switch( node_state->zero_index ){
-			// No puede haber una manera menos cara de guardar la verga?
+			// 
 			case 0:
 				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
 				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
@@ -276,7 +276,7 @@ std::list<Node*> Node::succ(){
 			break;
 		case ROOT:
 			switch( node_state->zero_index ){
-			// No puede haber una manera menos cara de guardar la verga?
+			// 
 			case 0:
 				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
 				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
@@ -339,7 +339,6 @@ std::list<Node*> Node::succ(){
 	}
 	/*
 	switch( node_state->zero_index ){
-	// No puede haber una manera menos cara de guardar la verga?
 	case 0:
 		lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
 		lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );

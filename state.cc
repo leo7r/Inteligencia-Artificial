@@ -17,6 +17,7 @@
  */
 #include "state.hh"
 #include <stdio.h>
+#include <utility>
 #include <iostream>
 
 void print_action( action a ){
@@ -46,12 +47,13 @@ State16::State16(int_fast64_t c,char z):current_state(c),zero_index(z){
 
 //funcion para crear estado tomando en cuenta si existe o no
 State16* crear_estado(int_fast64_t st , char zero_index ){
+
 	
 	std::unordered_map<int_fast64_t,State16*>::const_iterator isState = stateMap.find(st);
 	
 	if ( isState == stateMap.end() ){
 		State16* state = new State16(st,zero_index);
-		stateMap.insert(std::make_pair<int_fast64_t,State16*>(st,state));
+		stateMap[st] = state;
 		return state;
 	}
 	else{

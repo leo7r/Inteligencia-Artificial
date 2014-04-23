@@ -63,7 +63,7 @@ int dist_manhattan(State16* st){
 	return distancia;
 }
 
-std::pair<std::list<Node*>,int> bounded_dfs(Node n,int g ,int bound,int (*h)(State16*)){
+/*std::pair<std::list<Node*>,int> bounded_dfs(Node n,int g ,int bound,int (*h)(State16*)){
     std::list<Node*>* vacio = new std::list<Node*>;
     if (g + h(n.node_state) > bound){ 
         std::pair<std::list<Node*>,int> result0;
@@ -90,9 +90,9 @@ std::pair<std::list<Node*>,int> bounded_dfs(Node n,int g ,int bound,int (*h)(Sta
     std::pair<std::list<Node*>,int> result2;
     result2 = std::make_pair(0,new_bound);
     return result2;
-}
+}*/
 
-std::list<Node*> ida_star(Node root,int (*h)(State16*)){
+/*std::list<Node*> ida_star(Node root,int (*h)(State16*)){
    int bound = h(root.node_state); 
    std::pair < std::list<Node*>, int> par;
    while (bound != std::numeric_limits<int>::max()){
@@ -102,7 +102,7 @@ std::list<Node*> ida_star(Node root,int (*h)(State16*)){
        }
        bound = par.second;
    }
-}
+}*/
 
 std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
     std::pair<int,bool> f;
