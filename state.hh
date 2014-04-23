@@ -17,6 +17,7 @@
  */
 
 #include <stdint.h>
+#include <unordered_map>
 
 typedef enum {
 	ARRIBA,
@@ -25,6 +26,8 @@ typedef enum {
 	IZQUIERDA,
 	ROOT
 } action;
+
+typedef unordered_map<int_fast64_t,State16*> stateMap;
  
 void print_action(action);
 
@@ -53,3 +56,5 @@ public:
     State16* a_arriba();
     State16* a_abajo();
 };
+
+State16* crear_estado(int_fast64_t , char);

@@ -1,4 +1,4 @@
-all: 15puzzle
+all: pruebas
 
 pruebas: state.o nodes.o heuristic.o pruebas.o
 	
@@ -14,7 +14,7 @@ nodes.o: state.hh nodes.hh nodes.cc
 
 state.o: state.hh state.cc
 
-	g++ -g -c state.cc 
+	g++ -std=c++11 -g -c state.cc 
 	
 heuristic.o: nodes.hh heuristic.hh heuristic.cc
 

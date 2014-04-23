@@ -48,7 +48,296 @@ std::list<Node*> Node::extract_solution(){
 std::list<Node*> Node::succ(){
 	
 	std::list<Node*> lista;
-	
+	switch( a ) {
+		
+		case DERECHA:
+			switch( node_state->zero_index ){
+			// No puede haber una manera menos cara de guardar la verga?
+			case 0:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				break;
+				
+			case 1:
+			case 2:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				break;
+				
+			case 3:
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				break;
+				
+			case 4:
+			case 8:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 5:
+			case 6:
+			case 9:
+			case 10:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 7:
+			case 11:
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 12:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 13:
+			case 14:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 15:
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+			}
+			break;
+		case IZQUIERDA:
+			switch( node_state->zero_index ){
+			// No puede haber una manera menos cara de guardar la verga?
+			case 0:
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				break;
+				
+			case 1:
+			case 2:
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				break;
+				
+			case 3:
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				break;
+				
+			case 4:
+			case 8:
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 5:
+			case 6:
+			case 9:
+			case 10:
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 7:
+			case 11:
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 12:
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 13:
+			case 14:
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 15:
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+			}
+			break;
+		case ARRIBA:
+			switch( node_state->zero_index ){
+			// No puede haber una manera menos cara de guardar la verga?
+			case 0:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				break;
+				
+			case 1:
+			case 2:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				break;
+				
+			case 3:
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				break;
+				
+			case 4:
+			case 8:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 5:
+			case 6:
+			case 9:
+			case 10:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 7:
+			case 11:
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 12:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 13:
+			case 14:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 15:
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+			}
+			break;
+		case ABAJO:
+			switch( node_state->zero_index ){
+			// No puede haber una manera menos cara de guardar la verga?
+			case 0:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				break;
+				
+			case 1:
+			case 2:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				break;
+				
+			case 3:
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				break;
+				
+			case 4:
+			case 8:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				break;
+				
+			case 5:
+			case 6:
+			case 9:
+			case 10:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				break;
+				
+			case 7:
+			case 11:
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				break;
+				
+			case 12:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				break;
+				
+			case 13:
+			case 14:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				break;
+				
+			case 15:
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				break;
+			}
+			break;
+		case ROOT:
+			switch( node_state->zero_index ){
+			// No puede haber una manera menos cara de guardar la verga?
+			case 0:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				break;
+				
+			case 1:
+			case 2:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				break;
+				
+			case 3:
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				break;
+				
+			case 4:
+			case 8:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 5:
+			case 6:
+			case 9:
+			case 10:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 7:
+			case 11:
+				lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 12:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 13:
+			case 14:
+				lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+				
+			case 15:
+				lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
+				lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
+				break;
+			}
+			break;
+	}
+	/*
 	switch( node_state->zero_index ){
 	// No puede haber una manera menos cara de guardar la verga?
 	case 0:
@@ -108,7 +397,7 @@ std::list<Node*> Node::succ(){
 		lista.push_front( new Node(this, IZQUIERDA , node_state->a_izquierda()) );
 		lista.push_front( new Node(this, ARRIBA , node_state->a_arriba()) );
 	    break;
-	}
+	}*/
 	
 	return lista;
 }
