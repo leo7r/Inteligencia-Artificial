@@ -17,6 +17,7 @@
  */
 #include "state.hh"
 #include <stdio.h>
+#include <iostream>
 
 void print_action( action a ){
 	
@@ -127,7 +128,21 @@ State16* State16::a_arriba(){
 
 	int_fast64_t temp = current_state;
 	int_fast64_t mask = 15ULL << 4 * ( 19 - zero_index );
-	temp = (((temp & mask) >> 16) | temp) & ~mask;
+	
+	int_fast64_t mask2 = ~(4095ULL << 4 * ( 16 - zero_index ));
+	
+	/* pruebas
+	std::cout << "Mask: ";
+	State16* mstate = new State16(mask,0);
+	mstate->print_state();
+	std::cout << "\ntemp & mask: ";
+	State16* fruf = new State16( (((((temp & mask) >> 16) & mask2) | temp) & ~mask)   ,0);
+	fruf->print_state();
+	State16* mstate2 = new State16( mask2 ,0);
+	mstate2->print_state();
+	*/
+	
+	temp = ((((temp & mask) >> 16) & mask2) | temp) & ~mask;
 	
 	return new State16(temp,zero_index-4);
 }

@@ -1,5 +1,9 @@
 all: 15puzzle
 
+pruebas: state.o nodes.o heuristic.o pruebas.o
+	
+	g++ -g -o pruebas state.o nodes.o heuristic.o pruebas.o
+
 15puzzle: state.o nodes.o heuristic.o 15puzzle.o 
 
 	g++ -g -o 15puzzle state.o nodes.o heuristic.o 15puzzle.o
@@ -19,6 +23,10 @@ heuristic.o: nodes.hh heuristic.hh heuristic.cc
 15puzzle.o: heuristic.hh 15puzzle.cc
 
 	g++ -g -c 15puzzle.cc
+	
+pruebas.o: heuristic.hh pruebas.cc
+
+	g++ -g -c pruebas.cc
 
 clean:
 
