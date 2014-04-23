@@ -50,7 +50,7 @@ std::list<Node*> Node::succ(){
 	std::list<Node*> lista;
 	
 	switch( node_state->zero_index ){
-	
+	// No puede haber una manera menos cara de guardar la verga?
 	case 0:
 		lista.push_front( new Node(this, DERECHA , node_state->a_derecha()) );
 		lista.push_front( new Node(this, ABAJO , node_state->a_abajo()) );

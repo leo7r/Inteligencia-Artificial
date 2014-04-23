@@ -22,6 +22,7 @@
 #include <stdint.h>
 #include "heuristic.hh"
 
+    int temporal = 0;
 int manhattan[16][16] = {  
 
 	{0, 1, 2, 3, 1, 2, 3, 4, 2, 3, 4, 5, 3, 4, 5, 6} ,   /* 0 */
@@ -111,15 +112,17 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
     }
     std::pair<int,bool> min;
     min.first = std::numeric_limits<int>::max();
-    
-    std::list<Node*> succ =  node->succ();
+    temporal++;
+    std::cout << temporal;
+    std::cout <<'\n';
 
-    std::list<Node*>::iterator it;
-    for (it = succ.begin() ; it != succ.end(); ++it){
-        Node* n = new Node(node,(*it)->a,(*it)->node_state);
-        std::pair<int,bool> t = search(n,g,bound,h); //Pendiente aca
+    std::list<Node*> succ =  node->succ();
+    while (!succ.empty()){
+        Node* tmp = succ.front();
+        std::pair<int,bool> t = search(tmp,g,bound,h); //Pendiente aca
         if (t.second == true) return t;
         if (t.first < min.first) min.first = t.first;
+        succ.pop_front();
     }
     return min;
 }
