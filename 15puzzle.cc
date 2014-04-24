@@ -62,7 +62,6 @@ int main(int argc, char *argv[]){
         array[i] = n;
         i++;
         if (i == 16){
-            std::cout << "hola\n";
             int_fast64_t a =  toInt64(array);
             State16* s = new State16(a,zero_index);
             Node *n = new Node(s);

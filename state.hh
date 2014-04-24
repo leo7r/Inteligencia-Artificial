@@ -17,6 +17,7 @@
  */
 
 #include <stdint.h>
+#include <utility>
 #include <unordered_map>
 
 typedef enum {
@@ -54,18 +55,14 @@ public:
     State16* a_izquierda();
     State16* a_arriba();
     State16* a_abajo();
+    std::pair<int_fast64_t,char> a_derechap();
+    std::pair<int_fast64_t,char> a_izquierdap();
+    std::pair<int_fast64_t,char> a_arribap();
+    std::pair<int_fast64_t,char> a_abajop();
 };
 
 static std::unordered_map<int_fast64_t,State16*> stateMap;
 
-/*class hash_table16{
-public:
-    static hash_table16* get_hash_table16();
-    ~hash_table16();
-private:
-    hash_table();
-
-}*/
-
 State16* crear_estado(int_fast64_t , char);
 
+State16* crear_estadop(std::pair<int_fast64_t,char>);

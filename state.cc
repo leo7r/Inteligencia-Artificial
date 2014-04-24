@@ -61,6 +61,20 @@ State16* crear_estado(int_fast64_t st , char zero_index ){
 	}
 }
 
+State16* crear_estadop(std::pair<int_fast64_t,char> s){
+
+	std::unordered_map<int_fast64_t,State16*>::const_iterator isState = stateMap.find(s.first);
+	
+	if ( isState == stateMap.end() ){
+		State16* state = new State16(s.first,s.second);
+		stateMap[s.first] = state;
+		return state;
+	}
+	else{
+		return isState->second;
+	}
+}
+
 State16::~State16(){}
 
 
@@ -171,4 +185,47 @@ State16* State16::a_abajo(){
 	temp = (((temp & mask) << 16) | temp) & ~mask;
 	
 	return new State16(temp,zero_index+4);
+}
+
+std::pair<int_fast64_t,char> State16::a_derechap(){
+	
+	int_fast64_t temp = current_state;
+	int_fast64_t mask = 15ULL << 4 * ( 14 - zero_index );
+	temp = (((temp & mask) << 4) | temp) & ~mask;
+	
+        std::pair<int_fast64_t,char> result = std::make_pair(temp,zero_index+1);
+	return result;
+}
+
+std::pair<int_fast64_t,char> State16::a_izquierdap(){
+	
+	int_fast64_t temp = current_state;
+	int_fast64_t mask = 15ULL << 4 * ( 16 - zero_index );
+	temp = (((temp & mask) >> 4) | temp) & ~mask;
+	
+        std::pair<int_fast64_t,char> result = std::make_pair(temp,zero_index-1);
+	return result;
+}
+
+std::pair<int_fast64_t,char> State16::a_arribap(){
+
+	int_fast64_t temp = current_state;
+	int_fast64_t mask = 15ULL << 4 * ( 19 - zero_index );
+	
+	int_fast64_t mask2 = ~(4095ULL << 4 * ( 16 - zero_index ));
+	
+	temp = ((((temp & mask) >> 16) & mask2) | temp) & ~mask;
+	
+        std::pair<int_fast64_t,char> result = std::make_pair(temp,zero_index-4);
+	return result;
+}
+
+std::pair<int_fast64_t,char> State16::a_abajop(){
+
+	int_fast64_t temp = current_state;
+	int_fast64_t mask = 15ULL << 4 * ( 11 - zero_index );
+	temp = (((temp & mask) << 16) | temp) & ~mask;
+	
+        std::pair<int_fast64_t,char> result = std::make_pair(temp,zero_index+4);
+	return result;
 }

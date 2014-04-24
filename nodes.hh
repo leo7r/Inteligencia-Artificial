@@ -17,6 +17,7 @@
  */
 
 #include "state.hh"
+#include <stdint.h>
 #include <list>
 
 class Node {

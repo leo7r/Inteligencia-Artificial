@@ -122,7 +122,7 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 	std::cout << dist_manhattan(node->node_state);
 	std::cout << '\n';
 	node->node_state->print_state();
-	std::cin.get();
+//	std::cin.get();
 	
 	
 	//std::cout << temporal;
