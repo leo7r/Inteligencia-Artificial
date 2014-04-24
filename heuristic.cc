@@ -22,7 +22,6 @@
 #include <queue>
 #include <stdint.h>
 #include "heuristic.hh"
-#include <unistd.h>
 
 int temporal = 0;
 int manhattan[16][16] = {
@@ -77,7 +76,14 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
     temporal++;
 	
 	
-    std::cout << "Probando estado:\n";
+    //std::cout << "Probando estado:\n";
+	
+    //std::cout << dist_manhattan(node->node_state);
+    //node->node_state->print_state();
+    //std::cin.get();
+	
+    //std::cout << temporal;
+    //std::cout << "\n";
 	
     //std::cout << dist_manhattan(node->node_state);
     node->node_state->print_state();
@@ -87,7 +93,6 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
     std::list<Node*> succ =  node->succ();
     succ.sort(compare_node_state16);
     while (!succ.empty()){
-        
 	Node* tmp = succ.front();
 
         std::pair<int,bool> t = search(tmp,g+tmp->cost,bound,h); //Pendiente aca

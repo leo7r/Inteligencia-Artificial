@@ -65,7 +65,13 @@ int main(int argc, char *argv[]){
             int_fast64_t a =  toInt64(array);
             State16* s = new State16(a,zero_index);
             Node *n = new Node(s);
-            ida_star1(n,dist_manhattan);
+            bool funciona = ida_star1(n,dist_manhattan);
+			
+			if ( funciona ){
+				std::cout << "Funciono! seguir?";
+				std::cin.get();
+			}
+			
             i = 0;
         }
     }

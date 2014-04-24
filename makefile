@@ -1,4 +1,4 @@
-all: pruebas
+all: 15puzzle
 
 pruebas: state.o nodes.o heuristic.o pruebas.o
 	
