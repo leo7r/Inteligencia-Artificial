@@ -45,6 +45,7 @@ class State16{
 public:
     int_fast64_t current_state;
     char zero_index;
+    bool closed;
     State16(); 
     State16(int_fast64_t,char);
     ~State16();
@@ -59,6 +60,11 @@ public:
     std::pair<int_fast64_t,char> a_izquierdap();
     std::pair<int_fast64_t,char> a_arribap();
     std::pair<int_fast64_t,char> a_abajop();
+};
+
+class State24{
+    State24(); 
+    ~State24();
 };
 
 static std::unordered_map<int_fast64_t,State16*> stateMap;
