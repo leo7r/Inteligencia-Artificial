@@ -31,7 +31,9 @@ Node::Node( State16* st ):node_state(st){
 	cost = 0;
 }
 
-Node::~Node(){}
+Node::~Node(){
+    delete this;
+}
 
 std::list<Node*> Node::extract_solution(){
 
