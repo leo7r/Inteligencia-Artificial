@@ -45,6 +45,8 @@ class State16{
 public:
     int_fast64_t current_state;
     char zero_index;
+	bool closed;
+	
     State16(); 
     State16(int_fast64_t,char);
     ~State16();

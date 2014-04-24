@@ -21,7 +21,6 @@
 #include <list>
 #include <stdint.h>
 #include "heuristic.hh"
-#include <unistd.h>
 
     int temporal = 0;
 int manhattan[16][16] = {
@@ -117,12 +116,12 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
     temporal++;
 	
 	
-	std::cout << "Probando estado:\n";
+	//std::cout << "Probando estado:\n";
 	
 	std::cout << dist_manhattan(node->node_state);
 	std::cout << '\n';
-	node->node_state->print_state();
-//	std::cin.get();
+	//node->node_state->print_state();
+	//std::cin.get();
 	
 	
 	//std::cout << temporal;
@@ -133,12 +132,17 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
     std::list<Node*> succ =  node->succ();
 	succ.sort(compare_node_state16);
     while (!succ.empty()){
-        
+        		
 		Node* tmp = succ.front();
 		
-        std::pair<int,bool> t = search(tmp,g,bound,h); //Pendiente aca
-        if (t.second == true) return t;
-        if (t.first < min.first) min.first = t.first;
+		if ( !tmp->node_state->closed ){
+			tmp->node_state->closed = true;
+			
+			std::pair<int,bool> t = search(tmp,g,bound,h); //Pendiente aca
+			if (t.second == true) return t;
+			if (t.first < min.first) min.first = t.first;
+		}
+		
         succ.pop_front();
     }
     return min;
