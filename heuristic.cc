@@ -103,6 +103,8 @@ int dist_manhattan(State16* st){
    }
 }*/
 
+int expanded_nodes;
+
 std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
     std::pair<int,bool> f;
     f.first = g + h(node->node_state);
@@ -118,8 +120,9 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 	
 	//std::cout << "Probando estado:\n";
 	
-	//std::cout << dist_manhattan(node->node_state);
-	std::cout << '\n';
+	//std::cout << expanded_nodes;//dist_manhattan(node->node_state);
+	//std::cout << '\n';
+	
 	//node->node_state->print_state();
 	//std::cin.get();
 	
@@ -129,6 +132,7 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 	int num_succ = 0;
 	
     std::list<Node*> succ =  node->succ();
+	expanded_nodes++;
     succ.sort(compare_node_state16);
     while (!succ.empty()){
         		
@@ -140,20 +144,27 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 			std::pair<int,bool> t = search(tmp,g,bound,h); //Pendiente aca
 			if (t.second == true) return t;
 			if (t.first < min.first) min.first = t.first;
+			
+			
 		}
         succ.pop_front();
     }
+	
+	std::cout << "Bound actualizado a: " << min.first << "\n";
+	
     return min;
 }
 
 bool ida_star1(Node* root, int (*h)(State16*)){
+	
+	expanded_nodes = 0;
+
    int bound = h(root->node_state); 
    std::pair<int,bool> t;
    while(1){
        t = search(root,0,bound,h); 
        if (t.second == true) return true;
        if (t.first == std::numeric_limits<int>::max()) return false;
-       bound = t.first;
    }
 }
 
