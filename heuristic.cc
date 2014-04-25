@@ -19,10 +19,11 @@
 #include <iostream>
 #include <utility>
 #include <list>
+#include <queue>
 #include <stdint.h>
 #include "heuristic.hh"
 
-    int temporal = 0;
+int temporal = 0;
 int manhattan[16][16] = {
 	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	{1, 0, 1, 2, 2, 1, 2, 3, 3, 2, 3, 4, 4, 3, 4, 5},
@@ -118,7 +119,7 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
     temporal++;
 	
 	
-	//std::cout << "Probando estado:\n";
+    //std::cout << "Probando estado:\n";
 	
 	//std::cout << expanded_nodes;//dist_manhattan(node->node_state);
 	//std::cout << '\n';
@@ -126,10 +127,13 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 	//node->node_state->print_state();
 	//std::cin.get();
 	
-	//std::cout << temporal;
-	//std::cout << "\n";
+    //std::cout << temporal;
+    //std::cout << "\n";
 	
-	int num_succ = 0;
+    //std::cout << dist_manhattan(node->node_state);
+    node->node_state->print_state();
+
+    int num_succ = 0;
 	
     std::list<Node*> succ =  node->succ();
 	expanded_nodes++;
@@ -147,6 +151,7 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 			
 			
 		}
+		
         succ.pop_front();
     }
 	
@@ -169,11 +174,51 @@ bool ida_star1(Node* root, int (*h)(State16*)){
 }
 
 bool compare_node_state16 (const Node* first, const Node* second)
-{
-  
+{ 
     if (dist_manhattan(first->node_state)<=dist_manhattan(second->node_state)) return true;
     else return false;
- 
 }
 
+class compare_node{
+    bool reverse;
+    int (*h)(State16*);
+    int (*h2)(State24*); 
+public:
+    compare_node(bool revparam, int(*f)(State16*)): reverse(revparam),h(f),h2(0){
+    }
+    compare_node(bool revparam, int(*f)(State24*)): reverse(revparam),h2(f),h(0){
+    }
+    bool operator() (Node* n1, Node* n2){
+        if (h2 == 0){
+            if (reverse) return ((n1->cost + h(n1->node_state)) > (n2->cost + h(n2->node_state)));
+            else return ((n1->cost + h(n1->node_state)) < (n2->cost + h(n2->node_state)));
+        } else{
+            if (reverse) return ((n1->cost) > (n2->cost));
+            else return ((n1->cost) < (n2->cost));
+        }
+    }
+};
 
+static std::unordered_map<int_fast64_t,int> dist16;
+
+bool a_star(Node* root,int (*h)(State16*)){
+    std::priority_queue<Node*,std::vector<Node*>,compare_node> q (compare_node(false,h));  
+    q.push(root);
+    while (!q.empty()){
+        Node* n = q.top();
+        q.pop();
+        if ((n->node_state->closed != false) || (dist16[n->node_state->current_state] > n->cost)) {
+            n->node_state->closed = true;
+            dist16[n->node_state->current_state] = n->cost;
+            if (n->node_state->is_goal()) return true;
+            
+            std::list<Node*> succ =  n->succ();
+            while (!succ.empty()){
+                Node* tmp = succ.front();
+                if (h(tmp->node_state) < std::numeric_limits<int>::max()) q.push(tmp);     
+                succ.pop_front();
+            }
+        }
+    }
+    return false;
+}

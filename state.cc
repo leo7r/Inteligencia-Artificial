@@ -39,7 +39,7 @@ void print_action( action a ){
 	}
 }
 
-State16::State16():current_state(-1),zero_index(' '){
+State16::State16():current_state(-1),zero_index(' '), closed(false){
 }
 
 State16::State16(int_fast64_t c,char z):current_state(c),zero_index(z),closed(false){
@@ -228,3 +228,6 @@ std::pair<int_fast64_t,char> State16::a_abajop(){
         std::pair<int_fast64_t,char> result = std::make_pair(temp,zero_index+4);
 	return result;
 }
+
+State24::State24(){}
+State24::~State24(){}
