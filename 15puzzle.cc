@@ -23,6 +23,10 @@
 #include <exception>
 #include <chrono>
 #include <ctime>
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 int_fast64_t toInt64(int* array){
    int_fast64_t tmp[16]; 
@@ -41,24 +45,65 @@ int_fast64_t toInt64(int* array){
     return tmp[0];
 }
 
+void imprimirAyuda(){
+    std::cout << "15puzzle [opciones]\n";
+    std::cout << "opciones: \n";
+    std::cout << "-a { a* | ida* }              Algoritmo a utilizar\n";
+    std::cout << "-h { manhattan | pdatabase }  Heuristica deseada\n";
+    std::cout << "-f {archivo}                  Archivo con instancias a resolver\n";
+
+}
+
 int main(int argc, char *argv[]){
     std::string* f_name;
-    if (argc == 1){
-        f_name = new std::string();
-        std::cout << "Escriba el nombre del archivo con las instancias del puzzle: ";
-        std::cin >> *f_name;
-    } else {
-        f_name = new std::string(argv[1]);
+    std::string* algoritmo;
+    std::string* heuristica;
+    int c;
+    int n,i;
+    char zero_index;
+    int array[16];
+    i = 0;
+
+    // Revisa las opciones necesarias para correr el programa
+    while ( (c = getopt(argc,argv,"a:h:f:")) != -1 ){
+        switch(c){
+            case 'a':
+                algoritmo = new std::string();
+                *algoritmo = optarg;
+                break;
+            case 'h':
+                heuristica = new std::string();
+                *heuristica = optarg;
+                break;
+            case 'f':
+                f_name = new std::string();
+                *f_name = optarg;
+                break;
+            case '?':
+                if (optopt == 'f' || optopt == 'h' || optopt == 'a')
+                fprintf (stderr, "La opcion -%c necesita un argumento.\n", optopt); 
+                else if (isprint (optopt))
+                fprintf (stderr, "Opcion invalida `-%c'.\n", optopt); 
+                else fprintf (stderr,"Opcion invalida caracter `\\x%x'.\n",
+                        optopt); 
+                imprimirAyuda();
+                return 1;
+            default:
+                imprimirAyuda();
+                abort();
+        }
     }
+    if (algoritmo == 0 || f_name == 0 || heuristica == 0){
+        imprimirAyuda();
+        return 1;
+    }
+
     std::fstream fs (f_name->data(), std::fstream::in); 
     if (!fs){
         std::cout << "Fallo en abrir el archivo.";
         return 1;
     }
-    int n,i;
-    char zero_index;
-    int array[16];
-    i = 0;
+
     while(!fs.eof()) {
         fs >> n;
         if (n == 0) zero_index = i;

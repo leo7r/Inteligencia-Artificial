@@ -41,7 +41,7 @@ class State{
     virtual State* a_abajo() = 0;
 };
 
-class State16{
+class State16:public State{
 public:
     int_fast64_t current_state;
     char zero_index;
@@ -62,9 +62,27 @@ public:
     std::pair<int_fast64_t,char> a_abajop();
 };
 
-class State24{
+/*Si necesitamos 24 posiciones con
+5 bits tendriamos 32 posiciones para
+representar.
+Con 5 bits * 24 posiciones necesitariamos  
+120 bits para representar todo.
+Esto lo podriamos obtener con 
+120 bits / 8 bits (que son caracter) = 15 chars  */
+
+class State24:public State{
+    char* current_state; // Estoy pensando en un arreglo de chars de 15 posiciones 
+    char zero_index;
+    bool closed;
     State24(); 
     ~State24();
+    /*bool is_goal();
+    void print_state();
+    char find_zero_index();
+    State24* a_derecha();
+    State24* a_izquierda();
+    State24* a_arriba();
+    State24* a_abajo();*/
 };
 
 static std::unordered_map<int_fast64_t,State16*> stateMap;
