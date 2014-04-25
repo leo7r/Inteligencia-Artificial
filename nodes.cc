@@ -32,7 +32,6 @@ Node::Node( State16* st ):node_state(st){
 }
 
 Node::~Node(){
-    delete this;
 }
 
 std::list<Node*> Node::extract_solution(){

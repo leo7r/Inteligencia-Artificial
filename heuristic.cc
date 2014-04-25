@@ -119,43 +119,23 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
     temporal++;
 	
 	
-    //std::cout << "Probando estado:\n";
-	
-	//std::cout << expanded_nodes << "\n";//dist_manhattan(node->node_state);
-	
-	//node->node_state->print_state();
-	//std::cin.get();
-	
-    //std::cout << temporal;
-    //std::cout << "\n";
-	
-    //std::cout << dist_manhattan(node->node_state);
-    //node->node_state->print_state();
-
     int num_succ = 0;
 	
     std::list<Node*> succ =  node->succ();
-	expanded_nodes++;
-    succ.sort(compare_node_state16);
+    expanded_nodes++;
     while (!succ.empty()){
         		
-		Node* tmp = succ.front();
-		
-		if ( !tmp->node_state->closed ){
-			tmp->node_state->closed = true;
+	Node* tmp = succ.front();
 			
-			std::pair<int,bool> t = search(tmp,g,bound,h); //Pendiente aca
+	std::pair<int,bool> t = search(tmp,g + tmp->cost,bound,h); // La vaina no funcionaba porque no le estaban sumando tmp->cost a g
 			
-			std::cout << "Bound: " << t.first << "\n";
 			
-			if (t.second == true) return t;
-			if (t.first < min.first) min.first = t.first;			
-		}
+	if (t.second == true) return t;
+	if (t.first < min.first) min.first = t.first;			
 		
         succ.pop_front();
     }
 	
-	//std::cout << "Bound actualizado a: " << min.first << "\n";
 	
     return min;
 }
@@ -168,8 +148,6 @@ bool ida_star1(Node* root, int (*h)(State16*)){
    std::pair<int,bool> t;
    while(1){
        t = search(root,0,bound,h);
-	   
-	   std::cout << "Bound: " << t.first << "\n";
 	   
        if (t.second == true) return true;
        if (t.first == std::numeric_limits<int>::max()) return false;
