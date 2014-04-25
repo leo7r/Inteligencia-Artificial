@@ -20,6 +20,7 @@
 #include <iostream>
 #include <iomanip>
 #include <stdint.h>
+#include <exception>
 
 int_fast64_t toInt64(int* array){
    int_fast64_t tmp[16]; 
@@ -65,13 +66,14 @@ int main(int argc, char *argv[]){
             int_fast64_t a =  toInt64(array);
             State16* s = new State16(a,zero_index);
             Node *n = new Node(s);
-            bool funciona = ida_star1(n,dist_manhattan);
+			
+			bool funciona = ida_star1(n,dist_manhattan);
 			
 			if ( funciona ){
 				std::cout << "Funciono! seguir?";
 				std::cin.get();
 			}
-			
+            
             i = 0;
         }
     }
