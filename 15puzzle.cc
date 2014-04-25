@@ -21,6 +21,8 @@
 #include <iomanip>
 #include <stdint.h>
 #include <exception>
+#include <chrono>
+#include <ctime>
 
 int_fast64_t toInt64(int* array){
    int_fast64_t tmp[16]; 
@@ -67,12 +69,24 @@ int main(int argc, char *argv[]){
             State16* s = new State16(a,zero_index);
             Node *n = new Node(s);
 			
+			std::chrono::time_point<std::chrono::system_clock> start, end;
+			start = std::chrono::system_clock::now();
+			
 			bool funciona = ida_star1(n,dist_manhattan);
 			
 			if ( funciona ){
-				std::cout << "Funciono! seguir?";
-				std::cin.get();
+				std::cout << "Funciono!";
 			}
+			else{
+				std::cout << "No funciono :(";
+			}	
+			
+			end = std::chrono::system_clock::now();
+			
+			std::chrono::duration<double> elapsed_seconds = end-start;
+			
+			std::cout << "Tiempo: " << elapsed_seconds.count() << "\n";
+			//std::cin.get();
             
             i = 0;
         }

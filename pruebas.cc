@@ -3,8 +3,9 @@
 
 int main(){
 	
-	State16* ini = crear_estado(0x59de63271c0a48bf,10); //new State16(0x59de63271c0a48bf,10);
+	State16* ini = crear_estado(0x7f82d63cb04a951e,9); //new State16(0x59de63271c0a48bf,10);
 	Node* node = new Node(ini);
+	node->a = ARRIBA;
 	
 	ini->print_state();
 	
@@ -18,7 +19,11 @@ int main(){
         Node* tmp = succ.front();
 		tmp->node_state->print_state();
 		std::cout << '\n';
-		std::cout << dist_manhattan(tmp->node_state);
+		
+		std::cout << "Accion: ";
+		print_action(tmp->a);
+		
+		//std::cout << dist_manhattan(tmp->node_state);
         succ.pop_front();
     }
 	

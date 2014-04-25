@@ -109,35 +109,73 @@ int expanded_nodes;
 std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
     std::pair<int,bool> f;
     f.first = g + h(node->node_state);
-    if (f.first > bound ) return f;
+	
+	f.second = false;
+	
+    if (f.first > bound ){ 
+		return f;
+	};
     if (node->node_state->is_goal()){
         f.second = true;
         return f;
     }
     std::pair<int,bool> min;
     min.first = std::numeric_limits<int>::max();
+	min.second = false;
     temporal++;
 	
-	
-    int num_succ = 0;
-	
-    std::list<Node*> succ =  node->succ();
+    //std::list<Node*> succ =  node->succ();	
     expanded_nodes++;
-    while (!succ.empty()){
-        		
-	Node* tmp = succ.front();
+	
+	for ( int act = ARRIBA ; act < ROOT ; act++ ){
+				
+		if ( node->is_posible((action)act) ){
 			
-	std::pair<int,bool> t = search(tmp,g + tmp->cost,bound,h); // La vaina no funcionaba porque no le estaban sumando tmp->cost a g
+			Node* suc;
 			
-			
-	if (t.second == true) return t;
-	if (t.first < min.first) min.first = t.first;			
+			switch( act ){
+				
+				case ARRIBA:
+					suc = new Node( node , (action) act , node->node_state->a_arriba() );
+					break;
+				case ABAJO:
+					suc = new Node( node , (action) act , node->node_state->a_abajo() );
+					break;
+				case IZQUIERDA:
+					suc = new Node( node , (action) act , node->node_state->a_izquierda() );
+					break;
+				case DERECHA:
+					suc = new Node( node , (action) act , node->node_state->a_derecha() );
+					break;
+			}
 		
-        succ.pop_front();
+			std::pair<int,bool> t = search(suc,suc->cost ,bound,h);
+				
+			if (t.second == true){
+				return t;
+			}
+			if (t.first < min.first){
+				min.first = t.first;
+			}
+		}
+	}
+	
+	/*
+	for ( std::list<Node*>::iterator it=succ.begin(); it != succ.end() ; ++it){
+        
+		Node* tmp = *it;
+		
+		std::pair<int,bool> t = search(tmp,tmp->cost ,bound,h);
+				
+		if (t.second == true){
+			return t;
+		}
+		if (t.first < min.first){
+			min.first = t.first;
+		}
     }
-	
-	
-    return min;
+    */
+	return min;
 }
 
 bool ida_star1(Node* root, int (*h)(State16*)){
@@ -147,16 +185,28 @@ bool ida_star1(Node* root, int (*h)(State16*)){
    int bound = h(root->node_state); 
    std::pair<int,bool> t;
    while(1){
+   
+	   std::cout << "Bound: " << bound << "\n";
        t = search(root,0,bound,h);
 	   
-       if (t.second == true) return true;
-       if (t.first == std::numeric_limits<int>::max()) return false;
+       if (t.second == true){
+		stateMap.clear();
+		delete(root);
+		return true;
+	   }
+       if (t.first == std::numeric_limits<int>::max()){
+		stateMap.clear();
+		delete(root);
+		return false;
+		}
+	   
+	   bound = t.first;
    }
 }
 
 bool compare_node_state16 (const Node* first, const Node* second)
 { 
-    if (dist_manhattan(first->node_state)<=dist_manhattan(second->node_state)) return true;
+    if (dist_manhattan(first->node_state)<dist_manhattan(second->node_state)) return true;
     else return false;
 }
 

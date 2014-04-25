@@ -33,5 +33,6 @@ class Node {
 		std::list<Node*> extract_solution();
 		std::list<Node*> succ();
 		std::list<Node> succN();
+		bool is_posible(action);
 };
 

@@ -74,7 +74,9 @@ State16* crear_estadop(std::pair<int_fast64_t,char> s){
 	}
 }
 
-State16::~State16(){}
+State16::~State16(){
+	delete(this);
+}
 
 
 bool State16::is_goal(){
