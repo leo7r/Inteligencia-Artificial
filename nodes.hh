@@ -35,4 +35,3 @@ class Node {
 		std::list<Node> succN();
 		bool is_posible(action);
 };
-

@@ -63,6 +63,60 @@ int dist_manhattan(State16* st){
 	return distancia;
 }
 
+
+/* Base de datos de patrones */
+
+static std::unordered_map<int_fast64_t,State16*> hashFirstPattern;
+static std::unordered_map<int_fast64_t,State16*> hashSecondPattern;
+static std::unordered_map<int_fast64_t,State16*> hashThirdPattern;
+static std::unordered_map<int_fast64_t,State16*> hashFourthPattern;
+
+State16* first_pattern;
+State16* second_pattern;
+State16* third_pattern;
+State16* fourth_pattern;
+
+State16* crear_estado_patron( , int_fast64_t st , char zero_index){
+	
+	std::unordered_map<int_fast64_t,State16*> hash;
+	
+	switch( num_patron ){
+		case 1:
+			hash = hashFirstPattern;
+			break;
+		case 2:
+			hash = hashSecondPattern;
+			break;
+		case 3:
+			hash = hashThirdPattern;
+			break;
+		case 4:
+			hash = hashFourthPattern;
+			break;
+	}
+	
+	std::unordered_map<int_fast64_t,State16*>::const_iterator isState = hash.find(st);
+	
+	if ( isState == hash.end() ){
+		State16* state = new State16(st,zero_index);
+		hash[st] = state;
+		return state;
+	}
+	else{
+		return isState->second;
+	}
+}
+
+void calcularPDB(){
+	
+	first_pattern  = crear_estado_patron(hashFirstPattern, 0x0100450000000000,0);
+	second_pattern  = crear_estado_patron(hashSecondPattern, 0x0023005700000000,0);
+	third_pattern  = crear_estado_patron(hashThirdPattern,   0x000000008900cd00,0);
+	fourth_pattern  = crear_estado_patron(hashFourthPattern, 0x0000000000ab00ef,0);
+	
+}
+
+
 /*std::pair<std::list<Node*>,int> bounded_dfs(Node n,int g ,int bound,int (*h)(State16*)){
     std::list<Node*>* vacio = new std::list<Node*>;
     if (g + h(n.node_state) > bound){ 
@@ -190,6 +244,7 @@ bool ida_star1(Node* root, int (*h)(State16*)){
        t = search(root,0,bound,h);
 	   
        if (t.second == true){
+		std::cout << "Numero de nodos expandidos: " << expanded_nodes;
 		stateMap.clear();
 		delete(root);
 		return true;
