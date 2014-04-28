@@ -190,16 +190,16 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 			switch( act ){
 				
 				case ARRIBA:
-					suc = new Node( node , (action) act , node->node_state->a_arriba() );
+					suc = new Node( node , (action) act , crear_estadop(node->node_state->a_arribap()) );
 					break;
 				case ABAJO:
-					suc = new Node( node , (action) act , node->node_state->a_abajo() );
+					suc = new Node( node , (action) act , crear_estadop(node->node_state->a_abajop()) );
 					break;
 				case IZQUIERDA:
-					suc = new Node( node , (action) act , node->node_state->a_izquierda() );
+					suc = new Node( node , (action) act , crear_estadop(node->node_state->a_izquierdap()) );
 					break;
 				case DERECHA:
-					suc = new Node( node , (action) act , node->node_state->a_derecha() );
+					suc = new Node( node , (action) act , crear_estadop(node->node_state->a_derechap()) );
 					break;
 			}
 		
@@ -211,6 +211,7 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 			if (t.first < min.first){
 				min.first = t.first;
 			}
+                        delete suc;
 		}
 	}
 	
@@ -288,12 +289,12 @@ public:
 static std::unordered_map<int_fast64_t,int> dist16;
 
 bool a_star(Node* root,int (*h)(State16*)){
-    std::priority_queue<Node*,std::vector<Node*>,compare_node> q (compare_node(false,h));  
+    std::priority_queue<Node*,std::vector<Node*>,compare_node> q (compare_node(true,h));  
     q.push(root);
     while (!q.empty()){
         Node* n = q.top();
         q.pop();
-        if ((n->node_state->closed != false) || (dist16[n->node_state->current_state] > n->cost)) {
+        if ((n->node_state->closed == false) || (dist16[n->node_state->current_state] > n->cost)) {
             n->node_state->closed = true;
             dist16[n->node_state->current_state] = n->cost;
             if (n->node_state->is_goal()) return true;
