@@ -105,35 +105,68 @@ int main(int argc, char *argv[]){
     }
 
     while(!fs.eof()) {
-        fs >> n;
-        if (n == 0) zero_index = i;
-        array[i] = n;
-        i++;
-        if (i == 16){
-            int_fast64_t a =  toInt64(array);
-            State16* s = new State16(a,zero_index);
-            Node *n = new Node(s);
+        if (*algoritmo == "ida*"){
+            fs >> n;
+            if (n == 0) zero_index = i;
+            array[i] = n;
+            i++;
+            if (i == 16){
+                int_fast64_t a =  toInt64(array);
+                State16* s = new State16(a,zero_index);
+                Node *n = new Node(s);
 			
-			std::chrono::time_point<std::chrono::system_clock> start, end;
-			start = std::chrono::system_clock::now();
+		std::chrono::time_point<std::chrono::system_clock> start, end;
+		start = std::chrono::system_clock::now();
 			
-			bool funciona = ida_star1(n,dist_manhattan);
+		bool funciona = ida_star1(n,dist_manhattan);
 			
-			if ( funciona ){
-				std::cout << "Funciono!";
-			}
-			else{
-				std::cout << "No funciono :(";
-			}	
+		if ( funciona ){
+		    std::cout << "Funciono!";
+		}
+		else{
+		    std::cout << "No funciono :(";
+		}	
 			
-			end = std::chrono::system_clock::now();
+		end = std::chrono::system_clock::now();
 			
-			std::chrono::duration<double> elapsed_seconds = end-start;
+		std::chrono::duration<double> elapsed_seconds = end-start;
 			
-			std::cout << "Tiempo: " << elapsed_seconds.count() << "\n";
-			//std::cin.get();
+		std::cout << "Tiempo: " << elapsed_seconds.count() << "\n";
+		//std::cin.get();
             
-            i = 0;
+                i = 0;
+            }
+        } else {
+            fs >> n;
+            if (n == 0) zero_index = i;
+            array[i] = n;
+            i++;
+            if (i == 16){
+                int_fast64_t a =  toInt64(array);
+                State16* s = new State16(a,zero_index);
+                Node *n = new Node(s);
+			
+		std::chrono::time_point<std::chrono::system_clock> start, end;
+		start = std::chrono::system_clock::now();
+			
+		bool funciona = a_star(n,dist_manhattan);
+			
+		if ( funciona ){
+		    std::cout << "Funciono!";
+		}
+		else{
+		    std::cout << "No funciono a estrella :(";
+		}	
+			
+		end = std::chrono::system_clock::now();
+			
+		std::chrono::duration<double> elapsed_seconds = end-start;
+			
+		std::cout << "Tiempo: " << elapsed_seconds.count() << "\n";
+		//std::cin.get();
+            
+                i = 0;
+            }
         }
     }
     return 0;

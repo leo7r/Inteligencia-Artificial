@@ -136,16 +136,16 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 			switch( act ){
 				
 				case ARRIBA:
-					suc = new Node( node , (action) act , node->node_state->a_arriba() );
+					suc = new Node( node , (action) act , crear_estadop(node->node_state->a_arribap()) );
 					break;
 				case ABAJO:
-					suc = new Node( node , (action) act , node->node_state->a_abajo() );
+					suc = new Node( node , (action) act , crear_estadop(node->node_state->a_abajop()) );
 					break;
 				case IZQUIERDA:
-					suc = new Node( node , (action) act , node->node_state->a_izquierda() );
+					suc = new Node( node , (action) act , crear_estadop(node->node_state->a_izquierdap()) );
 					break;
 				case DERECHA:
-					suc = new Node( node , (action) act , node->node_state->a_derecha() );
+					suc = new Node( node , (action) act , crear_estadop(node->node_state->a_derechap()) );
 					break;
 			}
 		
@@ -157,6 +157,7 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 			if (t.first < min.first){
 				min.first = t.first;
 			}
+                        delete suc;
 		}
 	}
 	
@@ -238,7 +239,7 @@ bool a_star(Node* root,int (*h)(State16*)){
     while (!q.empty()){
         Node* n = q.top();
         q.pop();
-        if ((n->node_state->closed != false) || (dist16[n->node_state->current_state] > n->cost)) {
+        if ((n->node_state->closed == false) || (dist16[n->node_state->current_state] > n->cost)) {
             n->node_state->closed = true;
             dist16[n->node_state->current_state] = n->cost;
             if (n->node_state->is_goal()) return true;

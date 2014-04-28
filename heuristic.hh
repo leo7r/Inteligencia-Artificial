@@ -24,4 +24,8 @@ int dist_manhattan(State16*);
 
 bool ida_star1(Node*,int (*h)(State16*));
 
+bool a_star(Node* root,int (*h)(State16*));
+
 bool compare_node_state16 (const Node* , const Node* );
+
+
