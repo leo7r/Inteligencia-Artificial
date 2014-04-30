@@ -3,7 +3,7 @@
 
 int main(){
 	
-	State16* ini = crear_estado(0x7f82d63cb04a951e,9); //new State16(0x59de63271c0a48bf,10);
+	/*State16* ini = crear_estado(0x7f82d63cb04a951e,9); //new State16(0x59de63271c0a48bf,10);
 	Node* node = new Node(ini);
 	node->a = ARRIBA;
 	
@@ -25,7 +25,14 @@ int main(){
 		
 		//std::cout << dist_manhattan(tmp->node_state);
         succ.pop_front();
-    }
+    }*/
+	
+	//calcularPDB();
+	//loadPDB();
+	State16* ini = crear_estado(0x0123456789abcdef,0);
+	
+	State16* patron = firstPatternMask(ini);
+	patron->print_state();
 	
 	return 0;
 }

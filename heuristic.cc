@@ -16,11 +16,16 @@
  * =====================================================================================
  */
 #include <limits>
+#include <sstream>
+#include <string>
 #include <iostream>
+#include <fstream>
 #include <utility>
 #include <list>
 #include <queue>
 #include <stdint.h>
+#include <stdlib.h>
+#include <map>
 #include "heuristic.hh"
 
 int temporal = 0;
@@ -66,97 +71,229 @@ int dist_manhattan(State16* st){
 
 /* Base de datos de patrones */
 
-static std::unordered_map<int_fast64_t,State16*> hashFirstPattern;
-static std::unordered_map<int_fast64_t,State16*> hashSecondPattern;
-static std::unordered_map<int_fast64_t,State16*> hashThirdPattern;
-static std::unordered_map<int_fast64_t,State16*> hashFourthPattern;
+static std::map<std::pair<int_fast64_t,char>,State16*> hashPattern;
+static std::unordered_map<int_fast64_t,int> firstPattern;
+static std::unordered_map<int_fast64_t,int> secondPattern;
+static std::unordered_map<int_fast64_t,int> thirdPattern;
 
 State16* first_pattern;
 State16* second_pattern;
 State16* third_pattern;
-State16* fourth_pattern;
 
-State16* crear_estado_patron( , int_fast64_t st , char zero_index){
+State16* crear_estado_patron(int_fast64_t st , char zero_index){
+		
+	std::pair<int_fast64_t,char> par(st,zero_index);
 	
-	std::unordered_map<int_fast64_t,State16*> hash;
+	std::map<std::pair<int_fast64_t,char>,State16*>::const_iterator isState = hashPattern.find(par);
 	
-	switch( num_patron ){
-		case 1:
-			hash = hashFirstPattern;
-			break;
-		case 2:
-			hash = hashSecondPattern;
-			break;
-		case 3:
-			hash = hashThirdPattern;
-			break;
-		case 4:
-			hash = hashFourthPattern;
-			break;
-	}
-	
-	std::unordered_map<int_fast64_t,State16*>::const_iterator isState = hash.find(st);
-	
-	if ( isState == hash.end() ){
+	if ( isState == hashPattern.end() ){
 		State16* state = new State16(st,zero_index);
-		hash[st] = state;
+		std::pair<int_fast64_t,char> par(st,zero_index);
+		hashPattern[par] = state;
 		return state;
 	}
 	else{
-		return isState->second;
+		State16* ret = isState->second;
+		ret->zero_index = zero_index;
+		return ret;
 	}
+}
+
+bool isClosed( State16* st ){
+	
+	std::pair<int_fast64_t,char> par(st->current_state,st->zero_index);
+	std::map<std::pair<int_fast64_t,char>,State16*>::const_iterator isState = hashPattern.find(par);
+	
+	
+	return isState != hashPattern.end();
 }
 
 void calcularPDB(){
 	
-	first_pattern  = crear_estado_patron(hashFirstPattern, 0x0100450000000000,0);
-	second_pattern  = crear_estado_patron(hashSecondPattern, 0x0023005700000000,0);
-	third_pattern  = crear_estado_patron(hashThirdPattern,   0x000000008900cd00,0);
-	fourth_pattern  = crear_estado_patron(hashFourthPattern, 0x0000000000ab00ef,0);
+	first_pattern  = 	crear_estado_patron(0x0123006700000000,0);
+	second_pattern  = 	crear_estado_patron(0x000045008900c000,0);
+	third_pattern  = 	crear_estado_patron(0x0000000000ab0def,0);
+	
+	//bfs_pdb(first_pattern);
+	//bfs_pdb(second_pattern);
+	bfs_pdb(third_pattern);
+}
+
+void bfs_pdb(State16* st){
+
+	std::list<Node*> open;
+	Node* nodo = new Node( st );
+	open.push_front(nodo);
+	int num_nodos = 0;
+	
+	
+	std::ofstream myfile;
+	myfile.open ("patron3.txt");
+	
+	while ( !open.empty() ){
+		Node* aux = open.front();
+		
+		for ( int act = ARRIBA ; act < ROOT ; act++ ){
+				
+			if ( aux->node_state->is_posible((action)act) ){
+				
+				State16* suc_state;
+				
+				switch( act ){
+					
+					case ARRIBA:
+						suc_state = aux->node_state->a_arriba();
+						break;
+					case ABAJO:
+						suc_state = aux->node_state->a_abajo();
+						break;
+					case IZQUIERDA:
+						suc_state = aux->node_state->a_izquierda();
+						break;
+					case DERECHA:
+						suc_state = aux->node_state->a_derecha();
+						break;
+				}
+								
+				if ( !isClosed(suc_state) ){
+					State16* new_state = crear_estado_patron(suc_state->current_state,suc_state->zero_index);
+					Node* node = new Node( aux , (action) act , new_state );
+					
+					if ( aux->node_state->current_state == new_state->current_state ){
+						node->cost-=1;
+					}
+					else{
+						myfile << new_state->current_state << ":" << node->cost << "\n";
+						num_nodos++;
+					}
+					
+					open.push_back(node);
+					//std::cout << "Costo del nodo: " << node->cost << "\n";
+				}
+				
+			}
+		}
+
+		open.pop_front();
+	}
+	
+	std::cout << "Numero de nodos cerrados: " << num_nodos << "\n";
+	hashPattern.clear();
+	myfile.close();
+}
+
+void my_split(std::string &s, char delim, std::vector<std::string> &elems) {
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
 	
 }
 
+void loadPDB(){
+	loadPattern("patron1.txt",firstPattern);
+	loadPattern("patron2.txt",secondPattern);
+	loadPattern("patron3.txt",thirdPattern);
+}
 
-/*std::pair<std::list<Node*>,int> bounded_dfs(Node n,int g ,int bound,int (*h)(State16*)){
-    std::list<Node*>* vacio = new std::list<Node*>;
-    if (g + h(n.node_state) > bound){ 
-        std::pair<std::list<Node*>,int> result0;
-        result0 = std::make_pair(*vacio,g+h(n.node_state));
-        return result0;
-    }
-    if (n.node_state->is_goal()){
-        std::list<Node*>* result = new std::list<Node*>;
-        *result = n.extract_solution();
-        std::pair<std::list<Node*>,int> result1;
-        result1 =  std::make_pair(*result,n.cost);
-        return result1;
-    }
-    int new_bound = std::numeric_limits<int>::max();
-    std::list<Node*>* suc = new std::list<Node*>;
-    *suc = n.succ();
-    std::pair<std::list<Node*>, int> result;
-    std::list<Node*>::iterator it;
-    for ( it = suc->begin() ; it != suc->end(); ++it){
-        result = bounded_dfs(Node(&n,(*it)->a,(*it)->node_state),g,bound,h);
-        if (!result.first.empty()) return result;
-        new_bound = new_bound < result.second ? new_bound : result.second;
-    }
-    std::pair<std::list<Node*>,int> result2;
-    result2 = std::make_pair(0,new_bound);
-    return result2;
-}*/
+void loadPattern( std::string patron , std::unordered_map<int_fast64_t,int> hash ){
+	
+	std::ifstream myfile;
+	myfile.open (patron);
+	std::string line;
+	
+	if (myfile.is_open()){
+			
+		while ( std::getline(myfile,line) ){
+			
+			std::vector<std::string> v;
+			my_split(line,':',v);
+			
+			int_fast64_t st = strtoll (v.front().c_str(), NULL, 10);
+			int h = atoi(v.back().c_str());
+			
+			hash[st] = h;
+			
+		}
+	myfile.close();
+	}
+		
+}
 
-/*std::list<Node*> ida_star(Node root,int (*h)(State16*)){
-   int bound = h(root.node_state); 
-   std::pair < std::list<Node*>, int> par;
-   while (bound != std::numeric_limits<int>::max()){
-       par = bounded_dfs(root, 0, bound,h);
-       if (!par.first.empty()){
-            return par.first; 
-       }
-       bound = par.second;
-   }
-}*/
+int_fast64_t orMask( int index ){
+	
+	switch( index ){
+		
+		case 0:
+			return 0xf000000000000000;
+		case 1:
+			return 0x0f00000000000000;
+		case 2:
+			return 0x00f0000000000000;
+		case 3:
+			return 0x000f0000000000000;
+		case 4:
+			return 0x0000f00000000000;
+		case 5:
+			return 0x00000f0000000000;
+		case 6:
+			return 0x000000f000000000;
+		case 7:
+			return 0x0000000f00000000;
+		case 8:
+			return 0x00000000f0000000;
+		case 9:
+			return 0x000000000f000000;
+		case 10:
+			return 0x0000000000f00000;
+		case 11:
+			return 0x00000000000f0000;
+		case 12:
+			return 0x000000000000f000;
+		case 13:
+			return 0x0000000000000f00;
+		case 14:
+			return 0x00000000000000f0;
+		case 15:
+			return 0x000000000000000f;
+	}
+	
+}
+
+State16* firstPatternMask( State16* st ){
+	
+	int_fast64_t * object = &st->current_state;
+	
+    size_t size = sizeof st->current_state;
+    int i = (int) size-1;
+	
+	int_fast64_t mask = 0x0000000000000000;
+	int_fast64_t * mask_ptr = &mask;
+	  
+    for( i ; i >= 0; i--){
+	    //printf("%01d\t", (((const unsigned char *) object)[i] & 0xf0) >> 4 );
+		int first_cell = (((const unsigned char *) object)[i] & 0xf0) >> 4;
+		int second_cell = ((const unsigned char *) object)[i] & 0xf;
+		
+		if ( first_cell == 1 || first_cell == 2 || first_cell == 3 || first_cell == 6 || first_cell == 7 ){
+			
+			mask = mask | orMask(i);
+		}
+		
+		if ( second_cell == 1 || second_cell == 2 || second_cell == 3 || second_cell == 6 || second_cell == 7 ){
+			
+			mask = mask | orMask(i+1);
+		}
+		
+		
+		//std::cout << first_cell << " " << second_cell << " ";
+    }
+	
+	return new State16(mask,0);
+}
+
+/* Algoritmos */
 
 int expanded_nodes;
 

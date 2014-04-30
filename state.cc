@@ -84,6 +84,59 @@ bool State16::is_goal(){
 }
 
 
+bool State16::is_posible( action act ){
+	
+	switch( zero_index ){
+		
+		case 0:
+			if ( act == DERECHA || act == ABAJO )
+				return true;
+			break;
+		case 1:
+		case 2:
+			if ( act != ARRIBA )
+				return true;
+			break;
+		case 3:
+			if ( act == ABAJO || act == IZQUIERDA )
+				return true;
+			break;
+		case 4:
+		case 8:
+			if ( act != IZQUIERDA )
+				return true;
+			break;
+		case 5:
+		case 6:
+		case 9:
+		case 10:
+			return true;
+			break;
+		case 7:
+		case 11:
+			if ( act != DERECHA )
+				return true;
+			break;
+		case 12:
+			if ( act == ARRIBA || act == DERECHA )
+				return true;
+			break;
+		case 13:
+		case 14:
+			if ( act != ABAJO )
+				return true;
+			break;
+		case 15:
+			if ( act == ARRIBA || act == IZQUIERDA )
+				return true;
+			break;
+		
+	}
+	
+	return false;
+}
+
+
 void State16::print_state(){
     
     int_fast64_t * object = &current_state; // pendiente aca

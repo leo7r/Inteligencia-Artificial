@@ -17,6 +17,7 @@
  */
 #include "nodes.hh"
 #include <stdio.h>
+#include <vector>
 
 int dist_manhattan(State16*);
 
@@ -28,4 +29,20 @@ bool a_star(Node* root,int (*h)(State16*));
 
 bool compare_node_state16 (const Node* , const Node* );
 
+State16* crear_estado_patron( int_fast64_t , char);
 
+bool isClosed( State16* );
+
+void calcularPDB();
+
+void bfs_pdb(State16*);
+
+void loadPDB();
+
+void loadPattern( std::string , std::unordered_map<int_fast64_t,int> );
+
+void my_split(std::string&, char, std::vector<std::string>&);
+
+State16* firstPatternMask( State16* );
+
+int_fast64_t orMask( int );
