@@ -30,4 +30,4 @@ pruebas.o: heuristic.hh pruebas.cc
 
 clean:
 
-	rm *.o *.h.gch *.exe
+	rm *.o *.h.gch *.exe 15puzzle

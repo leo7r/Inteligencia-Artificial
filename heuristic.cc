@@ -420,8 +420,8 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 			switch( act ){
 				
 				case ARRIBA:
-					suc = new Node( node , (action) act , node->node_state->a_arriba() ); // Estoy guardando todos los estados. destroy states & nodes
-					break;
+		                suc = new Node( node , (action) act , node->node_state->a_arriba() );
+                                break;
 				case ABAJO:
 					suc = new Node( node , (action) act , node->node_state->a_abajo() );
 					break;
@@ -441,7 +441,6 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 			if (t.first < min.first){
 				min.first = t.first;
 			}
-            
 			liberar(suc);
 		}
 	}
@@ -518,7 +517,6 @@ public:
 
 
 bool a_star(Node* root,int (*h)(State16*)){
-
     std::unordered_map<int_fast64_t,int> dist16;
     std::priority_queue<Node*,std::vector<Node*>,compare_node> q (compare_node(true,h));  
     std::list<Node*>* succ = new std::list<Node*>;
@@ -526,7 +524,7 @@ bool a_star(Node* root,int (*h)(State16*)){
     while (!q.empty()){
         Node* n = q.top();
         q.pop();
-        if ((n->node_state->closed != false) || (dist16[n->node_state->current_state] > n->cost)) {
+        if ((n->node_state->closed == false) || (dist16[n->node_state->current_state] > n->cost)) {
             n->node_state->closed = true;
             dist16[n->node_state->current_state] = n->cost;
             if (n->node_state->is_goal()) return true;

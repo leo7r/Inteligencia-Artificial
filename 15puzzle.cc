@@ -117,11 +117,15 @@ int main(int argc, char *argv[]){
 			
 		std::chrono::time_point<std::chrono::system_clock> start, end;
 		start = std::chrono::system_clock::now();
-			
-		bool funciona = ida_star1(n,dist_manhattan);
+	        bool funciona;		
+                if (*heuristica == "manhattan"){
+		    funciona = ida_star1(n,dist_manhattan);
+                } else{
+                    funciona = ida_star1(n,pdbHeuristic);
+                }
 			
 		if ( funciona ){
-		    std::cout << "Funciono!";
+		    std::cout << "Funciono! ";
 		}
 		else{
 		    std::cout << "No funciono :(";
@@ -148,9 +152,12 @@ int main(int argc, char *argv[]){
 			
 		std::chrono::time_point<std::chrono::system_clock> start, end;
 		start = std::chrono::system_clock::now();
-			
-		bool funciona = a_star(n,dist_manhattan);
-			
+		bool funciona;	
+                if (*heuristica == "manhattan"){
+		    funciona = a_star(n,dist_manhattan);
+		} else{
+                    funciona = a_star(n,pdbHeuristic);
+                }
 		if ( funciona ){
 		    std::cout << "Funciono!";
 		}
