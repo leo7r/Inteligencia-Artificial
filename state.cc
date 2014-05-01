@@ -78,11 +78,9 @@ State16::~State16(){
 	delete(this);
 }
 
-
 bool State16::is_goal(){
     return current_state == 0x0123456789abcdef;
 }
-
 
 bool State16::is_posible( action act ){
 	
@@ -136,7 +134,6 @@ bool State16::is_posible( action act ){
 	return false;
 }
 
-
 void State16::print_state(){
     
     int_fast64_t * object = &current_state; // pendiente aca
@@ -162,7 +159,6 @@ void State16::print_state(){
     printf("%01d\t", (((const unsigned char *) object)[0] & 0xf0) >> 4 );
     printf("%01d\t\n", ((const unsigned char *) object)[0] & 0xf);
 }
-
 
 char State16::find_zero_index(){
 

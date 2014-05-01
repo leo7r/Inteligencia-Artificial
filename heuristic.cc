@@ -16,16 +16,18 @@
  * =====================================================================================
  */
 #include <limits>
-#include <sstream>
-#include <string>
 #include <iostream>
-#include <fstream>
 #include <utility>
 #include <list>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <utility>
 #include <queue>
 #include <stdint.h>
 #include <stdlib.h>
 #include <map>
+#include <stdexcept>
 #include "heuristic.hh"
 
 int temporal = 0;
@@ -67,7 +69,6 @@ int dist_manhattan(State16* st){
 	
 	return distancia;
 }
-
 
 /* Base de datos de patrones */
 
@@ -114,12 +115,12 @@ void calcularPDB(){
 	second_pattern  = 	crear_estado_patron(0x000045008900c000,0);
 	third_pattern  = 	crear_estado_patron(0x0000000000ab0def,0);
 	
-	//bfs_pdb(first_pattern);
-	//bfs_pdb(second_pattern);
-	bfs_pdb(third_pattern);
+	//bfs_pdb(first_pattern,"patron1.txt");
+	//bfs_pdb(second_pattern,"patron2.txt");
+	bfs_pdb(third_pattern,"patron3.txt");
 }
 
-void bfs_pdb(State16* st){
+void bfs_pdb(State16* st , std::string file ){
 
 	std::list<Node*> open;
 	Node* nodo = new Node( st );
@@ -128,7 +129,7 @@ void bfs_pdb(State16* st){
 	
 	
 	std::ofstream myfile;
-	myfile.open ("patron3.txt");
+	myfile.open (file);
 	
 	while ( !open.empty() ){
 		Node* aux = open.front();
@@ -163,7 +164,22 @@ void bfs_pdb(State16* st){
 						node->cost-=1;
 					}
 					else{
-						myfile << new_state->current_state << ":" << node->cost << "\n";
+						//myfile << new_state->current_state << ":" << node->cost << "\n";
+						
+						try{
+							firstPattern.at(new_state->current_state);
+							
+							//std::cout << "Duplicado: \n";
+							//new_state->print_state();
+							//std::cin.get();
+							
+						}
+						catch(const std::out_of_range& oor ){
+							
+						}
+						
+						firstPattern[new_state->current_state] = node->cost;
+						
 						num_nodos++;
 					}
 					
@@ -177,8 +193,17 @@ void bfs_pdb(State16* st){
 		open.pop_front();
 	}
 	
-	std::cout << "Numero de nodos cerrados: " << num_nodos << "\n";
+	std::unordered_map<int_fast64_t,int>::const_iterator isState = firstPattern.begin();
+		
+	for ( auto it = firstPattern.begin(); it != firstPattern.end(); ++it ){
+		//std::cout << "Pasando al archivo\n";
+		myfile << it->first << ":" << it->second << "\n";
+		//std::cin.get();
+	}
+	
+	std::cout << "Numero de nodos cerrados: " << num_nodos <<  " | " << firstPattern.size() << "\n" ;
 	hashPattern.clear();
+	firstPattern.clear();
 	myfile.close();
 }
 
@@ -192,16 +217,17 @@ void my_split(std::string &s, char delim, std::vector<std::string> &elems) {
 }
 
 void loadPDB(){
-	loadPattern("patron1.txt",firstPattern);
-	loadPattern("patron2.txt",secondPattern);
-	loadPattern("patron3.txt",thirdPattern);
+	loadPattern("patron1.txt",1);
+	loadPattern("patron2.txt",2);
+	loadPattern("patron3.txt",3);
 }
 
-void loadPattern( std::string patron , std::unordered_map<int_fast64_t,int> hash ){
+void loadPattern( std::string patron , int num_patron ){
 	
 	std::ifstream myfile;
 	myfile.open (patron);
 	std::string line;
+	int num = 0;
 	
 	if (myfile.is_open()){
 			
@@ -213,9 +239,28 @@ void loadPattern( std::string patron , std::unordered_map<int_fast64_t,int> hash
 			int_fast64_t st = strtoll (v.front().c_str(), NULL, 10);
 			int h = atoi(v.back().c_str());
 			
-			hash[st] = h;
+			switch( num_patron ){
+				
+				case 1:
+					
+					firstPattern[st] = h;
+					break;
+				case 2:
+					secondPattern[st] = h;
+					break;
+				case 3:
+					thirdPattern[st] = h;
+					break;
+			}
+			
+			num++;
+			
+			//hash[st] = h;
 			
 		}
+		
+		std::cout << "Num lineas leidas: " << num << "\n";
+		
 	myfile.close();
 	}
 		
@@ -232,7 +277,7 @@ int_fast64_t orMask( int index ){
 		case 2:
 			return 0x00f0000000000000;
 		case 3:
-			return 0x000f0000000000000;
+			return 0x000f000000000000;
 		case 4:
 			return 0x0000f00000000000;
 		case 5:
@@ -261,29 +306,49 @@ int_fast64_t orMask( int index ){
 	
 }
 
-State16* firstPatternMask( State16* st ){
+State16* patternMask( State16* st , int num_patron ){
 	
 	int_fast64_t * object = &st->current_state;
 	
     size_t size = sizeof st->current_state;
     int i = (int) size-1;
 	
+		
 	int_fast64_t mask = 0x0000000000000000;
 	int_fast64_t * mask_ptr = &mask;
 	  
     for( i ; i >= 0; i--){
-	    //printf("%01d\t", (((const unsigned char *) object)[i] & 0xf0) >> 4 );
 		int first_cell = (((const unsigned char *) object)[i] & 0xf0) >> 4;
 		int second_cell = ((const unsigned char *) object)[i] & 0xf;
 		
-		if ( first_cell == 1 || first_cell == 2 || first_cell == 3 || first_cell == 6 || first_cell == 7 ){
+		bool comp1 = false;
+		bool comp2 = false;
+	
+		switch( num_patron ){
 			
-			mask = mask | orMask(i);
+			case 1:
+				comp1 = first_cell == 1 || first_cell == 2 || first_cell == 3 || first_cell == 6 || first_cell == 7;
+				comp2 = second_cell == 1 || second_cell == 2 || second_cell == 3 || second_cell == 6 || second_cell == 7;
+				break;
+			case 2:
+				comp1 = first_cell == 4 || first_cell == 5 || first_cell == 8 || first_cell == 9 || first_cell == 12;
+				comp2 = second_cell == 4 || second_cell == 5 || second_cell == 8 || second_cell == 9 || second_cell == 12;
+				break;
+			case 3:
+				comp1 = first_cell == 10 || first_cell == 11 || first_cell == 13 || first_cell == 14 || first_cell == 15;
+				comp2 = second_cell == 10 || second_cell == 11 || second_cell == 13 || second_cell == 14 || second_cell == 15;
+				break;
+			
 		}
 		
-		if ( second_cell == 1 || second_cell == 2 || second_cell == 3 || second_cell == 6 || second_cell == 7 ){
+		if ( comp1 ){
+			mask = mask | orMask((size - i -1)*2);
+		}
+		
+		if ( comp2 ){
 			
-			mask = mask | orMask(i+1);
+			mask = mask | orMask((size - i )*2-1);
+			
 		}
 		
 		
@@ -293,14 +358,34 @@ State16* firstPatternMask( State16* st ){
 	return new State16(mask,0);
 }
 
+int pdbHeuristic( State16* st ){
+	
+	int h = 0;
+	
+	State16* firstMask = patternMask(st,1);
+	int_fast64_t fP = firstMask->current_state & st->current_state;
+	h+= firstPattern[fP];
+	
+	firstMask = patternMask(st,2);
+	fP = firstMask->current_state & st->current_state;
+	h+= secondPattern[fP];
+	
+	firstMask = patternMask(st,3);
+	fP = firstMask->current_state & st->current_state;
+	h+= thirdPattern[fP];
+	
+	return h;
+}
+
 /* Algoritmos */
 
 int expanded_nodes;
 
 std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
     std::pair<int,bool> f;
+		
     f.first = g + h(node->node_state);
-	
+		
 	f.second = false;
 	
     if (f.first > bound ){ 
@@ -315,6 +400,10 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 	min.second = false;
     temporal++;
 	
+	//std::cout << "Intentando expandir estado con h = " << h(node->node_state) << "\n";
+	//node->node_state->print_state();
+	//std::cin.get();
+	
     //std::list<Node*> succ =  node->succ();	
     expanded_nodes++;
 	
@@ -327,16 +416,16 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 			switch( act ){
 				
 				case ARRIBA:
-					suc = new Node( node , (action) act , crear_estadop(node->node_state->a_arribap()) );
+					suc = new Node( node , (action) act , node->node_state->a_arriba() );
 					break;
 				case ABAJO:
-					suc = new Node( node , (action) act , crear_estadop(node->node_state->a_abajop()) );
+					suc = new Node( node , (action) act , node->node_state->a_abajo() );
 					break;
 				case IZQUIERDA:
-					suc = new Node( node , (action) act , crear_estadop(node->node_state->a_izquierdap()) );
+					suc = new Node( node , (action) act , node->node_state->a_izquierda() );
 					break;
 				case DERECHA:
-					suc = new Node( node , (action) act , crear_estadop(node->node_state->a_derechap()) );
+					suc = new Node( node , (action) act , node->node_state->a_derecha() );
 					break;
 			}
 		
@@ -348,7 +437,6 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 			if (t.first < min.first){
 				min.first = t.first;
 			}
-                        delete suc;
 		}
 	}
 	
@@ -382,7 +470,6 @@ bool ida_star1(Node* root, int (*h)(State16*)){
        t = search(root,0,bound,h);
 	   
        if (t.second == true){
-		std::cout << "Numero de nodos expandidos: " << expanded_nodes;
 		stateMap.clear();
 		delete(root);
 		return true;
@@ -426,12 +513,12 @@ public:
 static std::unordered_map<int_fast64_t,int> dist16;
 
 bool a_star(Node* root,int (*h)(State16*)){
-    std::priority_queue<Node*,std::vector<Node*>,compare_node> q (compare_node(true,h));  
+    std::priority_queue<Node*,std::vector<Node*>,compare_node> q (compare_node(false,h));  
     q.push(root);
     while (!q.empty()){
         Node* n = q.top();
         q.pop();
-        if ((n->node_state->closed == false) || (dist16[n->node_state->current_state] > n->cost)) {
+        if ((n->node_state->closed != false) || (dist16[n->node_state->current_state] > n->cost)) {
             n->node_state->closed = true;
             dist16[n->node_state->current_state] = n->cost;
             if (n->node_state->is_goal()) return true;
