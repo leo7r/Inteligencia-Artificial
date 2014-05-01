@@ -297,19 +297,24 @@ State16* firstPatternMask( State16* st ){
 
 int expanded_nodes;
 
+void liberar(Node* suc){
+    delete suc->node_state;
+    delete suc;
+}
+
 std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
     std::pair<int,bool> f;
-    f.first = g + h(node->node_state);
+    f.first =g +  h(node->node_state);
 	
-	f.second = false;
-	
+    f.second = false;
+    
     if (f.first > bound ){ 
 		return f;
 	};
     if (node->node_state->is_goal()){
         f.second = true;
         return f;
-    }
+    }	
     std::pair<int,bool> min;
     min.first = std::numeric_limits<int>::max();
 	min.second = false;
@@ -327,16 +332,16 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 			switch( act ){
 				
 				case ARRIBA:
-					suc = new Node( node , (action) act , crear_estadop(node->node_state->a_arribap()) );
+					suc = new Node( node , (action) act , node->node_state->a_arriba() ); // Estoy guardando todos los estados. destroy states & nodes
 					break;
 				case ABAJO:
-					suc = new Node( node , (action) act , crear_estadop(node->node_state->a_abajop()) );
+					suc = new Node( node , (action) act , node->node_state->a_abajo() );
 					break;
 				case IZQUIERDA:
-					suc = new Node( node , (action) act , crear_estadop(node->node_state->a_izquierdap()) );
+					suc = new Node( node , (action) act , node->node_state->a_izquierda() );
 					break;
 				case DERECHA:
-					suc = new Node( node , (action) act , crear_estadop(node->node_state->a_derechap()) );
+					suc = new Node( node , (action) act , node->node_state->a_derecha() );
 					break;
 			}
 		
@@ -348,7 +353,7 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 			if (t.first < min.first){
 				min.first = t.first;
 			}
-                        delete suc;
+                        liberar(suc);
 		}
 	}
 	
@@ -378,22 +383,21 @@ bool ida_star1(Node* root, int (*h)(State16*)){
    std::pair<int,bool> t;
    while(1){
    
-	   std::cout << "Bound: " << bound << "\n";
-       t = search(root,0,bound,h);
+        std::cout << "Bound: " << bound << "\n";
+        t = search(root,0,bound,h);
 	   
-       if (t.second == true){
-		std::cout << "Numero de nodos expandidos: " << expanded_nodes;
-		stateMap.clear();
-		delete(root);
-		return true;
-	   }
-       if (t.first == std::numeric_limits<int>::max()){
-		stateMap.clear();
-		delete(root);
-		return false;
-		}
-	   
-	   bound = t.first;
+        if (t.second == true){
+	    std::cout << "Numero de nodos expandidos: " << expanded_nodes;
+	    stateMap.clear();
+	    delete(root);
+	    return true;
+	}
+        if (t.first == std::numeric_limits<int>::max()){
+	    stateMap.clear();
+	    delete(root);
+	    return false;
+        }   
+	bound = t.first;
    }
 }
 
@@ -427,6 +431,7 @@ static std::unordered_map<int_fast64_t,int> dist16;
 
 bool a_star(Node* root,int (*h)(State16*)){
     std::priority_queue<Node*,std::vector<Node*>,compare_node> q (compare_node(true,h));  
+    std::list<Node*>* succ = new std::list<Node*>; 
     q.push(root);
     while (!q.empty()){
         Node* n = q.top();
@@ -436,13 +441,18 @@ bool a_star(Node* root,int (*h)(State16*)){
             dist16[n->node_state->current_state] = n->cost;
             if (n->node_state->is_goal()) return true;
             
-            std::list<Node*> succ =  n->succ();
-            while (!succ.empty()){
-                Node* tmp = succ.front();
-                if (h(tmp->node_state) < std::numeric_limits<int>::max()) q.push(tmp);     
-                succ.pop_front();
+            n->succ(succ);
+            while (!succ->empty()){
+                Node* tmp = succ->front();
+                if (h(tmp->node_state) < std::numeric_limits<int>::max()){
+                    q.push(tmp);     
+                } else{
+                    liberar(tmp);
+                }
+                succ->pop_front();
             }
         }
+        delete n;
     }
     return false;
 }
