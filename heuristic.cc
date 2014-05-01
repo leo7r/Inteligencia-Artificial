@@ -427,9 +427,9 @@ public:
     }
 };
 
-static std::unordered_map<int_fast64_t,int> dist16;
 
 bool a_star(Node* root,int (*h)(State16*)){
+    std::unordered_map<int_fast64_t,int> dist16;
     std::priority_queue<Node*,std::vector<Node*>,compare_node> q (compare_node(true,h));  
     std::list<Node*>* succ = new std::list<Node*>; 
     q.push(root);
