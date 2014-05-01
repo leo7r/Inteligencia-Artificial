@@ -60,7 +60,7 @@ public:
     std::pair<int_fast64_t,char> a_izquierdap();
     std::pair<int_fast64_t,char> a_arribap();
     std::pair<int_fast64_t,char> a_abajop();
-	bool is_posible( action );
+    bool is_posible( action );
 };
 
 class State24{

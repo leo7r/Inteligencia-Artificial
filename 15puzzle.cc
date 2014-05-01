@@ -55,9 +55,9 @@ void imprimirAyuda(){
 }
 
 int main(int argc, char *argv[]){
-    std::string* f_name;
-    std::string* algoritmo;
-    std::string* heuristica;
+    std::string* f_name = 0;
+    std::string* algoritmo = 0;
+    std::string* heuristica = 0;
     int c;
     int n,i;
     char zero_index;
