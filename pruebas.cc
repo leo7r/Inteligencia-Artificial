@@ -5,7 +5,13 @@
 #include <ctype.h>
 
 int main(){
-	
+
+        char array[15] = {0,68, 50,20, -57,66,84,-74,53,-49,-124,101,58,86,-41};
+        //signed char array[15] = {-34,-34, -34,-34, -34,-34,-34,-83,-34,-34,-34,-34,-34,-34,-34};
+        State24* ini = new State24(array,0);
+        bool e = ini->is_goal();
+        std::cout << e;
+    
 	/*State16* ini = crear_estado(0x7f82d63cb04a951e,9); //new State16(0x59de63271c0a48bf,10);
 	Node* node = new Node(ini);
 	node->a = ARRIBA;
@@ -33,6 +39,8 @@ int main(){
 	//calcularPDB();
 	loadPDB();
 	State16* ini = crear_estado(0x7f82d63cb41a950e,14);
+	//loadPDB();
+/*  	State16* ini = crear_estado(0x1325a9f68edbc470,0);
 	
 	pdbHeuristic(ini);
 	ini = crear_estado(0x7f82d63cb41a95e0,14);
@@ -60,18 +68,10 @@ int main(){
 	std::chrono::duration<double> elapsed_seconds = end-start;
 		
 	std::cout << "Tiempo: " << elapsed_seconds.count() << "\n";
-	*/
-	/*
-	State16* patron = patternMask(ini,1);
-	patron->print_state();
-	patron = patternMask(ini,2);
-	patron->print_state();
-	patron = patternMask(ini,3);
-	patron->print_state();
-	*/
-	
+
 	//std::cout << pdbHeuristic(ini);
 	
 	
-	return 0;
+	return 0;*/
+
 }
