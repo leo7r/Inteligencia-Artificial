@@ -278,6 +278,21 @@ std::pair<int_fast64_t,char> State16::a_abajop(){
         std::pair<int_fast64_t,char> result = std::make_pair(temp,zero_index+4);
 	return result;
 }
-
+/**
+ * Constructor para la clase State24
+ */
 State24::State24(){}
+
+State24::State24(char* arr, char zi): current_state(arr), zero_index(zi), closed(false){}
+/**
+ * Constructor para la clase State24
+ */
 State24::~State24(){}
+
+bool State24::is_goal(){
+    long long int r1 = 0x00443214c74254b6;
+    long long int r2 = 0xb635cf84653a56d7;
+    long long int* p1 =  (long long int*) &current_state[0];
+    long long int* p2 =  (long long int*) &current_state[7];
+    return ((*p1 == r1) && (*p2 == r2));
+}

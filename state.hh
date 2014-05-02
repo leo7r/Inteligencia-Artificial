@@ -63,9 +63,28 @@ public:
     bool is_posible( action );
 };
 
+/*Si necesitamos 24 posiciones con
+  5 bits tendriamos 32 posiciones para
+  representar.
+  Con 5 bits * 24 posiciones necesitariamos
+  120 bits para representar todo.
+  Esto lo podriamos obtener con
+  120 bits / 8 bits (que son caracter) = 15 chars */
 class State24{
+public:
+    char* current_state; // Arreglo de arrays de 15
+    char zero_index;
+    bool closed;
     State24(); 
+    State24(char*,char);
     ~State24();
+    bool is_goal();
+    void print_state();
+    char find_zero_index();
+    State24* a_derecha();
+    State24* a_izquierda();
+    State24* a_arriba();
+    State24* a_abajo();   
 };
 
 static std::unordered_map<int_fast64_t,State16*> stateMap;
