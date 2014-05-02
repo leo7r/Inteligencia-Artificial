@@ -31,9 +31,14 @@ int main(){
     }*/
 	
 	//calcularPDB();
-	//loadPDB();
-	State16* ini = crear_estado(0x1325a9f68edbc470,0);
+	loadPDB();
+	State16* ini = crear_estado(0x7f82d63cb41a950e,14);
 	
+	pdbHeuristic(ini);
+	ini = crear_estado(0x7f82d63cb41a95e0,14);
+	pdbHeuristic(ini);
+	
+	/*
 	//0x7f82d63cb04a951e
     Node *n = new Node(ini);
 	ini->print_state();
@@ -55,7 +60,7 @@ int main(){
 	std::chrono::duration<double> elapsed_seconds = end-start;
 		
 	std::cout << "Tiempo: " << elapsed_seconds.count() << "\n";
-	
+	*/
 	/*
 	State16* patron = patternMask(ini,1);
 	patron->print_state();

@@ -169,16 +169,20 @@ void bfs_pdb(State16* st , std::string file ){
 						try{
 							firstPattern.at(new_state->current_state);
 							
+							if ( firstPattern[new_state->current_state] > node->cost ){
+								firstPattern[new_state->current_state] = node->cost;
+								//std::cout << "Encontre duplicado con menor costo!\n";
+							}
+							
 							//std::cout << "Duplicado: \n";
 							//new_state->print_state();
 							//std::cin.get();
 							
 						}
 						catch(const std::out_of_range& oor ){
-							
+							firstPattern[new_state->current_state] = node->cost;
 						}
 						
-						firstPattern[new_state->current_state] = node->cost;
 						
 						num_nodos++;
 					}
@@ -361,20 +365,28 @@ State16* patternMask( State16* st , int num_patron ){
 int pdbHeuristic( State16* st ){
 	
 	int h = 0;
+	int fp,sp,tp;
 	
 	State16* firstMask = patternMask(st,1);
 	int_fast64_t fP = firstMask->current_state & st->current_state;
-	h+= firstPattern[fP];
+	fp = firstPattern[fP];
+	//h+= firstPattern[fP];
 	
 	firstMask = patternMask(st,2);
 	fP = firstMask->current_state & st->current_state;
-	h+= secondPattern[fP];
+	//h+= secondPattern[fP];
+	sp = secondPattern[fP];
 	
 	firstMask = patternMask(st,3);
 	fP = firstMask->current_state & st->current_state;
-	h+= thirdPattern[fP];
+	//h+= thirdPattern[fP];
+	tp = thirdPattern[fP];
 	
-	return h;
+	State16* asdasd = new State16(fP,0);
+	//asdasd->print_state();
+	
+	//std::cout << "H = " << (fp+sp+tp) << " = " << fp << "+" << sp << "+" << tp << "\n";
+	return fp+sp+tp;
 }
 
 /* Algoritmos */
@@ -386,29 +398,31 @@ void liberar(Node* suc){
     delete suc;
 }
 
-std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
-    std::pair<int,bool> f;
+std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State16*)){
+    std::pair<int,Node*> f;
 	
     f.first = g + h(node->node_state);
-    f.second = false;
+    f.second = NULL;
     
-    if (f.first > bound ){ 
+    if (f.first > bound ){
+		//std::cout << "--- Estado se paso del bound : " << bound << " (" << g + h(node->node_state) << "):\n";
+		//node->node_state->print_state();
 		return f;
 	};
     if (node->node_state->is_goal()){
-        f.second = true;
+        f.second = node;
         return f;
     }	
-    std::pair<int,bool> min;
+    std::pair<int,Node*> min;
     min.first = std::numeric_limits<int>::max();
-	min.second = false;
+	min.second = NULL;
     temporal++;
 	
-	//std::cout << "Intentando expandir estado con h = " << h(node->node_state) << "\n";
-	//node->node_state->print_state();
-	//std::cin.get();
+	/*std::cout << "Expandiendo estado con h = " << h(node->node_state) << " | bound = " << bound << "\n";
+	node->node_state->print_state();
+	std::cin.get();
+	*/
 	
-    //std::list<Node*> succ =  node->succ();	
     expanded_nodes++;
 	
 	for ( int act = ARRIBA ; act < ROOT ; act++ ){
@@ -432,10 +446,17 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 					suc = new Node( node , (action) act , node->node_state->a_derecha() );
 					break;
 			}
-		
-			std::pair<int,bool> t = search(suc,suc->cost ,bound,h);
+			
+			/*
+			std::cout << "Sucesor de :" << "\n";
+			node->node_state->print_state();
+			std::cout << "sucesor: ";
+			suc->node_state->print_state();
+			*/
+			
+			std::pair<int,Node*> t = search(suc,suc->cost ,bound,h);
 				
-			if (t.second == true){
+			if (t.second != NULL){
 				return t;
 			}
 			if (t.first < min.first){
@@ -463,27 +484,28 @@ std::pair<int,bool> search(Node* node, int g, int bound,int (*h)(State16*)){
 	return min;
 }
 
-bool ida_star1(Node* root, int (*h)(State16*)){
+Node* ida_star1(Node* root, int (*h)(State16*)){
 	
 	expanded_nodes = 0;
 
    int bound = h(root->node_state); 
-   std::pair<int,bool> t;
+   std::pair<int,Node*> t;
    while(1){
    
         std::cout << "Bound: " << bound << "\n";
         t = search(root,0,bound,h);
 	   
-        if (t.second == true){
+        if (t.second != NULL){
+			
 			std::cout << "Numero de nodos expandidos: " << expanded_nodes;
 			stateMap.clear();
 			delete(root);
-			return true;
+			return t.second;
 		}
         if (t.first == std::numeric_limits<int>::max()){
 			stateMap.clear();
 			delete(root);
-			return false;
+			return NULL;
         }
 		bound = t.first;
    }
