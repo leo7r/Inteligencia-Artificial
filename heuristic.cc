@@ -558,14 +558,14 @@ std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State16*)){
     */
 	return min;
 }
-
-Node* ida_star1(Node* root, int (*h)(State16*)){
-	
-	expanded_nodes = 0;
-
-   int bound = h(root->node_state); 
-   std::pair<int,Node*> t;
-   while(1){
+/**
+ * Implementacion de algoritmo de ida estrella.
+ */
+bool ida_star1(Node* root, int (*h)(State16*)){	
+    expanded_nodes = 0;
+    int bound = h(root->node_state); 
+    std::pair<int,Node*> t;
+    while(1){
    
         std::cout << "Bound: " << bound << "\n";
         t = search(root,0,bound,h);
@@ -575,14 +575,14 @@ Node* ida_star1(Node* root, int (*h)(State16*)){
 			std::cout << "Numero de nodos expandidos: " << expanded_nodes;
 			stateMap.clear();
 			delete(root);
-			return t.second;
+			return true;
 		}
         if (t.first == std::numeric_limits<int>::max()){
 			stateMap.clear();
 			delete(root);
-			return NULL;
+			return false;
         }
-		bound = t.first;
+	bound = t.first;
    }
 }
 
