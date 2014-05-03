@@ -29,8 +29,16 @@
 #include <map>
 #include <stdexcept>
 #include "heuristic.hh"
+/**
+ * Procedimiento que libera el espacio de un nodo.
+ */
+void liberar(Node* suc){
+    delete suc->node_state;
+    delete suc;
+}
 
 int temporal = 0;
+
 int manhattan[16][16] = {
 	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	{1, 0, 1, 2, 2, 1, 2, 3, 3, 2, 3, 4, 4, 3, 4, 5},
@@ -50,8 +58,11 @@ int manhattan[16][16] = {
 	{6, 5, 4, 3, 5, 4, 3, 2, 4, 3, 2, 1, 3, 2, 1, 0}
 
 
-};
- 
+}; /* Matriz para el calculo de las distancias manhattan */
+
+ /**
+  * Implementacion para la heuristica de distancia manhattan.
+  */
 int dist_manhattan(State16* st){
 
         int_fast64_t * object = &st->current_state;
@@ -72,15 +83,18 @@ int dist_manhattan(State16* st){
 
 /* Base de datos de patrones */
 
-static std::map<std::pair<int_fast64_t,char>,State16*> hashPattern;
-static std::unordered_map<int_fast64_t,int> firstPattern;
-static std::unordered_map<int_fast64_t,int> secondPattern;
-static std::unordered_map<int_fast64_t,int> thirdPattern;
+static std::map<std::pair<int_fast64_t,char>,State16*> hashPattern; /*  */
+static std::unordered_map<int_fast64_t,int> firstPattern;           /*  */
+static std::unordered_map<int_fast64_t,int> secondPattern;          /*  */
+static std::unordered_map<int_fast64_t,int> thirdPattern;           /*  */
 
 State16* first_pattern;
 State16* second_pattern;
 State16* third_pattern;
 
+/**
+ * Crea y retorna un estado del patron. 
+ */
 State16* crear_estado_patron(int_fast64_t st , char zero_index){
 		
 	std::pair<int_fast64_t,char> par(st,zero_index);
@@ -99,7 +113,10 @@ State16* crear_estado_patron(int_fast64_t st , char zero_index){
 		return ret;
 	}
 }
-
+/**
+ * Funcion que nos dice si un State16 se encuentra
+ * en la tabla de hash de patrones hashPattern.
+ */
 bool isClosed( State16* st ){
 	
 	std::pair<int_fast64_t,char> par(st->current_state,st->zero_index);
@@ -108,18 +125,23 @@ bool isClosed( State16* st ){
 	
 	return isState != hashPattern.end();
 }
-
+/**
+ * Crea los diversos pedazos para la
+ * base de datos de patrones.
+ */
 void calcularPDB(){
 	
 	first_pattern  = 	crear_estado_patron(0x0123006700000000,0);
 	second_pattern  = 	crear_estado_patron(0x000045008900c000,0);
 	third_pattern  = 	crear_estado_patron(0x0000000000ab0def,0);
 	
-	//bfs_pdb(first_pattern,"patron1.txt");
+	bfs_pdb(first_pattern,"patron1.txt");
 	bfs_pdb(second_pattern,"patron2.txt");
 	bfs_pdb(third_pattern,"patron3.txt");
 }
-
+/**
+ * Escribe un archivo binario con los estados y costos.
+ */
 void writeBinFile( std::ofstream* file , int_fast64_t st , int h ){
 	
 	int_fast64_t * ptr = &st;
@@ -130,7 +152,9 @@ void writeBinFile( std::ofstream* file , int_fast64_t st , int h ){
 		file->write((const char*) ptr_i , sizeof h );
 	}
 }
-
+/**
+ * BFS para la base de datos de patrones.
+ */
 void bfs_pdb(State16* st , std::string file ){
 
 	std::list<Node*> open;
@@ -146,11 +170,8 @@ void bfs_pdb(State16* st , std::string file ){
 		Node* aux = open.front();
 		
 		for ( int act = ARRIBA ; act < ROOT ; act++ ){
-				
 			if ( aux->node_state->is_posible((action)act) ){
-				
 				State16* suc_state;
-				
 				switch( act ){
 					
 					case ARRIBA:
@@ -168,44 +189,42 @@ void bfs_pdb(State16* st , std::string file ){
 				}
 								
 				if ( !isClosed(suc_state) ){
-					State16* new_state = crear_estado_patron(suc_state->current_state,suc_state->zero_index);
-					Node* node = new Node( aux , (action) act , new_state );
+				    State16* new_state = crear_estado_patron(suc_state->current_state,suc_state->zero_index);
+                                    delete suc_state;
+				    Node* node = new Node( aux , (action) act , new_state );
 					
-					if ( aux->node_state->current_state == new_state->current_state ){
-						node->cost-=1;
+				    if ( aux->node_state->current_state == new_state->current_state ){
+					node->cost-=1;
+				    }
+				    else{
+				        //myfile << new_state->current_state << ":" << node->cost << "\n";
+						
+				        try{
+					    firstPattern.at(new_state->current_state);
+							
+					    if ( firstPattern[new_state->current_state] > node->cost ){
+					        firstPattern[new_state->current_state] = node->cost;
+						//std::cout << "Encontre duplicado con menor costo!\n";
+					    }
+							
+					    //std::cout << "Duplicado: \n";
+					    //new_state->print_state();
+					    //std::cin.get();
+							
 					}
-					else{
-						//myfile << new_state->current_state << ":" << node->cost << "\n";
-						
-						try{
-							firstPattern.at(new_state->current_state);
-							
-							if ( firstPattern[new_state->current_state] > node->cost ){
-								firstPattern[new_state->current_state] = node->cost;
-								//std::cout << "Encontre duplicado con menor costo!\n";
-							}
-							
-							//std::cout << "Duplicado: \n";
-							//new_state->print_state();
-							//std::cin.get();
-							
-						}
-						catch(const std::out_of_range& oor ){
-							firstPattern[new_state->current_state] = node->cost;
-						}
-						
-						
-						num_nodos++;
+					catch(const std::out_of_range& oor ){
+					    firstPattern[new_state->current_state] = node->cost;
 					}
+					num_nodos++;
+				    }
 					
-					open.push_back(node);
-					//std::cout << "Costo del nodo: " << node->cost << "\n";
-				}
-				
+				    open.push_back(node);
+				    //std::cout << "Costo del nodo: " << node->cost << "\n";
+				}	
 			}
 		}
-
 		open.pop_front();
+                liberar(aux);
 	}
 	
 	std::unordered_map<int_fast64_t,int>::const_iterator isState = firstPattern.begin();
@@ -222,7 +241,9 @@ void bfs_pdb(State16* st , std::string file ){
 	firstPattern.clear();
 	myfile.close();
 }
-
+/**
+ * Corta un string determinado y lo coloca en un vector.
+ */
 void my_split(std::string &s, char delim, std::vector<std::string> &elems) {
     std::stringstream ss(s);
     std::string item;
@@ -231,13 +252,17 @@ void my_split(std::string &s, char delim, std::vector<std::string> &elems) {
     }
 	
 }
-
+/**
+ * Carga los archivos de la base de datos de patrones.
+ */
 void loadPDB(){
 	loadPattern("patron1.txt",1);
 	loadPattern("patron2.txt",2);
 	loadPattern("patron3.txt",3);
 }
-
+/** 
+ * Carga todos los patrones de la base de datos de patrones.
+ */
 void loadPattern( std::string patron , int num_patron ){
 	
 	std::ifstream file;
@@ -316,7 +341,10 @@ void loadPattern( std::string patron , int num_patron ){
 	}
 	*/
 }
-
+/**
+ * Retorna una mascara dependiendo
+ * de la posicion dada en index.
+ */
 int_fast64_t orMask( int index ){
 	
 	switch( index ){
@@ -356,7 +384,9 @@ int_fast64_t orMask( int index ){
 	}
 	
 }
-
+/**
+ * Retorna un patron dado un State16* y el num_patron.
+ */
 State16* patternMask( State16* st , int num_patron ){
 	
 	int_fast64_t * object = &st->current_state;
@@ -408,7 +438,9 @@ State16* patternMask( State16* st , int num_patron ){
 	
 	return new State16(mask,0);
 }
-
+/**
+ * Heuristica de PDB.
+ */
 int pdbHeuristic( State16* st ){
 	
 	int h = 0;
@@ -440,10 +472,6 @@ int pdbHeuristic( State16* st ){
 
 int expanded_nodes;
 
-void liberar(Node* suc){
-    delete suc->node_state;
-    delete suc;
-}
 
 std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State16*)){
     std::pair<int,Node*> f;

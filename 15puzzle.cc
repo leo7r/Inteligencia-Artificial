@@ -59,8 +59,8 @@ int main(int argc, char *argv[]){
     char zero_index;
     int array[16];
     i = 0;
-	
-	loadPDB();
+    calcularPDB();	
+    loadPDB();
 	
     while(!fs.eof()) {
         fs >> n;
