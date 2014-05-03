@@ -35,6 +35,8 @@ void calcularPDB();
 
 void bfs_pdb(State16* , std::string );
 
+void writeBinFile( std::ofstream* , int_fast64_t , int );
+
 void loadPDB();
 
 void loadPattern( std::string , int );

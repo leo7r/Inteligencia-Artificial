@@ -116,8 +116,19 @@ void calcularPDB(){
 	third_pattern  = 	crear_estado_patron(0x0000000000ab0def,0);
 	
 	//bfs_pdb(first_pattern,"patron1.txt");
-	//bfs_pdb(second_pattern,"patron2.txt");
+	bfs_pdb(second_pattern,"patron2.txt");
 	bfs_pdb(third_pattern,"patron3.txt");
+}
+
+void writeBinFile( std::ofstream* file , int_fast64_t st , int h ){
+	
+	int_fast64_t * ptr = &st;
+	int * ptr_i = &h;
+	
+	if ( file->is_open() ){
+		file->write((const char*)ptr,(sizeof st));
+		file->write((const char*) ptr_i , sizeof h );
+	}
 }
 
 void bfs_pdb(State16* st , std::string file ){
@@ -129,7 +140,7 @@ void bfs_pdb(State16* st , std::string file ){
 	
 	
 	std::ofstream myfile;
-	myfile.open (file);
+	myfile.open (file, std::ios::out | std::ios::binary);
 	
 	while ( !open.empty() ){
 		Node* aux = open.front();
@@ -201,7 +212,8 @@ void bfs_pdb(State16* st , std::string file ){
 		
 	for ( auto it = firstPattern.begin(); it != firstPattern.end(); ++it ){
 		//std::cout << "Pasando al archivo\n";
-		myfile << it->first << ":" << it->second << "\n";
+		writeBinFile( &myfile , it->first , it->second );
+		//myfile << it->first << ":" << it->second << "\n";
 		//std::cin.get();
 	}
 	
@@ -227,6 +239,45 @@ void loadPDB(){
 }
 
 void loadPattern( std::string patron , int num_patron ){
+	
+	std::ifstream file;
+	file.open (patron, std::ios::in | std::ios::binary);
+	
+	
+	int_fast64_t st;	
+	int h;
+	
+	int_fast64_t * ptr2 = (int_fast64_t*) malloc(sizeof st);
+	int * ptr2_i = (int*) malloc(sizeof h);
+	
+	int size = 524159;
+	
+	if ( file.is_open() ){
+		for ( int i = 0 ; i < size ; ++i ){
+			file.read((char*)ptr2,sizeof st);
+			file.read((char*)ptr2_i,sizeof h);
+			
+			st = *ptr2;
+			h = *ptr2_i;
+			
+			switch( num_patron ){
+				case 1:
+					firstPattern[st] = h;
+					break;
+				case 2:
+					secondPattern[st] = h;
+					break;
+				case 3:
+					thirdPattern[st] = h;
+					break;
+			}
+		}
+	}
+	
+	std::cout << "Cargado patron: " << num_patron << "\n";
+	file.close();
+	
+	/*
 	
 	std::ifstream myfile;
 	myfile.open (patron);
@@ -256,18 +307,14 @@ void loadPattern( std::string patron , int num_patron ){
 					thirdPattern[st] = h;
 					break;
 			}
-			
-			num++;
-			
-			//hash[st] = h;
-			
+			num++;			
 		}
 		
 		std::cout << "Num lineas leidas: " << num << "\n";
 		
 	myfile.close();
 	}
-		
+	*/
 }
 
 int_fast64_t orMask( int index ){

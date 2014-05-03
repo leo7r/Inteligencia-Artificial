@@ -159,6 +159,28 @@ void State16::print_state(){
     printf("%01d\t\n", ((const unsigned char *) object)[0] & 0xf);
 }
 
+char* State16::toCharArray(){
+    
+	char* array = new char[8];
+	
+    int_fast64_t * object = &current_state; // pendiente aca
+	
+    size_t size = sizeof current_state;
+    int i = (int) size-1;
+	
+	array = (char*) (this->current_state);
+  
+    /*for( i ; i >= 0; i--){
+	    //printf("%01d\t", (((const unsigned char *) object)[i] & 0xf0) >> 4 );
+	    //printf("%01d\t", ((const unsigned char *) object)[i] & 0xf);
+
+		array[size-i] = (((const unsigned char *) object)[i] & 0xf0) >> 4;
+		array[size-i+1] = (((const unsigned char *) object)[i] & 0xf);		
+    }*/
+	
+	return array;
+}
+
 char State16::find_zero_index(){
 
     int_fast64_t * object = &current_state; //pendiente aca
