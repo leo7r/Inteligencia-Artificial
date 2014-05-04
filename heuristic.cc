@@ -65,7 +65,7 @@ int manhattan[16][16] = {
   */
 int dist_manhattan(State16* st){
 
-        int_fast64_t * object = &st->current_state;
+    int_fast64_t * object = &st->current_state;
 	
 	size_t size = sizeof st->current_state;
 	int i = 0;
@@ -509,8 +509,8 @@ std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State16*)){
 			switch( act ){
 				
 				case ARRIBA:
-		                suc = new Node( node , (action) act , node->node_state->a_arriba() );
-                                break;
+					suc = new Node( node , (action) act , node->node_state->a_arriba() );
+					break;
 				case ABAJO:
 					suc = new Node( node , (action) act , node->node_state->a_abajo() );
 					break;

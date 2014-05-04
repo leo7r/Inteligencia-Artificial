@@ -23,6 +23,8 @@ int dist_manhattan(State16*);
 
 //std::list<Node*> ida_star(Node,int (*h)(State16*));
 
+std::pair<int,Node*> search(Node*, int, int,int (*h)(State16*) );
+
 bool ida_star1(Node*,int (*h)(State16*));
 
 bool compare_node_state16 (const Node* , const Node* );
