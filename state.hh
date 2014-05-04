@@ -64,20 +64,18 @@ public:
     bool is_posible( action );
 };
 
-/*Si necesitamos 24 posiciones con
-  5 bits tendriamos 32 posiciones para
-  representar.
-  Con 5 bits * 24 posiciones necesitariamos
-  120 bits para representar todo.
-  Esto lo podriamos obtener con
-  120 bits / 8 bits (que son caracter) = 15 chars */
+/**
+ * Clase de State24.
+ * Voy a usar un arreglo de short ints en el cual se guardaran tres posiciones en cada
+ * short int
+ */
 class State24{
 public:
-    char* current_state; // Arreglo de arrays de 15
-    char zero_index;
-    bool closed;
+    short int* current_state;
+    char zero_index;              /* Nos dice en donde se encuentra el cero. */
+    bool closed;                  /* Nos dice si esta cerrado o no. */
     State24(); 
-    State24(char*,char);
+    State24(short int*,char);
     ~State24();
     bool is_goal();
     void print_state();

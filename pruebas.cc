@@ -9,12 +9,11 @@
 
 int main(){
 
-        /*char array[15] = {0,68, 50,20, -57,66,84,-74,53,-49,-124,101,58,86,-41};
-        //signed char array[15] = {-34,-34, -34,-34, -34,-34,-34,-83,-34,-34,-34,-34,-34,-34,-34};
-        State24* ini = new State24(array,0);
-        bool e = ini->is_goal();
-        std::cout << e;
-    */
+        short int array[9] = {68,6410,12752,19094,25436, 31778, -27416, -21074, -16384};
+                             //};
+        State24* ini = new State24( array,0);
+        ini->print_state();
+
 	/*State16* ini = crear_estado(0x7f82d63cb04a951e,9); //new State16(0x59de63271c0a48bf,10);
 	Node* node = new Node(ini);
 	node->a = ARRIBA;
@@ -40,7 +39,7 @@ int main(){
     }*/
 	
 	//calcularPDB();
-	loadPDB();
+	//loadPDB();
 	/*State16* ini = crear_estado(0x0f82d63cb41a95e7,14);
 	
 	ini->print_state();
@@ -89,7 +88,6 @@ int main(){
 	ini = crear_estado(0x7f82d63cb41a95e0,14);
 	pdbHeuristic(ini);
 	
-	/*
 	//0x7f82d63cb04a951e
     Node *n = new Node(ini);
 	ini->print_state();
