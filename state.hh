@@ -66,16 +66,14 @@ public:
 
 /**
  * Clase de State24.
- * Voy a usar un arreglo de short ints en el cual se guardaran tres posiciones en cada
- * short int
  */
 class State24{
 public:
-    short int* current_state;
+    char* current_state;     
     char zero_index;              /* Nos dice en donde se encuentra el cero. */
     bool closed;                  /* Nos dice si esta cerrado o no. */
     State24(); 
-    State24(short int*,char);
+    State24(char*,char);
     ~State24();
     bool is_goal();
     void print_state();

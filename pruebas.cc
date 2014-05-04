@@ -9,10 +9,24 @@
 
 int main(){
 
-        short int array[9] = {68,6410,12752,19094,25436, 31778, -27416, -21074, -16384};
-                             //};
+        char array[25] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}; 
         State24* ini = new State24( array,0);
-        ini->print_state();
+        ini->a_izquierda()->print_state();
+
+        State24* tmp = ini->a_derecha();
+        tmp->print_state();
+        printf("index: %d\n",tmp->zero_index);
+
+
+        State24* tmp1 = tmp->a_derecha();
+        tmp1->print_state();
+        State24* tmp2 = tmp1->a_derecha();
+        tmp2->print_state();
+        State24* tmp3 = tmp2->a_derecha();
+        tmp3->print_state();
+        State24* tmp4 = tmp3->a_derecha();
+        tmp4->print_state();
+        tmp3->a_izquierda()->a_izquierda()->print_state();
 
 	/*State16* ini = crear_estado(0x7f82d63cb04a951e,9); //new State16(0x59de63271c0a48bf,10);
 	Node* node = new Node(ini);

@@ -294,34 +294,90 @@ std::pair<int_fast64_t,char> State16::a_abajop(){
  */
 State24::State24():closed(false){}
 
-State24::State24(short int* array, char zi):current_state(array), zero_index(zi), closed(false){}
+State24::State24(char* array, char zi):current_state(array), zero_index(zi), closed(false){}
 /**
  * Destructor para la clase State24
  */
 State24::~State24(){}
 
+char goal_array[25] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24};
+
 bool State24::is_goal(){
-    short int array[9] = {68,6410,12752,19094,25436, 31778, -27416, -21074, -16384};
     int i = 0;
-    for (i ; i < 9; i++){
-        if (current_state[i] != array[i]) return false;
+    for (i ; i != 25; i++){
+        if (current_state[i] != goal_array[i]) return false;
     }
     return true;
 }
 
 void State24::print_state(){
-    int i = 0;
-    int jump = 0;
+    char i = 0;
+    char jump = 0;
     printf("\n");
-    for (i ; i< 8; i++){
-        printf("%01d\t",(current_state[i] & 0xf800) >> 11); jump++;
-        if (jump == 5) {jump = 0; printf("\n");}
-        printf("%01d\t",(current_state[i] & 0x07c0) >> 6); jump++;
-        if (jump == 5) {jump = 0; printf("\n");}
-        printf("%01d\t",(current_state[i] & 0x003e) >> 1); jump++;
-        if (jump == 5) {jump = 0; printf("\n");}
-
+    for (i ; i != 25 ; i++) {
+        printf("%d\t",current_state[i]); jump++;
+        if (jump == 5){ printf("\n"); jump = 0; }
     }
-    printf("%01d\t",(current_state[i] & 0xf800) >> 11); jump++;
+    printf("\n");
+}
 
+char State24::find_zero_index(){
+    char i = 0;
+    for (i ; i != 25 ; i++){
+        if (current_state[i] == 0) return i;
+    }
+    return -1;
+}
+
+char* clonar(char* array){
+    char* nuevo = (char*) malloc (sizeof(char) * 25);
+    int i = 0;
+    for (i; i != 25 ; i++){
+        nuevo[i] = array[i];
+    }
+    return nuevo;
+}
+
+State24* State24::a_derecha(){
+    char* nuevo = clonar(current_state);  // Esto tal vez no sea necesario pero lo pondre mientras tanto.
+    if ( ((zero_index + 1) % 5) == 0){
+        return new State24(nuevo,zero_index);
+    }
+    char tmp  = nuevo[zero_index];
+    nuevo[zero_index] = nuevo[zero_index+1];
+    nuevo[zero_index+1] = tmp;
+    return new State24(nuevo,zero_index+1);
+}
+
+State24* State24::a_izquierda(){
+    char* nuevo = clonar(current_state);  // Esto tal vez no sea necesario pero lo pondre mientras tanto.
+    if ( (zero_index % 5) == 0){
+        return new State24(nuevo,zero_index);
+    }
+    char tmp  = nuevo[zero_index];
+    nuevo[zero_index] = nuevo[zero_index-1];
+    nuevo[zero_index-1] = tmp;
+    return new State24(nuevo,zero_index-1);
+}
+
+State24* State24::a_abajo(){
+    char* nuevo = clonar(current_state);  // Esto tal vez no sea necesario pero lo pondre mientras tanto.
+    if ( (20 <= zero_index) && (zero_index <= 24) ){
+        return new State24(nuevo,zero_index);
+    }
+    char tmp  = nuevo[zero_index];
+    nuevo[zero_index] = nuevo[zero_index+5];
+    nuevo[zero_index+5] = tmp;
+    return new State24(nuevo,zero_index+5);
+}
+
+State24* State24::a_arriba(){
+    char* nuevo = clonar(current_state);  // Esto tal vez no sea necesario pero lo pondre mientras tanto.
+    if ((0 <= zero_index) && (zero_index <= 4)){
+        return new State24(nuevo,zero_index);
+    }
+    char tmp  = nuevo[zero_index];
+    nuevo[zero_index] = nuevo[zero_index-5];
+    nuevo[zero_index-5] = tmp;
+    return new State24(nuevo,zero_index-5);
 }
