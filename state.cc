@@ -233,17 +233,6 @@ State16* State16::a_arriba(){
 	
 	int_fast64_t mask2 = ~(4095ULL << 4 * ( 16 - zero_index ));
 	
-	/* pruebas
-	std::cout << "Mask: ";
-	State16* mstate = new State16(mask,0);
-	mstate->print_state();
-	std::cout << "\ntemp & mask: ";
-	State16* fruf = new State16( (((((temp & mask) >> 16) & mask2) | temp) & ~mask)   ,0);
-	fruf->print_state();
-	State16* mstate2 = new State16( mask2 ,0);
-	mstate2->print_state();
-	*/
-	
 	temp = ((((temp & mask) >> 16) & mask2) | temp) & ~mask;
 	
 	return new State16(temp,zero_index-4);
@@ -303,18 +292,36 @@ std::pair<int_fast64_t,char> State16::a_abajop(){
 /**
  * Constructor para la clase State24
  */
-State24::State24(){}
+State24::State24():closed(false){}
 
-State24::State24(char* arr, char zi): current_state(arr), zero_index(zi), closed(false){}
+State24::State24(short int* array, char zi):current_state(array), zero_index(zi), closed(false){}
 /**
- * Constructor para la clase State24
+ * Destructor para la clase State24
  */
 State24::~State24(){}
 
 bool State24::is_goal(){
-    long long int r1 = 0x00443214c74254b6;
-    long long int r2 = 0xb635cf84653a56d7;
-    long long int* p1 =  (long long int*) &current_state[0];
-    long long int* p2 =  (long long int*) &current_state[7];
-    return ((*p1 == r1) && (*p2 == r2));
+    short int array[9] = {68,6410,12752,19094,25436, 31778, -27416, -21074, -16384};
+    int i = 0;
+    for (i ; i < 9; i++){
+        if (current_state[i] != array[i]) return false;
+    }
+    return true;
+}
+
+void State24::print_state(){
+    int i = 0;
+    int jump = 0;
+    printf("\n");
+    for (i ; i< 8; i++){
+        printf("%01d\t",(current_state[i] & 0xf800) >> 11); jump++;
+        if (jump == 5) {jump = 0; printf("\n");}
+        printf("%01d\t",(current_state[i] & 0x07c0) >> 6); jump++;
+        if (jump == 5) {jump = 0; printf("\n");}
+        printf("%01d\t",(current_state[i] & 0x003e) >> 1); jump++;
+        if (jump == 5) {jump = 0; printf("\n");}
+
+    }
+    printf("%01d\t",(current_state[i] & 0xf800) >> 11); jump++;
+
 }
