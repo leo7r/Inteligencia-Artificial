@@ -481,8 +481,8 @@ std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State16*)){
 			switch( act ){
 				
 				case ARRIBA:
-		                suc = new Node( node , (action) act , node->node_state->a_arriba() );
-                                break;
+					suc = new Node( node , (action) act , node->node_state->a_arriba() );
+					break;
 				case ABAJO:
 					suc = new Node( node , (action) act , node->node_state->a_abajo() );
 					break;
