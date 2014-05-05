@@ -19,6 +19,8 @@
 #include <stdio.h>
 #include <vector>
 
+extern int expanded_nodes;
+
 int dist_manhattan(State16*);
 
 int dist_manhattan24(State25*);

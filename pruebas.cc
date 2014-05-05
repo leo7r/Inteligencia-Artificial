@@ -28,6 +28,8 @@ int main(){
         tmp4->print_state();
         tmp3->a_izquierda()->a_izquierda()->print_state();
 
+        tmp1->a_abajo()->print_state();
+
 	/*State16* ini = crear_estado(0x7f82d63cb04a951e,9); //new State16(0x59de63271c0a48bf,10);
 	Node* node = new Node(ini);
 	node->a = ARRIBA;

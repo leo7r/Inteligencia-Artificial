@@ -58,7 +58,7 @@ public:
     State16(int_fast64_t,char);
     ~State16();
     bool is_goal();
-	char* toCharArray();
+    char* toCharArray();
     void print_state();
     char find_zero_index();
     State16* a_derecha();

@@ -25,6 +25,13 @@
 #include <ctime>
 #include <string.h>
 
+void print_array(int* array){
+    int i = 0;
+    for ( i; i < 16 ; i++){
+        printf("%d ",array[i] );
+    }
+}
+
 int_fast64_t toInt64(int* array){
    int_fast64_t tmp[16]; 
    int i = 0;
@@ -95,6 +102,9 @@ int main(int argc, char *argv[]){
         array[i] = n;
         i++;
         if (i == 16){
+            std::cout << "Instancia: ";
+            print_array(array);
+            printf("\n");
             int_fast64_t a =  toInt64(array);
             State16* s = new State16(a,zero_index);
             Node *n = new Node(s);		
@@ -125,6 +135,8 @@ int main(int argc, char *argv[]){
 	    std::chrono::duration<double> elapsed_seconds = end-start;
 			
 	    std::cout << "Tiempo: " << elapsed_seconds.count() << "\n";
+            std::cout << "Nodos generados por segundo: " << expanded_nodes / elapsed_seconds.count();
+            std::cout << "\n";
 
             delete n; 
             delete s;
