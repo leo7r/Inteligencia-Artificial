@@ -218,7 +218,7 @@ void bfs_pdb(State16* st , std::string file ){
 			}
 		}
 		open.pop_front();
-                liberar(aux);
+        liberar(aux);
 	}
 	
 	std::unordered_map<int_fast64_t,int>::const_iterator isState = firstPattern.begin();
@@ -342,7 +342,7 @@ int_fast64_t orMask( int index ){
 /**
  * Retorna un patron dado un State16* y el num_patron.
  */
-State16* patternMask( State16* st , int num_patron ){
+int_fast64_t patternMask( State16* st , int num_patron ){
 	
 	int_fast64_t * object = &st->current_state;
 	
@@ -390,7 +390,7 @@ State16* patternMask( State16* st , int num_patron ){
 		
     }
 	
-	return new State16(mask,0);
+	return mask;
 }
 /**
  * Heuristica de PDB.
@@ -400,23 +400,21 @@ int pdbHeuristic( State16* st ){
 	int h = 0;
 	int fp,sp,tp;
 	
-	State16* firstMask = patternMask(st,1);
-	int_fast64_t fP = firstMask->current_state & st->current_state;
+	int_fast64_t firstMask = patternMask(st,1);
+	int_fast64_t fP = firstMask & st->current_state;
 	fp = firstPattern[fP];
 	//h+= firstPattern[fP];
 	
 	firstMask = patternMask(st,2);
-	fP = firstMask->current_state & st->current_state;
+	fP = firstMask & st->current_state;
 	//h+= secondPattern[fP];
 	sp = secondPattern[fP];
 	
 	firstMask = patternMask(st,3);
-	fP = firstMask->current_state & st->current_state;
+	fP = firstMask & st->current_state;
 	//h+= thirdPattern[fP];
 	tp = thirdPattern[fP];
 	
-	State16* asdasd = new State16(fP,0);
-	//asdasd->print_state();
 	
 	//std::cout << "H = " << (fp+sp+tp) << " = " << fp << "+" << sp << "+" << tp << "\n";
 	return fp+sp+tp;

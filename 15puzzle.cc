@@ -92,7 +92,7 @@ int main(int argc, char *argv[]){
 
     if (*heuristica == "pdatabase"){
         std::cout << "Cargando base de datos de patrones: \n";
-        calcularPDB();	
+        //calcularPDB();	
         loadPDB();
     }
 	
@@ -108,8 +108,8 @@ int main(int argc, char *argv[]){
             int_fast64_t a =  toInt64(array);
             State16* s = new State16(a,zero_index);
             Node *n = new Node(s);		
-	    std::chrono::time_point<std::chrono::system_clock> start, end;
-	    start = std::chrono::system_clock::now();
+			std::chrono::time_point<std::chrono::system_clock> start, end;
+			start = std::chrono::system_clock::now();
 
             if (*heuristica == "pdatabase"){
                 if (*algoritmo == "a*"){

@@ -47,7 +47,7 @@ void loadPattern( std::string , int );
 
 void my_split(std::string&, char, std::vector<std::string>&);
 
-State16* patternMask( State16* , int );
+int_fast64_t patternMask( State16* , int );
 
 int pdbHeuristic( State16* );
 
