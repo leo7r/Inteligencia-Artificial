@@ -204,12 +204,7 @@ void bfs_pdb(State16* st , std::string file ){
 							
 					    if ( firstPattern[new_state->current_state] > node->cost ){
 					        firstPattern[new_state->current_state] = node->cost;
-						//std::cout << "Encontre duplicado con menor costo!\n";
 					    }
-							
-					    //std::cout << "Duplicado: \n";
-					    //new_state->print_state();
-					    //std::cin.get();
 							
 					}
 					catch(const std::out_of_range& oor ){
@@ -219,7 +214,6 @@ void bfs_pdb(State16* st , std::string file ){
 				    }
 					
 				    open.push_back(node);
-				    //std::cout << "Costo del nodo: " << node->cost << "\n";
 				}	
 			}
 		}
@@ -230,7 +224,6 @@ void bfs_pdb(State16* st , std::string file ){
 	std::unordered_map<int_fast64_t,int>::const_iterator isState = firstPattern.begin();
 		
 	for ( auto it = firstPattern.begin(); it != firstPattern.end(); ++it ){
-		//std::cout << "Pasando al archivo\n";
 		writeBinFile( &myfile , it->first , it->second );
 		//myfile << it->first << ":" << it->second << "\n";
 		//std::cin.get();
@@ -301,46 +294,8 @@ void loadPattern( std::string patron , int num_patron ){
 	
 	std::cout << "Cargado patron: " << num_patron << "\n";
 	file.close();
-	
-	/*
-	
-	std::ifstream myfile;
-	myfile.open (patron);
-	std::string line;
-	int num = 0;
-	
-	if (myfile.is_open()){
-			
-		while ( std::getline(myfile,line) ){
-			
-			std::vector<std::string> v;
-			my_split(line,':',v);
-			
-			int_fast64_t st = strtoll (v.front().c_str(), NULL, 10);
-			int h = atoi(v.back().c_str());
-			
-			switch( num_patron ){
-				
-				case 1:
-					
-					firstPattern[st] = h;
-					break;
-				case 2:
-					secondPattern[st] = h;
-					break;
-				case 3:
-					thirdPattern[st] = h;
-					break;
-			}
-			num++;			
-		}
-		
-		std::cout << "Num lineas leidas: " << num << "\n";
-		
-	myfile.close();
-	}
-	*/
 }
+
 /**
  * Retorna una mascara dependiendo
  * de la posicion dada en index.
@@ -433,7 +388,6 @@ State16* patternMask( State16* st , int num_patron ){
 		}
 		
 		
-		//std::cout << first_cell << " " << second_cell << " ";
     }
 	
 	return new State16(mask,0);
@@ -470,7 +424,6 @@ int pdbHeuristic( State16* st ){
 
 /* Algoritmos */
 
-int expanded_nodes;
 
 
 std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State16*)){
@@ -558,6 +511,7 @@ std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State16*)){
     */
 	return min;
 }
+int expanded_nodes;
 /**
  * Implementacion de algoritmo de ida estrella.
  */
@@ -567,19 +521,20 @@ bool ida_star1(Node* root, int (*h)(State16*)){
     std::pair<int,Node*> t;
     while(1){
    
-        std::cout << "Bound: " << bound << "\n";
+        std::cout << "Bound:" << bound <<"\n";
         t = search(root,0,bound,h);
 	   
         if (t.second != NULL){
 			
 			std::cout << "Numero de nodos expandidos: " << expanded_nodes;
+                        std::cout << "\n";
 			stateMap.clear();
-			delete(root);
+			//delete(root);
 			return true;
 		}
         if (t.first == std::numeric_limits<int>::max()){
 			stateMap.clear();
-			delete(root);
+			//delete(root);
 			return false;
         }
 	bound = t.first;
