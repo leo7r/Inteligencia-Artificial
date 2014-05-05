@@ -32,20 +32,28 @@ typedef enum {
 void print_action(action);
 
 class State{
-    virtual bool is_goal() = 0;
-    virtual void print_state() = 0;
-    virtual char find_zero_index() = 0;
-    virtual State* a_derecha() = 0;
-    virtual State* a_izquierda() = 0;
-    virtual State* a_arriba() = 0;
-    virtual State* a_abajo() = 0;
+
+	public:
+		char zero_index;
+		bool closed;                  /* Nos dice si esta cerrado o no. */
+		
+		State();
+		State(char zi);
+
+		virtual bool is_goal() = 0;
+		virtual void print_state() = 0;
+		virtual char find_zero_index() = 0;
+		virtual State* a_derecha() = 0;
+		virtual State* a_izquierda() = 0;
+		virtual State* a_arriba() = 0;
+		virtual State* a_abajo() = 0;
+		virtual bool is_posible( action ) = 0;
+		virtual bool equals( State* st ) = 0;
 };
 
-class State16{
+class State16: public State{
 public:
     int_fast64_t current_state;
-    char zero_index;
-    bool closed;
     State16(); 
     State16(int_fast64_t,char);
     ~State16();
@@ -62,26 +70,27 @@ public:
     std::pair<int_fast64_t,char> a_arribap();
     std::pair<int_fast64_t,char> a_abajop();
     bool is_posible( action );
+	bool equals( State* st );
 };
 
 /**
- * Clase de State24.
+ * Clase de State25.
  */
-class State24{
+class State25: public State{
 public:
-    char* current_state;     
-    char zero_index;              /* Nos dice en donde se encuentra el cero. */
-    bool closed;                  /* Nos dice si esta cerrado o no. */
-    State24(); 
-    State24(char*,char);
-    ~State24();
+    char* current_state;
+    State25(); 
+    State25(char*,char);
+    ~State25();
     bool is_goal();
     void print_state();
     char find_zero_index();
-    State24* a_derecha();
-    State24* a_izquierda();
-    State24* a_arriba();
-    State24* a_abajo();   
+    State25* a_derecha();
+    State25* a_izquierda();
+    State25* a_arriba();
+    State25* a_abajo();
+    bool is_posible( action );
+	bool equals( State* st );
 };
 
 static std::unordered_map<int_fast64_t,State16*> stateMap;

@@ -23,12 +23,12 @@
 class Node {
     public:
 		Node* parent;
-		State16* node_state;
+		State* node_state;
 		action a;
 		int cost;
 	
-		Node( Node* , action , State16* );
-		Node( State16* );
+		Node( Node* , action , State* );
+		Node( State* );
 		~Node();
 		std::list<Node*> extract_solution();
 		std::list<Node*> succ();

@@ -19,6 +19,10 @@
 #include <stdio.h>
 #include <utility>
 #include <iostream>
+#include <stdlib.h>
+
+State::State():zero_index(0),closed(false){}
+State::State(char zi):zero_index(zi),closed(false){}
 
 void print_action( action a ){
 	
@@ -39,10 +43,10 @@ void print_action( action a ){
 	}
 }
 
-State16::State16():current_state(-1),zero_index(' '), closed(false){
+State16::State16():State(0),current_state(-1){
 }
 
-State16::State16(int_fast64_t c,char z):current_state(c),zero_index(z),closed(false){
+State16::State16(int_fast64_t c,char z):State(z),current_state(c){
 }
 
 //funcion para crear estado tomando en cuenta si existe o no
@@ -208,6 +212,10 @@ char State16::find_zero_index(){
     }
 }
 
+bool State16::equals( State* st ){
+	return current_state == ((State16*)st)->current_state;
+}
+
 State16* State16::a_derecha(){
 	
 	int_fast64_t temp = current_state;
@@ -290,19 +298,19 @@ std::pair<int_fast64_t,char> State16::a_abajop(){
 	return result;
 }
 /**
- * Constructor para la clase State24
+ * Constructor para la clase State25
  */
-State24::State24():closed(false){}
+State25::State25():State(0){}
 
-State24::State24(char* array, char zi):current_state(array), zero_index(zi), closed(false){}
+State25::State25(char* array, char zi):State(0),current_state(array){}
 /**
- * Destructor para la clase State24
+ * Destructor para la clase State25
  */
-State24::~State24(){}
+State25::~State25(){}
 
 char goal_array[25] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24};
 
-bool State24::is_goal(){
+bool State25::is_goal(){
     int i = 0;
     for (i ; i != 25; i++){
         if (current_state[i] != goal_array[i]) return false;
@@ -310,7 +318,7 @@ bool State24::is_goal(){
     return true;
 }
 
-void State24::print_state(){
+void State25::print_state(){
     char i = 0;
     char jump = 0;
     printf("\n");
@@ -321,7 +329,7 @@ void State24::print_state(){
     printf("\n");
 }
 
-char State24::find_zero_index(){
+char State25::find_zero_index(){
     char i = 0;
     for (i ; i != 25 ; i++){
         if (current_state[i] == 0) return i;
@@ -338,46 +346,121 @@ char* clonar(char* array){
     return nuevo;
 }
 
-State24* State24::a_derecha(){
+bool State25::is_posible( action act ){
+	
+	switch( zero_index ){
+		
+		case 0:
+			if ( act == DERECHA || act == ABAJO )
+				return true;
+			break;
+		case 1:
+		case 2:
+		case 3:
+			if ( act != ARRIBA )
+				return true;
+			break;
+		case 4:
+			if ( act == ABAJO || act == IZQUIERDA )
+				return true;
+			break;
+		case 5:
+		case 10:
+		case 15:
+			if ( act != IZQUIERDA )
+				return true;
+			break;
+		case 6:
+		case 7:
+		case 8:
+		case 11:
+		case 12:
+		case 13:
+		case 16:
+		case 17:
+		case 18:
+			return true;
+			break;
+		case 9:
+		case 14:
+		case 19:
+			if ( act != DERECHA )
+				return true;
+			break;
+		case 20:
+			if ( act == ARRIBA || act == DERECHA )
+				return true;
+			break;
+		case 21:
+		case 22:
+		case 23:
+			if ( act != ABAJO )
+				return true;
+			break;
+		case 24:
+			if ( act == ARRIBA || act == IZQUIERDA )
+				return true;
+			break;
+		
+	}
+	
+	return false;
+}
+
+bool State25::equals( State* st ){
+
+	char i = 0;
+	char* estado = ((State25*) st)->current_state;
+	
+	for (i ; i < 25 ; ++i ){
+		if ( estado[i] != current_state[i] ){
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+State25* State25::a_derecha(){
     char* nuevo = clonar(current_state);  // Esto tal vez no sea necesario pero lo pondre mientras tanto.
     if ( ((zero_index + 1) % 5) == 0){
-        return new State24(nuevo,zero_index);
+        return new State25(nuevo,zero_index);
     }
     char tmp  = nuevo[zero_index];
     nuevo[zero_index] = nuevo[zero_index+1];
     nuevo[zero_index+1] = tmp;
-    return new State24(nuevo,zero_index+1);
+    return new State25(nuevo,zero_index+1);
 }
 
-State24* State24::a_izquierda(){
+State25* State25::a_izquierda(){
     char* nuevo = clonar(current_state);  // Esto tal vez no sea necesario pero lo pondre mientras tanto.
     if ( (zero_index % 5) == 0){
-        return new State24(nuevo,zero_index);
+        return new State25(nuevo,zero_index);
     }
     char tmp  = nuevo[zero_index];
     nuevo[zero_index] = nuevo[zero_index-1];
     nuevo[zero_index-1] = tmp;
-    return new State24(nuevo,zero_index-1);
+    return new State25(nuevo,zero_index-1);
 }
 
-State24* State24::a_abajo(){
+State25* State25::a_abajo(){
     char* nuevo = clonar(current_state);  // Esto tal vez no sea necesario pero lo pondre mientras tanto.
     if ( (20 <= zero_index) && (zero_index <= 24) ){
-        return new State24(nuevo,zero_index);
+        return new State25(nuevo,zero_index);
     }
     char tmp  = nuevo[zero_index];
     nuevo[zero_index] = nuevo[zero_index+5];
     nuevo[zero_index+5] = tmp;
-    return new State24(nuevo,zero_index+5);
+    return new State25(nuevo,zero_index+5);
 }
 
-State24* State24::a_arriba(){
+State25* State25::a_arriba(){
     char* nuevo = clonar(current_state);  // Esto tal vez no sea necesario pero lo pondre mientras tanto.
     if ((0 <= zero_index) && (zero_index <= 4)){
-        return new State24(nuevo,zero_index);
+        return new State25(nuevo,zero_index);
     }
     char tmp  = nuevo[zero_index];
     nuevo[zero_index] = nuevo[zero_index-5];
     nuevo[zero_index-5] = tmp;
-    return new State24(nuevo,zero_index-5);
+    return new State25(nuevo,zero_index-5);
 }

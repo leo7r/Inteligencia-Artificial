@@ -57,8 +57,36 @@ int manhattan[16][16] = {
 	{5, 4, 3, 4, 4, 3, 2, 3, 3, 2, 1, 2, 2, 1, 0, 1},
 	{6, 5, 4, 3, 5, 4, 3, 2, 4, 3, 2, 1, 3, 2, 1, 0}
 
-
 }; /* Matriz para el calculo de las distancias manhattan */
+
+
+int manhattan25[25][25] = {
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	{1, 0, 1, 2, 3, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5, 4, 3, 4, 5, 6, 5, 4, 5, 6, 7},
+	{2, 1, 0, 1, 2, 3, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5, 4, 3, 4, 5, 6, 5, 4, 5, 6},
+	{3, 2, 1, 0, 1, 4, 3, 2, 1, 2, 5, 4, 3, 2, 3, 6, 5, 4, 3, 4, 7, 6, 5, 4, 5},
+	{4, 3, 2, 1, 0, 5, 4, 3, 2, 1, 6, 5, 4, 3, 2, 7, 6, 5, 4, 3, 8, 7, 6, 5, 4},
+	{1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 1, 2, 3, 4, 5, 2, 3, 4, 5, 6, 3, 4, 5, 6, 7},
+	{2, 1, 2, 3, 4, 1, 0, 1, 2, 3, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5, 4, 3, 4, 5, 6},
+	{3, 2, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5, 4, 3, 4, 5},
+	{4, 3, 2, 1, 2, 3, 2, 1, 0, 1, 4, 3, 2, 1, 2, 5, 4, 3, 2, 3, 6, 5, 4, 3, 4},
+	{5, 4, 3, 2, 1, 4, 3, 2, 1, 0, 5, 4, 3, 2, 1, 6, 5, 4, 3, 2, 7, 6, 5, 4, 3},
+	{2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 1, 2, 3, 4, 5, 2, 3, 4, 5, 6},
+	{3, 2, 3, 4, 5, 2, 1, 2, 3, 4, 1, 0, 1, 2, 3, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5},
+	{4, 3, 2, 3, 4, 3, 2, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 2, 3, 4, 3, 2, 3, 4},
+	{5, 4, 3, 2, 3, 4, 3, 2, 1, 2, 3, 2, 1, 0, 1, 4, 3, 2, 1, 2, 5, 4, 3, 2, 3},
+	{6, 5, 4, 3, 2, 5, 4, 3, 2, 1, 4, 3, 2, 1, 0, 5, 4, 3, 2, 1, 6, 5, 4, 3, 2},
+	{3, 4, 5, 6, 7, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 1, 2, 3, 4, 5},
+	{4, 3, 4, 5, 6, 3, 2, 3, 4, 5, 2, 1, 2, 3, 4, 1, 0, 1, 2, 3, 2, 1, 2, 3, 4},
+	{5, 4, 3, 4, 5, 4, 3, 2, 3, 4, 3, 2, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 2, 3},
+	{6, 5, 4, 3, 4, 5, 4, 3, 2, 3, 4, 3, 2, 1, 2, 3, 2, 1, 0, 1, 4, 3, 2, 1, 2},
+	{7, 6, 5, 4, 3, 6, 5, 4, 3, 2, 5, 4, 3, 2, 1, 4, 3, 2, 1, 0, 5, 4, 3, 2, 1},
+	{4, 5, 6, 7, 8, 3, 4, 5, 6, 7, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4},
+	{5, 4, 5, 6, 7, 4, 3, 4, 5, 6, 3, 2, 3, 4, 5, 2, 1, 2, 3, 4, 1, 0, 1, 2, 3},
+	{6, 5, 4, 5, 6, 5, 4, 3, 4, 5, 4, 3, 2, 3, 4, 3, 2, 1, 2, 3, 2, 1, 0, 1, 2},
+	{7, 6, 5, 4, 5, 6, 5, 4, 3, 4, 5, 4, 3, 2, 3, 4, 3, 2, 1, 2, 3, 2, 1, 0, 1},
+	{8, 7, 6, 5, 4, 7, 6, 5, 4, 3, 6, 5, 4, 3, 2, 5, 4, 3, 2, 1, 4, 3, 2, 1, 0}
+};
 
  /**
   * Implementacion para la heuristica de distancia manhattan.
@@ -79,6 +107,18 @@ int dist_manhattan(State16* st){
 	}
 	
 	return distancia;
+}
+
+int dist_manhattan24(State25* st){
+	
+	int h = 0;
+	
+	for ( int i = 0 ; i < 25 ; ++i ){
+		char c = st->current_state[i];
+		h+= manhattan25[c][i];
+	}
+	
+	return h;
 }
 
 /* Base de datos de patrones */
@@ -175,25 +215,25 @@ void bfs_pdb(State16* st , std::string file ){
 				switch( act ){
 					
 					case ARRIBA:
-						suc_state = aux->node_state->a_arriba();
+						suc_state = (State16*) aux->node_state->a_arriba();
 						break;
 					case ABAJO:
-						suc_state = aux->node_state->a_abajo();
+						suc_state = (State16*) aux->node_state->a_abajo();
 						break;
 					case IZQUIERDA:
-						suc_state = aux->node_state->a_izquierda();
+						suc_state = (State16*) aux->node_state->a_izquierda();
 						break;
 					case DERECHA:
-						suc_state = aux->node_state->a_derecha();
+						suc_state = (State16*) aux->node_state->a_derecha();
 						break;
 				}
 								
 				if ( !isClosed(suc_state) ){
 				    State16* new_state = crear_estado_patron(suc_state->current_state,suc_state->zero_index);
-                                    delete suc_state;
+                    delete suc_state;
 				    Node* node = new Node( aux , (action) act , new_state );
 					
-				    if ( aux->node_state->current_state == new_state->current_state ){
+				    if ( ((State16*)aux->node_state)->current_state == new_state->current_state ){
 					node->cost-=1;
 				    }
 				    else{
@@ -470,11 +510,10 @@ int pdbHeuristic( State16* st ){
 
 int expanded_nodes;
 
-
 std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State16*)){
     std::pair<int,Node*> f;
 	
-    f.first = g + h(node->node_state);
+    f.first = g + h((State16*)node->node_state);
     f.second = NULL;
     
     if (f.first > bound ){
@@ -561,7 +600,7 @@ std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State16*)){
  */
 bool ida_star1(Node* root, int (*h)(State16*)){	
     expanded_nodes = 0;
-    int bound = h(root->node_state); 
+    int bound = h((State16*)root->node_state); 
     std::pair<int,Node*> t;
     while(1){
    
@@ -584,25 +623,134 @@ bool ida_star1(Node* root, int (*h)(State16*)){
    }
 }
 
-bool compare_node_state16 (const Node* first, const Node* second)
-{ 
-    if (dist_manhattan(first->node_state)<dist_manhattan(second->node_state)) return true;
-    else return false;
+
+/////////// Mismo algoritmo para 25-puzzle
+std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State25*)){
+    std::pair<int,Node*> f;
+	
+    f.first = g + h((State25*)node->node_state);
+    f.second = NULL;
+    
+    if (f.first > bound ){
+		//std::cout << "--- Estado se paso del bound : " << bound << " (" << g + h(node->node_state) << "):\n";
+		//node->node_state->print_state();
+		return f;
+	};
+    if (node->node_state->is_goal()){
+        f.second = node;
+        return f;
+    }	
+    std::pair<int,Node*> min;
+    min.first = std::numeric_limits<int>::max();
+	min.second = NULL;
+    temporal++;
+	
+	/*std::cout << "Expandiendo estado con h = " << h(node->node_state) << " | bound = " << bound << "\n";
+	node->node_state->print_state();
+	std::cin.get();
+	*/
+	
+    expanded_nodes++;
+	
+	for ( int act = ARRIBA ; act < ROOT ; act++ ){
+				
+		if ( node->is_posible((action)act) ){
+			
+			Node* suc;
+			
+			switch( act ){
+				
+				case ARRIBA:
+					suc = new Node( node , (action) act , node->node_state->a_arriba() );
+					break;
+				case ABAJO:
+					suc = new Node( node , (action) act , node->node_state->a_abajo() );
+					break;
+				case IZQUIERDA:
+					suc = new Node( node , (action) act , node->node_state->a_izquierda() );
+					break;
+				case DERECHA:
+					suc = new Node( node , (action) act , node->node_state->a_derecha() );
+					break;
+			}
+			
+			/*
+			std::cout << "Sucesor de :" << "\n";
+			node->node_state->print_state();
+			std::cout << "sucesor: ";
+			suc->node_state->print_state();
+			*/
+			
+			std::pair<int,Node*> t = search(suc,suc->cost ,bound,h);
+				
+			if (t.second != NULL){
+				return t;
+			}
+			if (t.first < min.first){
+				min.first = t.first;
+			}
+			liberar(suc);
+		}
+	}
+	
+	/*
+	for ( std::list<Node*>::iterator it=succ.begin(); it != succ.end() ; ++it){
+        
+		Node* tmp = *it;
+		
+		std::pair<int,bool> t = search(tmp,tmp->cost ,bound,h);
+				
+		if (t.second == true){
+			return t;
+		}
+		if (t.first < min.first){
+			min.first = t.first;
+		}
+    }
+    */
+	return min;
+}
+/**
+ * Implementacion de algoritmo de ida estrella.
+ */
+bool ida_star1(Node* root, int (*h)(State25*)){	
+    expanded_nodes = 0;
+    int bound = h((State25*)root->node_state); 
+    std::pair<int,Node*> t;
+    while(1){
+   
+        std::cout << "Bound: " << bound << "\n";
+        t = search(root,0,bound,h);
+	   
+        if (t.second != NULL){
+			
+			std::cout << "Numero de nodos expandidos: " << expanded_nodes;
+			stateMap.clear();
+			delete(root);
+			return true;
+		}
+        if (t.first == std::numeric_limits<int>::max()){
+			stateMap.clear();
+			delete(root);
+			return false;
+        }
+	bound = t.first;
+   }
 }
 
 class compare_node{
     bool reverse;
     int (*h)(State16*);
-    int (*h2)(State24*); 
+    int (*h2)(State25*); 
 public:
     compare_node(bool revparam, int(*f)(State16*)): reverse(revparam),h(f),h2(0){
     }
-    compare_node(bool revparam, int(*f)(State24*)): reverse(revparam),h2(f),h(0){
+    compare_node(bool revparam, int(*f)(State25*)): reverse(revparam),h2(f),h(0){
     }
     bool operator() (Node* n1, Node* n2){
         if (h2 == 0){
-            if (reverse) return ((n1->cost + h(n1->node_state)) > (n2->cost + h(n2->node_state)));
-            else return ((n1->cost + h(n1->node_state)) < (n2->cost + h(n2->node_state)));
+            if (reverse) return ((n1->cost + h((State16*)n1->node_state)) > (n2->cost + h((State16*)n2->node_state)));
+            else return ((n1->cost + h((State16*)n1->node_state)) < (n2->cost + h((State16*)n2->node_state)));
         } else{
             if (reverse) return ((n1->cost) > (n2->cost));
             else return ((n1->cost) < (n2->cost));
@@ -619,11 +767,42 @@ bool a_star(Node* root,int (*h)(State16*)){
     while (!q.empty()){
         Node* n = q.top();
         q.pop();
-        if ((n->node_state->closed == false) || (dist16[n->node_state->current_state] > n->cost)) {
+        if ((n->node_state->closed == false) || (dist16[((State16*)n->node_state)->current_state] > n->cost)) {
             n->node_state->closed = true;
-            dist16[n->node_state->current_state] = n->cost;
+            dist16[((State16*)n->node_state)->current_state] = n->cost;
             if (n->node_state->is_goal()) return true;
             
+			for ( int act = ARRIBA ; act < ROOT ; act++ ){
+				
+				if ( n->is_posible((action)act) ){
+					
+					Node* suc;
+					
+					switch( act ){
+						
+						case ARRIBA:
+							suc = new Node( n , (action) act , n->node_state->a_arriba() );
+							break;
+						case ABAJO:
+							suc = new Node( n , (action) act , n->node_state->a_abajo() );
+							break;
+						case IZQUIERDA:
+							suc = new Node( n , (action) act , n->node_state->a_izquierda() );
+							break;
+						case DERECHA:
+							suc = new Node( n , (action) act , n->node_state->a_derecha() );
+							break;
+					}
+					
+					if (h((State16*)suc->node_state) < std::numeric_limits<int>::max()){
+						q.push(suc);     
+					} else{
+						liberar(suc);
+					}
+				}
+			}
+			
+			/*
             n->succ(succ);
             while (!succ->empty()){
                 Node* tmp = succ->front();
@@ -634,6 +813,7 @@ bool a_star(Node* root,int (*h)(State16*)){
                 }
                 succ->pop_front();
             }
+			*/
         }
         delete n;
     }

@@ -1,7 +1,7 @@
 /*
  * =====================================================================================
  *
- *       Filename:  15puzzle.cc
+ *       Filename:  24puzzle.cc
  *
  *    Description:  Resolucion de 15 puzzle
  *
@@ -25,23 +25,6 @@
 #include <ctime>
 #include <string.h>
 
-int_fast64_t toInt64(int* array){
-   int_fast64_t tmp[16]; 
-   int i = 0;
-   while (i != 16){
-        tmp[i]  = 0x000000000000000;
-        tmp[i] = tmp[i] | array[i];
-        tmp[i] = tmp[i] << (60-(i*4));
-        i++;
-    }
-    i = 1;
-    while (i != 16){
-        tmp[0] = tmp[0] | tmp[i];
-        i++;
-    }
-    return tmp[0];
-}
-
 void imprimirAyuda(){
     std::cout << "15puzzle [opciones]\n";
     std::cout << "opciones: \n";
@@ -54,7 +37,8 @@ int main(int argc, char *argv[]){
     std::string* f_name = 0;
     std::string* algoritmo = 0;
     std::string* heuristica = 0;
-    int n,i;
+    char n;
+	int i;
     bool solution;
 
     for ( i = 0 ; i != argc ; i++){
@@ -80,51 +64,45 @@ int main(int argc, char *argv[]){
     }
 
     char zero_index;
-    int array[16];
+    char array[25];
     i = 0;
 
     if (*heuristica == "pdatabase"){
         std::cout << "Cargando base de datos de patrones: \n";
         //calcularPDB();	
-        loadPDB();
+        //loadPDB24();
     }
 	
     while(!fs.eof()) {
         fs >> n;
+		
+		std::cout << "n: " << n << "\n";
+		std::cin.get();
+		
         if (n == 0) zero_index = i;
-        array[i] = n;
+        array[i] = (int) n;
         i++;
-        if (i == 16){
-            int_fast64_t a =  toInt64(array);
-            State16* s = new State16(a,zero_index);
+        if (i == 25){
+            State25* s = new State25(array,zero_index);
             Node *n = new Node(s);		
 			std::chrono::time_point<std::chrono::system_clock> start, end;
 			start = std::chrono::system_clock::now();
-
-            if (*heuristica == "pdatabase"){
-                if (*algoritmo == "a*"){
-                    solution = a_star(n,pdbHeuristic);
-                } else{
-	            solution = ida_star1(n,pdbHeuristic);
-                }
-	    } else {
-                if (*algoritmo == "a*"){
-                    solution = a_star(n,dist_manhattan);
-                } else {
-					solution = ida_star1(n,dist_manhattan);
-                }
-            }
-
-	    if ( solution == true ){
-	        std::cout << "Funciono\n";
-	    } else{
-	        std::cout << "No funciono\n";
-	    }	
-	    end = std::chrono::system_clock::now();
 			
-	    std::chrono::duration<double> elapsed_seconds = end-start;
+			s->print_state();
+			std::cin.get();
 			
-	    std::cout << "Tiempo: " << elapsed_seconds.count() << "\n";
+            solution = ida_star1(n,dist_manhattan24);
+
+			if ( solution == true ){
+				std::cout << "Funciono\n";
+			} else{
+				std::cout << "No funciono\n";
+			}	
+			end = std::chrono::system_clock::now();
+				
+			std::chrono::duration<double> elapsed_seconds = end-start;
+				
+			std::cout << "Tiempo: " << elapsed_seconds.count() << "\n";
 
             delete n; 
             delete s;
