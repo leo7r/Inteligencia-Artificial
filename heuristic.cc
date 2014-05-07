@@ -29,6 +29,17 @@
 #include <map>
 #include <stdexcept>
 #include "heuristic.hh"
+
+/**
+ * Procedimiento que libera el espacio de un nodo.
+ */
+void liberar25(Node* suc){
+    State25* tmp = (State25*) suc->node_state;
+    delete tmp->current_state;
+    delete tmp;
+    delete suc;
+}
+
 /**
  * Procedimiento que libera el espacio de un nodo.
  */
@@ -783,6 +794,7 @@ bool ida_star1(Node* root, int (*h)(State16*)){
 }
 
 
+
 /////////// Mismo algoritmo para 25-puzzle
 std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State25*)){
     std::pair<int,Node*> f;
@@ -848,7 +860,7 @@ std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State25*)){
 			if (t.first < min.first){
 				min.first = t.first;
 			}
-			liberar(suc);
+			liberar25(suc);
 		}
 	}
 	
