@@ -302,7 +302,7 @@ std::pair<int_fast64_t,char> State16::a_abajop(){
  */
 State25::State25():State(0){}
 
-State25::State25(char* array, char zi):State(0),current_state(array){}
+State25::State25(char* array, char zi):State(zi),current_state(array){}
 /**
  * Destructor para la clase State25
  */
@@ -422,45 +422,42 @@ bool State25::equals( State* st ){
 }
 
 State25* State25::a_derecha(){
-    char* nuevo = clonar(current_state);  // Esto tal vez no sea necesario pero lo pondre mientras tanto.
-    if ( ((zero_index + 1) % 5) == 0){
-        return new State25(nuevo,zero_index);
-    }
-    char tmp  = nuevo[zero_index];
-    nuevo[zero_index] = nuevo[zero_index+1];
-    nuevo[zero_index+1] = tmp;
-    return new State25(nuevo,zero_index+1);
+
+	char* nuevo = clonar(current_state);
+
+	char swapAux = nuevo[zero_index+1];
+	nuevo[zero_index+1]=0;
+	nuevo[zero_index]=swapAux;
+	
+	return new State25(nuevo,zero_index+1);
 }
 
 State25* State25::a_izquierda(){
-    char* nuevo = clonar(current_state);  // Esto tal vez no sea necesario pero lo pondre mientras tanto.
-    if ( (zero_index % 5) == 0){
-        return new State25(nuevo,zero_index);
-    }
-    char tmp  = nuevo[zero_index];
-    nuevo[zero_index] = nuevo[zero_index-1];
-    nuevo[zero_index-1] = tmp;
-    return new State25(nuevo,zero_index-1);
+    char* nuevo = clonar(current_state);
+
+	char swapAux = nuevo[zero_index-1];
+	nuevo[zero_index-1]=0;
+	nuevo[zero_index]=swapAux;
+	
+	return new State25(nuevo,zero_index-1);
 }
 
 State25* State25::a_abajo(){
-    char* nuevo = clonar(current_state);  // Esto tal vez no sea necesario pero lo pondre mientras tanto.
-    if ( (20 <= zero_index) && (zero_index <= 24) ){
-        return new State25(nuevo,zero_index);
-    }
-    char tmp  = nuevo[zero_index];
-    nuevo[zero_index] = nuevo[zero_index+5];
-    nuevo[zero_index+5] = tmp;
-    return new State25(nuevo,zero_index+5);
+    char* nuevo = clonar(current_state);
+
+	char swapAux = nuevo[zero_index+5];
+	nuevo[zero_index+5]=0;
+	nuevo[zero_index]=swapAux;
+	
+	return new State25(nuevo,zero_index+5);
 }
 
 State25* State25::a_arriba(){
-    char* nuevo = clonar(current_state);  // Esto tal vez no sea necesario pero lo pondre mientras tanto.
-    if ((0 <= zero_index) && (zero_index <= 4)){
-        return new State25(nuevo,zero_index);
-    }
-    char tmp  = nuevo[zero_index];
-    nuevo[zero_index] = nuevo[zero_index-5];
-    nuevo[zero_index-5] = tmp;
-    return new State25(nuevo,zero_index-5);
+    char* nuevo = clonar(current_state);
+
+	char swapAux = nuevo[zero_index-5];
+	nuevo[zero_index-5]=0;
+	nuevo[zero_index]=swapAux;
+	
+	return new State25(nuevo,zero_index-5);
 }

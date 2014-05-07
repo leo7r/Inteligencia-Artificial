@@ -1,4 +1,4 @@
-puzzle = 5
+puzzle = 4
 
 man = [[0 for x in xrange(puzzle*puzzle)] for x in range(puzzle*puzzle)]
 

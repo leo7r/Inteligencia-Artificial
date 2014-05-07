@@ -60,3 +60,17 @@ int pdbHeuristic( State16* );
 int_fast64_t orMask( int );
 
 bool a_star(Node* ,int (*h)(State16*));
+
+bool fexists(const char *);
+
+//funciones para el 25 puzzle
+
+State25* crear_estado_patron(char *  , char );
+
+bool isClosed( State25* );
+
+void calcularPDB25();
+
+void writeBinFile( std::ofstream* , char * , int );
+
+void bfs_pdb(State25*  , std::string  );

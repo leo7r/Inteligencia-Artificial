@@ -37,7 +37,7 @@ int main(int argc, char *argv[]){
     std::string* f_name = 0;
     std::string* algoritmo = 0;
     std::string* heuristica = 0;
-    char n;
+    int n;
 	int i;
     bool solution;
 
@@ -76,11 +76,11 @@ int main(int argc, char *argv[]){
     while(!fs.eof()) {
         fs >> n;
 		
-		std::cout << "n: " << n << "\n";
-		std::cin.get();
+		//std::cout << "n: " << n << "\n";
+		//std::cin.get();
 		
         if (n == 0) zero_index = i;
-        array[i] = (int) n;
+        array[i] = n;
         i++;
         if (i == 25){
             State25* s = new State25(array,zero_index);
@@ -88,8 +88,8 @@ int main(int argc, char *argv[]){
 			std::chrono::time_point<std::chrono::system_clock> start, end;
 			start = std::chrono::system_clock::now();
 			
-			s->print_state();
-			std::cin.get();
+			//s->print_state();
+			//std::cin.get();
 			
             solution = ida_star1(n,dist_manhattan24);
 

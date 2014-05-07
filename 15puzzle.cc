@@ -92,7 +92,11 @@ int main(int argc, char *argv[]){
 
     if (*heuristica == "pdatabase"){
         std::cout << "Cargando base de datos de patrones: \n";
-        //calcularPDB();	
+        if(!fexists("patron1.txt")||!fexists("patron2.txt")||!fexists("patron3.txt")){
+			calcularPDB();
+		}else{
+			std::cout << "Se encontro PDB previamente calculada... No se recalculara \n";
+		}
         loadPDB();
     }
 	

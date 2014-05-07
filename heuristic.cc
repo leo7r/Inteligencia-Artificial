@@ -121,7 +121,7 @@ int dist_manhattan24(State25* st){
 	return h;
 }
 
-/* Base de datos de patrones */
+/* Base de datos de patrones 15 puzzle*/
 
 static std::map<std::pair<int_fast64_t,char>,State16*> hashPattern; /*  */
 static std::unordered_map<int_fast64_t,int> firstPattern;           /*  */
@@ -131,6 +131,21 @@ static std::unordered_map<int_fast64_t,int> thirdPattern;           /*  */
 State16* first_pattern;
 State16* second_pattern;
 State16* third_pattern;
+
+/* Base de datos de patrones 24 puzzle*/
+
+static std::map<std::pair<char*,char>,State25*> hashPattern25; 		/*  */
+static std::unordered_map<char*,int> firstPattern25;           /*  */
+static std::unordered_map<char*,int> secondPattern25;          /*  */
+static std::unordered_map<char*,int> thirdPattern25; 
+static std::unordered_map<char*,int> fourthPattern25;          /*  */
+
+State25* first_pattern25;
+State25* second_pattern25;
+State25* third_pattern25;
+State25* fourth_pattern25;
+
+
 
 /**
  * Crea y retorna un estado del patron. 
@@ -460,6 +475,195 @@ int pdbHeuristic( State16* st ){
 	return fp+sp+tp;
 }
 
+
+/*Funcions para Crear o Cargar PDB puzzle 25*/
+State25* crear_estado_patron(char * st , char zero_index){
+		
+	std::pair<char *,char> par(st,zero_index);
+	
+	std::map<std::pair<char *,char>,State25*>::const_iterator isState = hashPattern25.find(par);
+	
+	if ( isState == hashPattern25.end() ){
+		State25* state = new State25(st,zero_index);
+		std::pair<char*,char> par(st,zero_index);
+		hashPattern25[par] = state;
+		return state;
+	}
+	else{
+		State25* ret = isState->second;
+		ret->zero_index = zero_index;
+		return ret;
+	}
+}
+
+bool isClosed( State25* st ){
+	
+	std::pair<char *,char> par(st->current_state,st->zero_index);
+	std::map<std::pair<char *,char>,State25*>::const_iterator isState = hashPattern25.find(par);
+	
+	
+	return isState != hashPattern25.end();
+}
+
+void calcularPDB25(){
+
+	char array1[25] = {0,1,2,0,0,5,6,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};	
+	char array2[25] = {0,0,0,0,0,5,6,0,0,0,10,11,0,0,0,15,16,0,0,0,0,0,0,0,0};
+	char array3[25] = {0,0,0,0,0,0,0,0,8,9,0,0,0,13,14,0,0,0,0,19,0,0,0,0,24};
+	char array4[25] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,18,0,20,21,22,23,0};
+	
+	first_pattern25  = 		crear_estado_patron(array1,0);
+	second_pattern25  = 	crear_estado_patron(array2,0);
+	third_pattern25  = 		crear_estado_patron(array3,0);
+	fourth_pattern25  = 	crear_estado_patron(array4,0);
+	
+	
+	bfs_pdb(first_pattern25,"patron1_25.txt");
+	//bfs_pdb(second_pattern25,"patron2_25.txt");
+	//bfs_pdb(third_pattern25,"patron3_25.txt");
+	//bfs_pdb(fourth_pattern25,"patron4_25.txt");
+}
+
+void writeBinFile( std::ofstream* file , char * st , int h ){
+	
+	int * ptr_i = &h;
+	
+	if ( file->is_open() ){
+		file->write((const char*)st,(sizeof st));
+		file->write((const char*) ptr_i , sizeof h );
+	}
+}
+
+void bfs_pdb(State25* st , std::string file ){
+
+	std::list<Node*> open;
+	Node* nodo = new Node( st );
+	open.push_front(nodo);
+	int num_nodos = 0;
+	
+	std::ofstream myfile;
+	myfile.open (file, std::ios::out | std::ios::binary);
+	
+	while ( !open.empty() ){
+		Node* aux = open.front();
+		
+		for ( int act = ARRIBA ; act < ROOT ; act++ ){
+			if ( aux->node_state->is_posible((action)act) ){
+				State25* suc_state;
+				switch( act ){
+					
+					case ARRIBA:
+						suc_state = (State25*) aux->node_state->a_arriba();
+						break;
+					case ABAJO:
+						suc_state = (State25*) aux->node_state->a_abajo();
+						break;
+					case IZQUIERDA:
+						suc_state = (State25*) aux->node_state->a_izquierda();
+						break;
+					case DERECHA:
+						suc_state = (State25*) aux->node_state->a_derecha();
+						break;
+				}
+								
+				if ( !isClosed(suc_state) ){
+				    State25* new_state = crear_estado_patron(suc_state->current_state,suc_state->zero_index);
+                    delete suc_state;
+				    Node* node = new Node( aux , (action) act , new_state );
+					
+				    if ( ((State25*)aux->node_state)->current_state == new_state->current_state ){
+						node->cost-=1;
+				    }
+				    else{
+				        //myfile << new_state->current_state << ":" << node->cost << "\n";
+						
+				        try{
+							firstPattern25.at(new_state->current_state);
+							
+							if ( firstPattern25[new_state->current_state] > node->cost ){
+								firstPattern25[new_state->current_state] = node->cost;
+							}
+							
+						}
+						catch(const std::out_of_range& oor ){
+							firstPattern25[new_state->current_state] = node->cost;
+						}
+						
+						num_nodos++;
+				    }
+					
+				    open.push_back(node);
+				}	
+			}
+		}
+		open.pop_front();
+        liberar(aux);
+	}
+	
+	std::unordered_map<char * ,int>::const_iterator isState = firstPattern25.begin();
+		
+	for ( auto it = firstPattern25.begin(); it != firstPattern25.end(); ++it ){
+		writeBinFile( &myfile , it->first , it->second );
+		//myfile << it->first << ":" << it->second << "\n";
+		//std::cin.get();
+	}
+	
+	std::cout << "Numero de nodos cerrados: " << num_nodos <<  " | " << firstPattern25.size() << "\n" ;
+	hashPattern25.clear();
+	firstPattern25.clear();
+	myfile.close();
+}
+/*
+void loadPDB25(){
+	loadPattern25("patron1_25.txt",1);
+	loadPattern25("patron2_25.txt",2);
+	loadPattern25("patron3_25.txt",3);
+	loadPattern25("patron4_25.txt",4);
+}
+
+void loadPattern25( std::string patron , int num_patron ){
+	
+	std::ifstream file;
+	file.open (patron, std::ios::in | std::ios::binary);
+	
+	
+	char * st;	
+	int h;
+	
+	char * ptr2 = (char*) malloc(sizeof st);
+	int * ptr2_i = (int*) malloc(sizeof h);
+	
+	int size = 524159;
+	
+	if ( file.is_open() ){
+		for ( int i = 0 ; i < size ; ++i ){
+			file.read((char*)ptr2,sizeof st);
+			file.read((char*)ptr2_i,sizeof h);
+			
+			st = *ptr2;
+			h = *ptr2_i;
+			
+			switch( num_patron ){
+				case 1:
+					firstPattern25[st] = h;
+					break;
+				case 2:
+					secondPattern25[st] = h;
+					break;
+				case 3:
+					thirdPattern25[st] = h;
+					break;
+				case 4:
+					fourthPattern25[st] = h;
+					break;
+			}
+		}
+	}
+	
+	std::cout << "Cargado patron: " << num_patron << "\n";
+	file.close();
+}
+*/
 /* Algoritmos */
 
 
@@ -681,12 +885,12 @@ bool ida_star1(Node* root, int (*h)(State25*)){
 			
 			std::cout << "Numero de nodos expandidos: " << expanded_nodes;
 			stateMap.clear();
-			delete(root);
+			//delete(root);
 			return true;
 		}
         if (t.first == std::numeric_limits<int>::max()){
 			stateMap.clear();
-			delete(root);
+			//delete(root);
 			return false;
         }
 	bound = t.first;
@@ -773,4 +977,11 @@ bool a_star(Node* root,int (*h)(State16*)){
         delete n;
     }
     return false;
+
+}
+
+bool fexists(const char *filename)
+{
+  std::ifstream ifile(filename);
+  return ifile;
 }
