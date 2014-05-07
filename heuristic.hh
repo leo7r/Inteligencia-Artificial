@@ -74,3 +74,5 @@ void calcularPDB25();
 void writeBinFile( std::ofstream* , char * , int );
 
 void bfs_pdb(State25*  , std::string  );
+
+void liberar25(Node* suc);

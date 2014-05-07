@@ -85,24 +85,21 @@ int main(int argc, char *argv[]){
         if (i == 25){
             State25* s = new State25(array,zero_index);
             Node *n = new Node(s);		
-			std::chrono::time_point<std::chrono::system_clock> start, end;
-			start = std::chrono::system_clock::now();
-			
-			//s->print_state();
-			//std::cin.get();
-			
+	    std::chrono::time_point<std::chrono::system_clock> start, end;
+	    start = std::chrono::system_clock::now();
+
             solution = ida_star1(n,dist_manhattan24);
 
-			if ( solution == true ){
-				std::cout << "Funciono\n";
-			} else{
-				std::cout << "No funciono\n";
-			}	
-			end = std::chrono::system_clock::now();
+	    if ( solution == true ){
+	        std::cout << "Funciono\n";
+	    } else{
+	        std::cout << "No funciono\n";
+	    }	
+	    end = std::chrono::system_clock::now();
 				
-			std::chrono::duration<double> elapsed_seconds = end-start;
+	    std::chrono::duration<double> elapsed_seconds = end-start;
 				
-			std::cout << "Tiempo: " << elapsed_seconds.count() << "\n";
+	    std::cout << "Tiempo: " << elapsed_seconds.count() << "\n";
 
             delete n; 
             delete s;

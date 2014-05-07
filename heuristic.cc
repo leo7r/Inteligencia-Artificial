@@ -35,7 +35,7 @@
  */
 void liberar25(Node* suc){
     State25* tmp = (State25*) suc->node_state;
-    delete tmp->current_state;
+    delete[] tmp->current_state;
     delete tmp;
     delete suc;
 }
@@ -263,7 +263,6 @@ void bfs_pdb(State16* st , std::string file ){
 					node->cost-=1;
 				    }
 				    else{
-				        //myfile << new_state->current_state << ":" << node->cost << "\n";
 						
 				        try{
 					    firstPattern.at(new_state->current_state);
@@ -291,8 +290,6 @@ void bfs_pdb(State16* st , std::string file ){
 		
 	for ( auto it = firstPattern.begin(); it != firstPattern.end(); ++it ){
 		writeBinFile( &myfile , it->first , it->second );
-		//myfile << it->first << ":" << it->second << "\n";
-		//std::cin.get();
 	}
 	
 	std::cout << "Numero de nodos cerrados: " << num_nodos <<  " | " << firstPattern.size() << "\n" ;
@@ -487,7 +484,9 @@ int pdbHeuristic( State16* st ){
 }
 
 
-/*Funcions para Crear o Cargar PDB puzzle 25*/
+/**
+ * Funcions para Crear o Cargar PDB puzzle 25
+ */
 State25* crear_estado_patron(char * st , char zero_index){
 		
 	std::pair<char *,char> par(st,zero_index);
@@ -523,10 +522,10 @@ void calcularPDB25(){
 	char array3[25] = {0,0,0,0,0,0,0,0,8,9,0,0,0,13,14,0,0,0,0,19,0,0,0,0,24};
 	char array4[25] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,18,0,20,21,22,23,0};
 	
-	first_pattern25  = 		crear_estado_patron(array1,0);
-	second_pattern25  = 	crear_estado_patron(array2,0);
-	third_pattern25  = 		crear_estado_patron(array3,0);
-	fourth_pattern25  = 	crear_estado_patron(array4,0);
+	first_pattern25   = crear_estado_patron(array1,0);
+	second_pattern25  = crear_estado_patron(array2,0);
+	third_pattern25   = crear_estado_patron(array3,0);
+	fourth_pattern25  = crear_estado_patron(array4,0);
 	
 	
 	bfs_pdb(first_pattern25,"patron1_25.txt");
@@ -675,9 +674,12 @@ void loadPattern25( std::string patron , int num_patron ){
 	file.close();
 }
 */
+
 /* Algoritmos */
 
-
+/**
+ * Algoritmo de busqueda recursiva.
+ */
 std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State16*)){
     std::pair<int,Node*> f;
 	
@@ -697,11 +699,6 @@ std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State16*)){
     min.first = std::numeric_limits<int>::max();
 	min.second = NULL;
     temporal++;
-	
-	/*std::cout << "Expandiendo estado con h = " << h(node->node_state) << " | bound = " << bound << "\n";
-	node->node_state->print_state();
-	std::cin.get();
-	*/
 	
     expanded_nodes++;
 	
@@ -727,13 +724,6 @@ std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State16*)){
 					break;
 			}
 			
-			/*
-			std::cout << "Sucesor de :" << "\n";
-			node->node_state->print_state();
-			std::cout << "sucesor: ";
-			suc->node_state->print_state();
-			*/
-			
 			std::pair<int,Node*> t = search(suc,suc->cost ,bound,h);
 				
 			if (t.second != NULL){
@@ -746,23 +736,9 @@ std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State16*)){
 		}
 	}
 	
-	/*
-	for ( std::list<Node*>::iterator it=succ.begin(); it != succ.end() ; ++it){
-        
-		Node* tmp = *it;
-		
-		std::pair<int,bool> t = search(tmp,tmp->cost ,bound,h);
-				
-		if (t.second == true){
-			return t;
-		}
-		if (t.first < min.first){
-			min.first = t.first;
-		}
-    }
-    */
 	return min;
 }
+
 int expanded_nodes;
 /**
  * Implementacion de algoritmo de ida estrella.
@@ -795,7 +771,9 @@ bool ida_star1(Node* root, int (*h)(State16*)){
 
 
 
-/////////// Mismo algoritmo para 25-puzzle
+/**
+ * Mismo algoritmo para 25-puzzle.
+ */
 std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State25*)){
     std::pair<int,Node*> f;
 	
@@ -845,13 +823,6 @@ std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State25*)){
 					break;
 			}
 			
-			/*
-			std::cout << "Sucesor de :" << "\n";
-			node->node_state->print_state();
-			std::cout << "sucesor: ";
-			suc->node_state->print_state();
-			*/
-			
 			std::pair<int,Node*> t = search(suc,suc->cost ,bound,h);
 				
 			if (t.second != NULL){
@@ -863,24 +834,9 @@ std::pair<int,Node*> search(Node* node, int g, int bound,int (*h)(State25*)){
 			liberar25(suc);
 		}
 	}
-	
-	/*
-	for ( std::list<Node*>::iterator it=succ.begin(); it != succ.end() ; ++it){
-        
-		Node* tmp = *it;
-		
-		std::pair<int,bool> t = search(tmp,tmp->cost ,bound,h);
-				
-		if (t.second == true){
-			return t;
-		}
-		if (t.first < min.first){
-			min.first = t.first;
-		}
-    }
-    */
 	return min;
 }
+
 /**
  * Implementacion de algoritmo de ida estrella.
  */
@@ -908,7 +864,9 @@ bool ida_star1(Node* root, int (*h)(State25*)){
 	bound = t.first;
    }
 }
-
+/**
+ * Clase para comparar nodos.
+ */
 class compare_node{
     bool reverse;
     int (*h)(State16*);
@@ -929,7 +887,9 @@ public:
     }
 };
 
-
+/**
+ * Algoritmo A*.
+ */
 bool a_star(Node* root,int (*h)(State16*)){
     std::unordered_map<int_fast64_t,int> dist16;
     std::priority_queue<Node*,std::vector<Node*>,compare_node> q (compare_node(true,h));  
@@ -973,18 +933,6 @@ bool a_star(Node* root,int (*h)(State16*)){
 				}
 			}
 			
-			/*
-            n->succ(succ);
-            while (!succ->empty()){
-                Node* tmp = succ->front();
-                if (h(tmp->node_state) < std::numeric_limits<int>::max()){
-                    q.push(tmp);     
-                } else{
-                    liberar(tmp);
-                }
-                succ->pop_front();
-            }
-			*/
         }
         delete n;
     }
