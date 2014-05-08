@@ -1,4 +1,4 @@
-all: 24puzzle
+all: pruebas
 
 pruebas: state.o nodes.o heuristic.o pruebas.o
 	

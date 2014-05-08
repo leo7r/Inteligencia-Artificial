@@ -23,8 +23,8 @@ static std::map<std::pair<char*,char>,State25*> hashPattern25; /*  */
 
 int main(){
 
-	//calcularPDB25();
-
+	calcularPDB25();
+/*
         char array[25] = {1,3,2,7,4,5,6,0,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}; 
         State25* ini = new State25( array,7);
 		State25* ini2=ini->a_derecha();
@@ -35,6 +35,7 @@ int main(){
 		ini4->print_state();
 		State25* ini5=ini->a_arriba();
 		ini5->print_state();
+		*/
 		/*
 		std::cout << dist_manhattan24(ini)<<"\n";
 		
