@@ -454,10 +454,9 @@ State25* State25::a_abajo(){
 
 State25* State25::a_arriba(){
     char* nuevo = clonar(current_state);
-
-	char swapAux = nuevo[zero_index-5];
-	nuevo[zero_index-5]=0;
-	nuevo[zero_index]=swapAux;
+    char swapAux = nuevo[zero_index-5];
+    nuevo[zero_index-5] = 0;
+    nuevo[zero_index] = swapAux;
 	
-	return new State25(nuevo,zero_index-5);
+    return new State25(nuevo,zero_index-5);
 }

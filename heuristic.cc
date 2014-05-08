@@ -35,7 +35,7 @@
  */
 void liberar25(Node* suc){
     State25* tmp = (State25*) suc->node_state;
-    delete[] tmp->current_state;
+    free( tmp->current_state);
     delete tmp;
     delete suc;
 }

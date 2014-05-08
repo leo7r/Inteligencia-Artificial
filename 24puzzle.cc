@@ -28,30 +28,26 @@
 void imprimirAyuda(){
     std::cout << "15puzzle [opciones]\n";
     std::cout << "opciones: \n";
-    std::cout << "-a { a* | ida* }              Algoritmo a utilizar\n";
     std::cout << "-h { manhattan | pdatabase }  Heuristica deseada\n";
     std::cout << "-f {archivo}                  Archivo con instancias a resolver\n";
 }
 
 int main(int argc, char *argv[]){
     std::string* f_name = 0;
-    std::string* algoritmo = 0;
     std::string* heuristica = 0;
     int n;
 	int i;
     bool solution;
 
     for ( i = 0 ; i != argc ; i++){
-        if (argv[i] == std::string("-a") && (i +1 < argc)){
-           algoritmo = new std::string(argv[i+1]); 
-        } else if (argv[i] == std::string("-h") && (i + 1 < argc)) {
+        if (argv[i] == std::string("-h") && (i + 1 < argc)) {
            heuristica = new std::string(argv[i+1]); 
         } else if (argv[i] == std::string("-f") && (i + 1 < argc)){
            f_name = new std::string(argv[i+1]); 
         }
     }    
     
-    if (algoritmo == 0 || f_name == 0 || heuristica == 0){
+    if (f_name == 0 || heuristica == 0){
         imprimirAyuda();
         return 1;
     }
@@ -69,8 +65,8 @@ int main(int argc, char *argv[]){
 
     if (*heuristica == "pdatabase"){
         std::cout << "Cargando base de datos de patrones: \n";
-        //calcularPDB();	
-        //loadPDB24();
+        calcularPDB25();	
+        loadPDB24();
     }
 	
     while(!fs.eof()) {
@@ -88,7 +84,11 @@ int main(int argc, char *argv[]){
 	    std::chrono::time_point<std::chrono::system_clock> start, end;
 	    start = std::chrono::system_clock::now();
 
-            solution = ida_star1(n,dist_manhattan24);
+            if (*heuristica == "manhattan"){
+                solution = ida_star1(n,dist_manhattan24);
+            } else{
+                ///solution = ida_star1(n,dist_manhattan24);
+            }
 
 	    if ( solution == true ){
 	        std::cout << "Funciono\n";
