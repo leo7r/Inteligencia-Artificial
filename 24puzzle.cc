@@ -66,7 +66,7 @@ int main(int argc, char *argv[]){
     if (*heuristica == "pdatabase"){
         std::cout << "Cargando base de datos de patrones: \n";
         calcularPDB25();	
-        loadPDB24();
+        //loadPDB24();
     }
 	
     while(!fs.eof()) {
@@ -87,7 +87,7 @@ int main(int argc, char *argv[]){
             if (*heuristica == "manhattan"){
                 solution = ida_star1(n,dist_manhattan24);
             } else{
-                ///solution = ida_star1(n,dist_manhattan24);
+                solution = ida_star1(n,dist_manhattan24);
             }
 
 	    if ( solution == true ){

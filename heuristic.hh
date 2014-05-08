@@ -71,7 +71,7 @@ bool isClosed( State25* );
 
 void calcularPDB25();
 
-void writeBinFile( std::ofstream* , char * , int );
+void writeBinFile( std::ofstream* , const char* , int );
 
 void bfs_pdb(State25*  , std::string  );
 

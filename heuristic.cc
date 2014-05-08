@@ -145,11 +145,11 @@ State16* third_pattern;
 
 /* Base de datos de patrones 24 puzzle*/
 
-static std::map<std::pair<char*,char>,State25*> hashPattern25; 		/*  */
-static std::unordered_map<char*,int> firstPattern25;           /*  */
-static std::unordered_map<char*,int> secondPattern25;          /*  */
-static std::unordered_map<char*,int> thirdPattern25; 
-static std::unordered_map<char*,int> fourthPattern25;          /*  */
+static std::map<std::pair<std::string,char>,State25*> hashPattern25; 		/*  */
+static std::unordered_map<std::string,int> firstPattern25;           /*  */
+static std::unordered_map<std::string,int> secondPattern25;          /*  */
+static std::unordered_map<std::string,int> thirdPattern25; 
+static std::unordered_map<std::string,int> fourthPattern25;          /*  */
 
 State25* first_pattern25;
 State25* second_pattern25;
@@ -489,13 +489,13 @@ int pdbHeuristic( State16* st ){
  */
 State25* crear_estado_patron(char * st , char zero_index){
 		
-	std::pair<char *,char> par(st,zero_index);
+	std::pair<std::string,char> par(std::string(st),zero_index);
 	
-	std::map<std::pair<char *,char>,State25*>::const_iterator isState = hashPattern25.find(par);
+	std::map<std::pair<std::string,char>,State25*>::const_iterator isState = hashPattern25.find(par);
 	
 	if ( isState == hashPattern25.end() ){
 		State25* state = new State25(st,zero_index);
-		std::pair<char*,char> par(st,zero_index);
+		std::pair<std::string,char> par(std::string(st),zero_index);
 		hashPattern25[par] = state;
 		return state;
 	}
@@ -508,8 +508,8 @@ State25* crear_estado_patron(char * st , char zero_index){
 
 bool isClosed( State25* st ){
 	
-	std::pair<char *,char> par(st->current_state,st->zero_index);
-	std::map<std::pair<char *,char>,State25*>::const_iterator isState = hashPattern25.find(par);
+	std::pair<std::string,char> par(std::string(st->current_state),st->zero_index);
+	std::map<std::pair<std::string,char>,State25*>::const_iterator isState = hashPattern25.find(par);
 	
 	
 	return isState != hashPattern25.end();
@@ -534,12 +534,12 @@ void calcularPDB25(){
 	//bfs_pdb(fourth_pattern25,"patron4_25.txt");
 }
 
-void writeBinFile( std::ofstream* file , char * st , int h ){
+void writeBinFile( std::ofstream* file , const char *st , int h ){
 	
 	int * ptr_i = &h;
 	
 	if ( file->is_open() ){
-		file->write((const char*)st,(sizeof st));
+		file->write( st,(sizeof st));
 		file->write((const char*) ptr_i , sizeof h );
 	}
 }
@@ -561,7 +561,6 @@ void bfs_pdb(State25* st , std::string file ){
 			if ( aux->node_state->is_posible((action)act) ){
 				State25* suc_state;
 				switch( act ){
-					
 					case ARRIBA:
 						suc_state = (State25*) aux->node_state->a_arriba();
 						break;
@@ -578,7 +577,7 @@ void bfs_pdb(State25* st , std::string file ){
 								
 				if ( !isClosed(suc_state) ){
 				    State25* new_state = crear_estado_patron(suc_state->current_state,suc_state->zero_index);
-                    delete suc_state;
+                                    delete suc_state;
 				    Node* node = new Node( aux , (action) act , new_state );
 					
 				    if ( ((State25*)aux->node_state)->current_state == new_state->current_state ){
@@ -588,18 +587,19 @@ void bfs_pdb(State25* st , std::string file ){
 				        //myfile << new_state->current_state << ":" << node->cost << "\n";
 						
 				        try{
-							firstPattern25.at(new_state->current_state);
+					    firstPattern25.at(std::string(new_state->current_state));
+                                            std::cout << "try\n";
 							
-							if ( firstPattern25[new_state->current_state] > node->cost ){
-								firstPattern25[new_state->current_state] = node->cost;
-							}
+					    if ( firstPattern25[std::string(new_state->current_state)] > node->cost ){
+					        firstPattern25[std::string(new_state->current_state)] = node->cost;
+					    }
 							
-						}
-						catch(const std::out_of_range& oor ){
-							firstPattern25[new_state->current_state] = node->cost;
-						}
-						
-						num_nodos++;
+					}
+					catch(const std::out_of_range& oor ){
+                                            std::cout << "catch\n";
+					    firstPattern25[std::string(new_state->current_state)] = node->cost;
+					}
+					num_nodos++;
 				    }
 					
 				    open.push_back(node);
@@ -607,13 +607,13 @@ void bfs_pdb(State25* st , std::string file ){
 			}
 		}
 		open.pop_front();
-        liberar(aux);
+                liberar(aux);
 	}
 	
-	std::unordered_map<char * ,int>::const_iterator isState = firstPattern25.begin();
+	std::unordered_map<std::string,int>::const_iterator isState = firstPattern25.begin();
 		
 	for ( auto it = firstPattern25.begin(); it != firstPattern25.end(); ++it ){
-		writeBinFile( &myfile , it->first , it->second );
+		writeBinFile( &myfile , it->first.data() , it->second );
 		//myfile << it->first << ":" << it->second << "\n";
 		//std::cin.get();
 	}

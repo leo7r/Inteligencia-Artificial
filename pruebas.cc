@@ -6,7 +6,16 @@
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
+#include <string>
 #include <map>
+
+std::string arrayConverter(char* array){
+    std::string nuevo;
+    for (int i = 0; i < 25 ; i++){
+        nuevo += (array[i]+ 97);
+    }
+    return nuevo + '\0';
+}
 
 class compareState25 { // simple comparison function
 	public:
@@ -18,7 +27,7 @@ class compareState25 { // simple comparison function
 			return x.second != y.second;
 		} 
 };
-static std::map<std::pair<char*,char>,State25*> hashPattern25; /*  */
+static std::map<std::pair<std::string,char>,State25*> hashPattern25; /*  */
 
 
 int main(){
@@ -36,35 +45,38 @@ int main(){
 		State25* ini5=ini->a_arriba();
 		ini5->print_state();
 		*/
-		/*
-		std::cout << dist_manhattan24(ini)<<"\n";
 		
-		char array2[25] = {1,0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}; 
+		//std::cout << dist_manhattan24(ini)<<"\n";
+		
+		char array1[25] = {1,0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}; 
+        State25* ini = new State25( array1,1);
+		
+		//std::cout << dist_manhattan24(ini)<<"\n";
+		
+        char array2[25] = {1,'a',2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}; 
         State25* ini2 = new State25( array2,1);
 		
-		std::cout << dist_manhattan24(ini2)<<"\n";*/
-		/*
-        char array2[25] = {1,0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}; 
-        State25* ini2 = new State25( array2,1);
-		
-        char array3[25] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}; 
+        char array3[25] = {'a',1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}; 
         State25* ini3 = new State25( array3,0);
 		
-        char array4[25] = {1,2,0,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}; 
+        char array4[25] = {'a',2,1,3,5,4,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}; 
         State25* ini4 = new State25( array4,0);
 		
-		std::pair<char *, char> par1(ini->current_state,ini->zero_index);
-		std::pair<char *, char> par2(ini2->current_state,ini2->zero_index);
-		std::pair<char *, char> par3(ini4->current_state,ini4->zero_index);
-		std::pair<char *, char> par4(ini->current_state,ini->zero_index+1);
+                std::cout << ini->current_state << "\n";
+                std::cout << std::string(arrayConverter(ini->current_state)) << '\n';
+                std::cout << std::string(arrayConverter(ini->current_state)).length() << '\n';
+		std::pair<std::string, char> par1(std::string(arrayConverter(ini->current_state)),ini->zero_index);
+		std::pair<std::string, char> par2(std::string(ini2->current_state),ini2->zero_index);
+		std::pair<std::string, char> par3(std::string(ini4->current_state),ini4->zero_index);
+		std::pair<std::string, char> par4(std::string(ini3->current_state),ini->zero_index+1);
 		
 		hashPattern25[par2]=ini2;
 		hashPattern25[par1]=ini;
-		hashPattern25[par1]=ini3;
+		hashPattern25[par4]=ini3; 
 		hashPattern25[par3]=ini4;
 		std::cout << hashPattern25.size() << "\n";
-		std::cout << hashPattern25.size()<< "\n";;
-				
+		//std::cout << hashPattern25.size()<< "\n";;
+		/*  		
 		std::map<std::pair<char*,char>,State25*>::const_iterator it;
 		it = hashPattern25.find(par4);
 		
