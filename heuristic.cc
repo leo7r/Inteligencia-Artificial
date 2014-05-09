@@ -169,11 +169,15 @@ static std::unordered_map<std::string,int> firstPattern25;           /*  */
 static std::unordered_map<std::string,int> secondPattern25;          /*  */
 static std::unordered_map<std::string,int> thirdPattern25; 
 static std::unordered_map<std::string,int> fourthPattern25;          /*  */
+static std::unordered_map<std::string,int> fifthPattern25;          /*  */
+static std::unordered_map<std::string,int> sixthPattern25;          /*  */
 
 State25* first_pattern25;
 State25* second_pattern25;
 State25* third_pattern25;
 State25* fourth_pattern25;
+State25* fifth_pattern25;
+State25* sixth_pattern25;
 
 
 
@@ -539,20 +543,26 @@ bool isClosed( State25* st ){
 void calcularPDB25(){
 
 	char array1[25] = {0,1,2,0,0,0,6,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};	
-	char array2[25] = {0,0,0,0,0,5,6,0,0,0,10,11,0,0,0,15,16,0,0,0,0,0,0,0,0};
-	char array3[25] = {0,0,0,0,0,0,0,0,8,9,0,0,0,13,14,0,0,0,0,19,0,0,0,0,24};
-	char array4[25] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,18,0,20,21,22,23,0};
+	char array2[25] = {0,0,0,3,4,0,0,0,8,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	char array3[25] = {0,0,0,0,0,5,0,0,0,0,10,0,0,0,0,15,0,0,0,0,20,0,0,0,0};
+	char array4[25] = {0,0,0,0,0,0,0,0,0,0,0,11,12,0,0,0,16,17,0,0,0,0,0,0,0};
+        char array5[25] = {0,0,0,0,0,0,0,0,0,0,0,0,0,13,14,0,0,0,18,19,0,0,0,0,0};
+        char array6[25] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,21,22,23,24};
 	
 	first_pattern25   = crear_estado_patron(array1,0);
 	second_pattern25  = crear_estado_patron(array2,0);
 	third_pattern25   = crear_estado_patron(array3,0);
 	fourth_pattern25  = crear_estado_patron(array4,0);
+	fifth_pattern25  = crear_estado_patron(array5,0);
+	sixth_pattern25  = crear_estado_patron(array6,0);
 	
 	
 	bfs_pdb(first_pattern25,"patron1_25.txt");
-	//bfs_pdb(second_pattern25,"patron2_25.txt");
-	//bfs_pdb(third_pattern25,"patron3_25.txt");
-	//bfs_pdb(fourth_pattern25,"patron4_25.txt");
+	bfs_pdb(second_pattern25,"patron2_25.txt");
+	bfs_pdb(third_pattern25,"patron3_25.txt");
+	bfs_pdb(fourth_pattern25,"patron4_25.txt");
+	bfs_pdb(fifth_pattern25,"patron5_25.txt");
+	bfs_pdb(sixth_pattern25,"patron6_25.txt");
 }
 
 void writeBinFile( std::ofstream* file , const char *st , int h ){
@@ -633,11 +643,11 @@ void bfs_pdb(State25* st , std::string file ){
 	std::unordered_map<std::string,int>::const_iterator isState = firstPattern25.begin();
 		
 	for ( auto it = firstPattern25.begin(); it != firstPattern25.end(); ++it ){
-                std::cout << it->first.data() << '\n';
                 char* tmp_char =  toChar(it->first.data());
-		writeBinFile( &myfile , *tmp_char , it->second );
+		writeBinFile( &myfile , tmp_char , it->second );
 		//myfile << it->first << ":" << it->second << "\n";
 		//std::cin.get();
+                delete tmp_char;
 	}
 	
 	std::cout << "Numero de nodos cerrados: " << num_nodos <<  " | " << firstPattern25.size() << "\n" ;
