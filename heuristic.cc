@@ -30,6 +30,25 @@
 #include <stdexcept>
 #include "heuristic.hh"
 
+char* toChar(std::string s){
+    char* nuevo = (char*) malloc(sizeof(char)*25);
+    const char * tmp = s.data();
+    for (int i = 0 ; i < 25 ; i++){
+        nuevo[i] = (tmp[i] - 97);
+    }
+    return nuevo;
+}
+
+std::string* arrayConverter(char* array){
+    std::string *nuevo = new std::string("");
+    for (int i = 0; i < 25 ; i++){
+        *nuevo += (array[i]+ 97);
+    }
+    *nuevo = *nuevo + '\0';
+    return nuevo;
+}
+
+
 /**
  * Procedimiento que libera el espacio de un nodo.
  */
@@ -488,30 +507,32 @@ int pdbHeuristic( State16* st ){
  * Funcions para Crear o Cargar PDB puzzle 25
  */
 State25* crear_estado_patron(char * st , char zero_index){
-		
-	std::pair<std::string,char> par(std::string(st),zero_index);
+        std::string *tmp = arrayConverter(st);		
+	std::pair<std::string,char> par(*tmp,zero_index);
 	
 	std::map<std::pair<std::string,char>,State25*>::const_iterator isState = hashPattern25.find(par);
 	
 	if ( isState == hashPattern25.end() ){
 		State25* state = new State25(st,zero_index);
-		std::pair<std::string,char> par(std::string(st),zero_index);
+		std::pair<std::string,char> par(*tmp,zero_index);
 		hashPattern25[par] = state;
+                delete tmp;
 		return state;
 	}
 	else{
 		State25* ret = isState->second;
 		ret->zero_index = zero_index;
+                delete tmp;
 		return ret;
 	}
 }
 
 bool isClosed( State25* st ){
-	
-	std::pair<std::string,char> par(std::string(st->current_state),st->zero_index);
+        std::string *tmp = arrayConverter(st->current_state);
+	std::pair<std::string,char> par(*tmp,st->zero_index);
 	std::map<std::pair<std::string,char>,State25*>::const_iterator isState = hashPattern25.find(par);
 	
-	
+	delete tmp;
 	return isState != hashPattern25.end();
 }
 
@@ -586,18 +607,17 @@ void bfs_pdb(State25* st , std::string file ){
 				    else{
 				        //myfile << new_state->current_state << ":" << node->cost << "\n";
 						
+                                            std::string * tmp_str = arrayConverter(new_state->current_state);
 				        try{
-					    firstPattern25.at(std::string(new_state->current_state));
-                                            std::cout << "try\n";
+					    firstPattern25.at(*tmp_str);
 							
-					    if ( firstPattern25[std::string(new_state->current_state)] > node->cost ){
-					        firstPattern25[std::string(new_state->current_state)] = node->cost;
+					    if ( firstPattern25[*tmp_str] > node->cost ){
+					        firstPattern25[*tmp_str] = node->cost;
 					    }
 							
 					}
 					catch(const std::out_of_range& oor ){
-                                            std::cout << "catch\n";
-					    firstPattern25[std::string(new_state->current_state)] = node->cost;
+					    firstPattern25[*tmp_str] = node->cost;
 					}
 					num_nodos++;
 				    }
@@ -613,7 +633,9 @@ void bfs_pdb(State25* st , std::string file ){
 	std::unordered_map<std::string,int>::const_iterator isState = firstPattern25.begin();
 		
 	for ( auto it = firstPattern25.begin(); it != firstPattern25.end(); ++it ){
-		writeBinFile( &myfile , it->first.data() , it->second );
+                std::cout << it->first.data() << '\n';
+                char* tmp_char =  toChar(it->first.data());
+		writeBinFile( &myfile , *tmp_char , it->second );
 		//myfile << it->first << ":" << it->second << "\n";
 		//std::cin.get();
 	}

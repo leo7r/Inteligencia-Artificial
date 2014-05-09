@@ -9,13 +9,7 @@
 #include <string>
 #include <map>
 
-std::string arrayConverter(char* array){
-    std::string nuevo;
-    for (int i = 0; i < 25 ; i++){
-        nuevo += (array[i]+ 97);
-    }
-    return nuevo + '\0';
-}
+
 
 class compareState25 { // simple comparison function
 	public:
@@ -48,12 +42,12 @@ int main(){
 		
 		//std::cout << dist_manhattan24(ini)<<"\n";
 		
-		char array1[25] = {1,0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}; 
-        State25* ini = new State25( array1,1);
+		//char array1[25] = {1,0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}; 
+        ///State25* ini = new State25( array1,1);
 		
 		//std::cout << dist_manhattan24(ini)<<"\n";
 		
-        char array2[25] = {1,'a',2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}; 
+        /*  char array2[25] = {1,'a',2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}; 
         State25* ini2 = new State25( array2,1);
 		
         char array3[25] = {'a',1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24}; 
@@ -74,7 +68,7 @@ int main(){
 		hashPattern25[par1]=ini;
 		hashPattern25[par4]=ini3; 
 		hashPattern25[par3]=ini4;
-		std::cout << hashPattern25.size() << "\n";
+		std::cout << hashPattern25.size() << "\n";*/
 		//std::cout << hashPattern25.size()<< "\n";;
 		/*  		
 		std::map<std::pair<char*,char>,State25*>::const_iterator it;
