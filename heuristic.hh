@@ -76,3 +76,7 @@ void writeBinFile( std::ofstream* , const char* , int );
 void bfs_pdb(State25*  , std::string  );
 
 void liberar25(Node* suc);
+
+void loadPDB25();
+
+int pdbHeuristic24(State25* st);

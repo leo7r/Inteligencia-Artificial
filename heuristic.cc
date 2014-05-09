@@ -478,6 +478,7 @@ int_fast64_t patternMask( State16* st , int num_patron ){
 	
 	return mask;
 }
+
 /**
  * Heuristica de PDB.
  */
@@ -557,11 +558,11 @@ void calcularPDB25(){
 	sixth_pattern25  = crear_estado_patron(array6,0);
 	
 	
-	bfs_pdb(first_pattern25,"patron1_25.txt");
-	bfs_pdb(second_pattern25,"patron2_25.txt");
-	bfs_pdb(third_pattern25,"patron3_25.txt");
-	bfs_pdb(fourth_pattern25,"patron4_25.txt");
-	bfs_pdb(fifth_pattern25,"patron5_25.txt");
+	//bfs_pdb(first_pattern25,"patron1_25.txt");
+	//bfs_pdb(second_pattern25,"patron2_25.txt");
+	//bfs_pdb(third_pattern25,"patron3_25.txt");
+	//bfs_pdb(fourth_pattern25,"patron4_25.txt");
+	//bfs_pdb(fifth_pattern25,"patron5_25.txt");
 	bfs_pdb(sixth_pattern25,"patron6_25.txt");
 }
 
@@ -655,13 +656,6 @@ void bfs_pdb(State25* st , std::string file ){
 	firstPattern25.clear();
 	myfile.close();
 }
-/*
-void loadPDB25(){
-	loadPattern25("patron1_25.txt",1);
-	loadPattern25("patron2_25.txt",2);
-	loadPattern25("patron3_25.txt",3);
-	loadPattern25("patron4_25.txt",4);
-}
 
 void loadPattern25( std::string patron , int num_patron ){
 	
@@ -669,7 +663,7 @@ void loadPattern25( std::string patron , int num_patron ){
 	file.open (patron, std::ios::in | std::ios::binary);
 	
 	
-	char * st;	
+	std::string * st;	
 	int h;
 	
 	char * ptr2 = (char*) malloc(sizeof st);
@@ -682,30 +676,112 @@ void loadPattern25( std::string patron , int num_patron ){
 			file.read((char*)ptr2,sizeof st);
 			file.read((char*)ptr2_i,sizeof h);
 			
-			st = *ptr2;
+			st = arrayConverter(ptr2); 
 			h = *ptr2_i;
 			
 			switch( num_patron ){
 				case 1:
-					firstPattern25[st] = h;
+					firstPattern25[*st] = h;
 					break;
 				case 2:
-					secondPattern25[st] = h;
+					secondPattern25[*st] = h;
 					break;
 				case 3:
-					thirdPattern25[st] = h;
+					thirdPattern25[*st] = h;
 					break;
 				case 4:
-					fourthPattern25[st] = h;
+					fourthPattern25[*st] = h;
 					break;
+                                case 5:
+                                        fifthPattern25[*st] = h;
+                                        break;
+                                case 6: sixthPattern25[*st] = h;
+                                        break;
 			}
+                        delete st;
 		}
 	}
 	
 	std::cout << "Cargado patron: " << num_patron << "\n";
 	file.close();
 }
-*/
+
+void loadPDB25(){
+	loadPattern25("patron1_25.txt",1);
+	loadPattern25("patron2_25.txt",2);
+	loadPattern25("patron3_25.txt",3);
+	loadPattern25("patron4_25.txt",4);
+        loadPattern25("patron5_25.txt",5);
+        loadPattern25("patron6_25.txt",6);
+}
+
+std::string* patternMask24(char* array, int i){
+    char* tmp = (char*) malloc(sizeof(char)*25);
+    switch(i){
+        case 1:
+            for (int j = 0; j < 25 ; j++){
+                tmp[j] = 0;
+                if (j == 1 || j == 2 || j == 6 || j == 7) tmp[j] = array[j];
+            }
+            break;
+        case 2:
+            for (int j = 0; j < 25 ; j++){
+                tmp[j] = 0;
+                if (j == 3 || j == 4 || j == 8 || j == 9) tmp[j] = array[j];
+            }
+            break;
+        case 3:
+            for (int j = 0; j < 25 ; j++){
+                tmp[j] = 0;
+                if (j == 5 || j == 10 || j == 15 || j == 20) tmp[j] = array[j];
+            }
+            break;
+        case 4:
+            for (int j = 0; j < 25 ; j++){
+                tmp[j] = 0;
+                if (j == 11 || j == 12 || j == 16 || j == 17) tmp[j] = array[j];
+            }
+            break;
+        case 5:
+            for (int j = 0; j < 25 ; j++){
+                tmp[j] = 0;
+                if (j == 13 || j == 14 || j == 18 || j == 19) tmp[j] = array[j];
+            }
+            break;
+        case 6:
+            for (int j = 0; j < 25 ; j++){
+                tmp[j] = 0;
+                if (j == 21 || j == 22 || j == 23 || j == 24) tmp[j] = array[j];
+            }
+            break;
+    }
+    std::string *result = arrayConverter(tmp);
+    free(tmp);
+    return result;
+}
+
+int pdbHeuristic24(State25* st){
+    std::string *aux;
+    aux = patternMask24(st->current_state,1);
+    int c1 = firstPattern25[*aux];
+    delete aux;
+    aux = patternMask24(st->current_state,2);
+    int c2 = firstPattern25[*aux];
+    delete aux;
+    aux = patternMask24(st->current_state,3);
+    int c3 = firstPattern25[*aux];
+    delete aux;
+    aux = patternMask24(st->current_state,4);
+    int c4 = firstPattern25[*aux];
+    delete aux;
+    aux = patternMask24(st->current_state,5);
+    int c5 = firstPattern25[*aux];
+    delete aux;
+    aux = patternMask24(st->current_state,6);
+    int c6 = firstPattern25[*aux];
+    delete aux;
+    return c1 + c2 +c3 + c4 +c5 + c6;
+}
 
 /* Algoritmos */
 
