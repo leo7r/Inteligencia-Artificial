@@ -77,3 +77,9 @@ void print_action( action a ){
 		break;
 	}
 }
+
+
+action new_action(action* new,enum posible_actions na, int c){
+    new->current_action = na;
+    new->cost = c;
+}

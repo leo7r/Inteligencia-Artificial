@@ -53,3 +53,5 @@ void push_back(node_list*,node*);
 void push_front(node_list*,node*);
 
 int is_empty(node_list*);
+
+node* next(node_list*);

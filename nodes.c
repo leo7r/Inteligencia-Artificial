@@ -57,6 +57,7 @@ void push_back(node_list* list, node* elem){
         list->last_elem = new_elem;
     }
 }
+
 /**
  * Coloca el elemento elem al frente de la cola. 
  */
@@ -76,6 +77,14 @@ void push_front(node_list* list, node* elem){
         list->first_elem = new_elem;
         list->current_elem = new_elem;
     }
+}
+/**
+ * Retorna el elemento actual de la lista y mueve el apuntador una posicion.
+ */
+node* next(node_list* list){
+    node* result = (node*) list->current_elem;
+    list->current_elem =(node_box*) list->current_elem->next;
+    return result;
 }
 
 /**
@@ -100,7 +109,7 @@ node make_node(node* parent,action* a,state* s){
     new_node.parent = (struct node*) parent;
     new_node.node_state = s; 
     new_node.a = a;
-    new_node.cost = 0; // Incompleto
+    new_node.cost = a->cost + parent->cost; 
     return new_node;
 }
 /**
@@ -111,11 +120,12 @@ node_list extract_solution(node n){
     node *tmp = &n;
     empty_list(&result);
     do{
-        push_back(&result,&n);
-        tmp = tmp->parent;
+        push_front(&result,&n);
+        tmp = (node*) tmp->parent;
     }  while(tmp != NULL);
     return result;
 }
+
 /**
  * Retorna una lista de nodos. 
  */

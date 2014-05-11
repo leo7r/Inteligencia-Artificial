@@ -44,3 +44,5 @@ void print_state(state);
 
 /* Imprime la representacion de una accion */
 void print_action(action);
+
+action new_action(action*,enum posible_actions, int);
