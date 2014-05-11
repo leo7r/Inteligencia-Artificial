@@ -119,4 +119,4 @@ node_list extract_solution(node n){
 /**
  * Retorna una lista de nodos. 
  */
-node_list succ(state){}
+node_list succ(state s){}
