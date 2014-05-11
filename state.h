@@ -26,10 +26,9 @@ enum posible_actions {
 };
  
 typedef struct{
-	
 	enum posible_actions current_action;
 	int cost;
-} action; /* action probablemente sea un enum  */
+} action; 
 
 typedef struct{
     /* Atributos de estado.  */
