@@ -93,9 +93,9 @@ static int PV[] = {
 };
 
 class state_t {
-    unsigned char t_; 
-    unsigned free_;
-    unsigned pos_;
+    unsigned char t_; /* */
+    unsigned free_; /* Indican que posiciones se encuentran libres en el tablero.  */
+    unsigned pos_; /*  */
 
   public:
     explicit state_t(unsigned char t = 6) : t_(t), free_(0), pos_(0) { }
@@ -168,7 +168,11 @@ inline bool state_t::terminal() const {
         if( is_black_move(b) || is_white_move(b) ) return false;
     return true;
 }
-
+/**
+ * Revisa si algun(os) disco(s) ha(n) sido comido(s).
+ * Este metodo hay que completarlo. La parte de las diagonales.
+ * Al menos tenemos ejemplos.
+ */
 inline bool state_t::outflank(bool color, int pos) const {
     if( !is_free(pos) ) return false;
 
@@ -222,7 +226,11 @@ inline void state_t::set_color(bool color, int pos) {
         }
     }
 }
-
+/**
+ * Se mueve por el tablero considerando el color y la pos. 
+ * Este va cambiando los colores de los discos comidos.
+ * Falta las diagonales.
+ */
 inline state_t state_t::move(bool color, int pos) const {
     state_t s(*this);
     if( pos >= DIM ) return s;
@@ -269,6 +277,12 @@ inline state_t state_t::move(bool color, int pos) const {
     return s;
 }
 
+/**
+ * Imprime un state_t.
+ * Toma en especial consideracion las posiciones
+ * (i == 2) || (i == 3)) && ((j == 2) || (j == 3)
+ * aun no se por qué.
+ */
 inline void state_t::print(std::ostream &os, int depth) const {
     os << "+";
     for( int j = 0; j < N; ++j ) os << "-";
@@ -284,7 +298,7 @@ inline void state_t::print(std::ostream &os, int depth) const {
             } else {
                 assert(((i == 2) || (i == 3)) && ((j == 2) || (j == 3)));
                 int p = ((i-2) << 1) + (j-2);
-                os << (is_free(p) ? '.' : (is_black(p) ? '&' : 'O'));
+                os << (is_free(p) ? '.' : (is_black(p) ? '&' : '0'));
             }
         }
         os << "|" << std::endl;
@@ -302,7 +316,10 @@ inline void state_t::print_bits(std::ostream &os) const {
     os << ":";
     for( int i = 31; i >= 0; --i ) os << (free_ & (1 << i) ? '1' : '0');
 }
-
+/**
+ * Hace overhead del operador <<
+ * pretty cool.
+ */
 inline std::ostream& operator<<(std::ostream &os, const state_t &state) {
     state.print(os);
     return os;
