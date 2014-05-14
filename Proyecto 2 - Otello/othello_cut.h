@@ -93,9 +93,9 @@ static int PV[] = {
 };
 
 class state_t {
-    unsigned char t_; /* */
-    unsigned free_; /* Indican que posiciones se encuentran libres en el tablero.  */
-    unsigned pos_; /*  */
+    unsigned char t_; /* Representa las 4 posiciones iniciales. Los 1 son & y los 0 son 0 */
+    unsigned free_;   /* Indican que posiciones se encuentran libres en el tablero.  */
+    unsigned pos_;    /* Indica las posiciones ocupadas del tablero sin tomar en cuenta las 4 del medio. */
 
   public:
     explicit state_t(unsigned char t = 6) : t_(t), free_(0), pos_(0) { }
@@ -105,27 +105,63 @@ class state_t {
     unsigned pos() const { return pos_; }
     size_t hash() const { return free_ ^ pos_ ^ t_; }
 
+    /**  
+     * Nos dice de que color es la posicion pos.
+     */
     bool is_color(bool color, int pos) const {
         if( color )
             return pos < 4 ? t_ & (1 << pos) : pos_ & (1 << (pos - 4));
         else
             return !(pos < 4 ? t_ & (1 << pos) : pos_ & (1 << (pos - 4)));
     }
+    /**
+     * Nos dice si el color es negro.
+     * true es negro
+     * false es blanco.
+     */ 
     bool is_black(int pos) const { return is_color(true, pos); }
     bool is_white(int pos) const { return is_color(false, pos); }
+
+    /**
+     * Nos dice si el tablero esta libre en la posicion dada "pos".
+     * Si la posicion es menor que 4 entonces es falso porque siempre esas posiciones estan ocupadas.
+     * Si la posicion es mayor o igual que 4 entonces hay que ver si la posicion requerida es igual a 0.
+     */
     bool is_free(int pos) const { return pos < 4 ? false : !(free_ & (1 << pos - 4)); }
+    /**
+     * Nos dice si free_ esta full.
+     */
     bool is_full() const { return ~free_ == 0; }
 
     int value() const;
     bool terminal() const;
     bool outflank(bool color, int pos) const;
+    
+    /**
+     * Nos dice si un movimiento es negro.
+     */
     bool is_black_move(int pos) const { return (pos == DIM) || outflank(true, pos); }
+    /**
+     * Nos dice si un movimiento es blanco.
+     */
     bool is_white_move(int pos) const { return (pos == DIM) || outflank(false, pos); }
 
     void set_color(bool color, int pos);
     state_t move(bool color, int pos) const;
+
+    /**
+     * Realiza un movimiento negro.
+     */
     state_t black_move(int pos) { return move(true, pos); }
+
+    /**
+     * Realiza un movimiento blanco.
+     */
     state_t white_move(int pos) { return move(false, pos); }
+
+    /**
+     * Obtiene un movimiento aleatorio.
+     */
     int get_random_move(bool color) {
         std::vector<int> valid_moves;
         for( int pos = 0; pos < DIM; ++pos ) {
@@ -136,12 +172,21 @@ class state_t {
         return valid_moves.empty() ? -1 : valid_moves[lrand48() % valid_moves.size()];
     }
 
+    /** 
+     * Compara dos estados con <
+     */
     bool operator<(const state_t &s) const {
         return (free_ < s.free_) || ((free_ == s.free_) && (pos_ < s.pos_));
     }
+    /** 
+     * Compara dos estados con ==
+     */
     bool operator==(const state_t &state) const {
         return (state.t_ == t_) && (state.free_ == free_) && (state.pos_ == pos_);
     }
+    /**  
+     * Asigna un estado a otro.
+     */
     const state_t& operator=(const state_t &state) {
         t_ = state.t_;
         free_ = state.free_;
@@ -152,7 +197,9 @@ class state_t {
     void print(std::ostream &os, int depth = 0) const;
     void print_bits(std::ostream &os) const;
 };
-
+/**
+ * Nos dice el valor actual del juego.
+ */
 inline int state_t::value() const {
     int v = 0;
     for( int pos = 0; pos < DIM; ++pos ) {
@@ -161,7 +208,9 @@ inline int state_t::value() const {
     assert((-36 <= v) && (v <= 36));
     return v;
 }
-
+/**
+ * Nos dice si ya se ha terminado el juego.
+ */
 inline bool state_t::terminal() const {
     if( is_full() ) return true;
     for( unsigned b = 0; b < DIM; ++b )
@@ -229,9 +278,7 @@ inline bool state_t::outflank(bool color, int pos) const {
         for( p = x - 1; (p >= dia2[pos - 4]) && !is_free(*p) && (color ^ is_black(*p)); --p );
         if( (p < x - 1) && (p >= dia2[pos - 4]) && !is_free(*p) ) return true;
     }
-
-
-
+    
     return false;
 }
 
