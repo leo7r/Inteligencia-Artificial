@@ -39,7 +39,8 @@ int main(int argc, const char **argv) {
     cout << state;
     cout << "Value of the game = " << state.value() << endl;
     cout << "#bits per state = " << sizeof(state) * 8 << endl;
-
+	
+	/*
     if( argc > 1 ) {
         int n = atoi(argv[1]);
         cout << endl << "Apply " << n << " random movements at empty board:";
@@ -52,7 +53,8 @@ int main(int argc, const char **argv) {
         }
         cout << endl << state;
     }
-
+	*/
+	
     return 0;
 }
 
