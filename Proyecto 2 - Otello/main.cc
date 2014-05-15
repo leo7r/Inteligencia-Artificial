@@ -18,7 +18,7 @@
  *
  */
 
-#include "othello_cut.h" // won't work correctly until .h is fixed!
+#include "algorithms.h" // won't work correctly until .h is fixed!
 #include <iostream>
 
 using namespace std;

@@ -21,6 +21,7 @@
 #include <cassert>
 #include <iostream>
 #include <vector>
+#include <list>
 #include <stdlib.h>
 
 #define MAX(s,t)      ((s)>(t)?(s):(t))
@@ -114,6 +115,7 @@ class state_t {
         else
             return !(pos < 4 ? t_ & (1 << pos) : pos_ & (1 << (pos - 4)));
     }
+
     /**
      * Nos dice si el color es negro.
      * true es negro
@@ -128,6 +130,7 @@ class state_t {
      * Si la posicion es mayor o igual que 4 entonces hay que ver si la posicion requerida es igual a 0.
      */
     bool is_free(int pos) const { return pos < 4 ? false : !(free_ & (1 << pos - 4)); }
+
     /**
      * Nos dice si free_ esta full.
      */
@@ -141,6 +144,7 @@ class state_t {
      * Nos dice si un movimiento es negro.
      */
     bool is_black_move(int pos) const { return (pos == DIM) || outflank(true, pos); }
+
     /**
      * Nos dice si un movimiento es blanco.
      */
@@ -178,12 +182,14 @@ class state_t {
     bool operator<(const state_t &s) const {
         return (free_ < s.free_) || ((free_ == s.free_) && (pos_ < s.pos_));
     }
+
     /** 
      * Compara dos estados con ==
      */
     bool operator==(const state_t &state) const {
         return (state.t_ == t_) && (state.free_ == free_) && (state.pos_ == pos_);
     }
+
     /**  
      * Asigna un estado a otro.
      */
@@ -196,6 +202,21 @@ class state_t {
 
     void print(std::ostream &os, int depth = 0) const;
     void print_bits(std::ostream &os) const;
+
+    /* Nuevas funciones. */
+
+    /**
+     * Retorna los posibles movimientos del estado dado.
+     */
+    std::list<int> succ(bool color){
+        std::list<int> sucesores; 
+        for( int pos = 0; pos < DIM; ++pos ) {
+            if((color && is_black_move(pos)) || (!color && is_white_move(pos))) {
+                sucesores.push_back(pos);
+            }
+        }
+        return sucesores;
+    }
 };
 /**
  * Nos dice el valor actual del juego.
@@ -208,6 +229,7 @@ inline int state_t::value() const {
     assert((-36 <= v) && (v <= 36));
     return v;
 }
+
 /**
  * Nos dice si ya se ha terminado el juego.
  */
@@ -217,6 +239,7 @@ inline bool state_t::terminal() const {
         if( is_black_move(b) || is_white_move(b) ) return false;
     return true;
 }
+
 /**
  * Revisa si se puede colocar una ficha en la posicion determinada.
  * Este metodo hay que completarlo. La parte de las diagonales.
