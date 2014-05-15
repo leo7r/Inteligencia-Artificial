@@ -218,7 +218,7 @@ inline bool state_t::terminal() const {
     return true;
 }
 /**
- * Revisa si algun(os) disco(s) ha(n) sido comido(s).
+ * Revisa si se puede colocar una ficha en la posicion determinada.
  * Este metodo hay que completarlo. La parte de las diagonales.
  * Al menos tenemos ejemplos.
  */
@@ -254,9 +254,9 @@ inline bool state_t::outflank(bool color, int pos) const {
     }
 
     // [CHECK OVER DIAGONALS REMOVED]
-
+	
     // Check diagonal 1
-    x = dia1[pos - 4]; 
+    x = dia1[pos - 4];
     while( *x != pos ) ++x;
     if (*(x+1) != -1){
         for( p = x + 1; (*p != -1) && !is_free(*p) && (color ^ is_black(*p)); ++p );
@@ -268,13 +268,13 @@ inline bool state_t::outflank(bool color, int pos) const {
     }
 
     // Check diagonal 2
-    x = dia2[pos - 4]; 
+    x = dia2[pos - 4];
     while( *x != pos ) ++x;
     if (*(x+1) != -1){
         for( p = x + 1; (*p != -1) && !is_free(*p) && (color ^ is_black(*p)); ++p );
         if( (p > x + 1) && (*p != -1) && !is_free(*p) ) return true;
     }
-    if ( x != dia1[pos - 4 ]){
+    if ( x != dia2[pos - 4 ]){
         for( p = x - 1; (p >= dia2[pos - 4]) && !is_free(*p) && (color ^ is_black(*p)); --p );
         if( (p < x - 1) && (p >= dia2[pos - 4]) && !is_free(*p) ) return true;
     }
