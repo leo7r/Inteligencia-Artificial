@@ -20,28 +20,55 @@
 
 #include "algorithms.h" // won't work correctly until .h is fixed!
 #include <iostream>
+#include <stdlib.h>
 
 using namespace std;
 
 void print_help(){
-    cout << "Usage: ./othello -a { algorithm }\n";
-    cout << "Algorithms: ";
+    cout << "Usage: ./othello -a { algorithm } -d {depth}\n";
+    cout << "Algorithms: minmax, \n";
 }
 
 int main(int argc, const char **argv) {
     state_t state;
+    string *algorithm = 0;
+    int depth = 0;
 
+    /* Windows es una mierda. */
+    for (int i = 0; i < argc ; i++){
+        if (argv[i] == string("-a") && (i + 1 < argc)){
+            algorithm = new string(argv[i+1]);
+        } else if (argv[i] == string("-d") && (i + 1 < argc)){
+            depth = atoi(argv[i+1]);
+        }
+    }
+
+    if (algorithm == 0 || depth <= 0){
+        print_help();
+        return 0;
+    }
+
+    int result;
     cout << "Principal variation:" << endl;
     for( int i = 0; PV[i] != -1; ++i ) {
         bool player = i % 2 == 0; // black moves first!
         int pos = PV[i];
         cout << state;
+        if (*algorithm == "minmax"){
+            result = minMax(state,depth,player);
+            cout << "Result: ";
+            cout << result;
+            cout << endl;
+        }
         cout << (player ? "Black" : "White")
              << " moves at pos = " << pos << (pos == 36 ? " (pass)" : "")
              << endl;
         state = state.move(player, pos);
         cout << "Board after " << i+1 << (i == 0 ? " ply:" : " plies:") << endl;
     }
+            cout << "Result: ";
+            cout << result;
+            cout << endl;
     cout << state;
     cout << "Value of the game = " << state.value() << endl;
     cout << "#bits per state = " << sizeof(state) * 8 << endl;

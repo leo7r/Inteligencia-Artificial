@@ -19,9 +19,9 @@
 /**
  * Algoritmo MinMax
  */
-int minMax(state_t , int);
+int minMax(state_t , int, bool);
 
 /**
  * Algoritmo MaxMin
  */
-int maxMin(state_t, int);
+int maxMin(state_t, int, bool);
