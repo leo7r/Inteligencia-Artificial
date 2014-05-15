@@ -23,8 +23,14 @@
 
 using namespace std;
 
+void print_help(){
+    cout << "Usage: ./othello -a { algorithm }\n";
+    cout << "Algorithms: ";
+}
+
 int main(int argc, const char **argv) {
     state_t state;
+
     cout << "Principal variation:" << endl;
     for( int i = 0; PV[i] != -1; ++i ) {
         bool player = i % 2 == 0; // black moves first!

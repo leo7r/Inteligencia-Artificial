@@ -10,4 +10,4 @@ main.o: main.cc othello_cut.h
 
 clean:
 
-	rm *.o othello
+	rm *.o *.exe othello
