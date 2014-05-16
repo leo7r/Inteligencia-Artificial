@@ -26,7 +26,7 @@ using namespace std;
 
 void print_help(){
     cout << "Usage: ./othello -a { algorithm } -d {depth}\n";
-    cout << "Algorithms: minmax, \n";
+    cout << "Algorithms: minimax, negamax \n";
 }
 
 int main(int argc, const char **argv) {
@@ -54,12 +54,14 @@ int main(int argc, const char **argv) {
         bool player = i % 2 == 0; // black moves first!
         int pos = PV[i];
         cout << state;
-        if (*algorithm == "minmax"){
-            result = minMax(state,depth,player);
-            cout << "Result: ";
-            cout << result;
-            cout << endl;
+        if (*algorithm == "minimax"){
+            result = miniMax(state,depth,player);
+        } else if(*algorithm == "negamax"){
+            result = negamax(state,depth,player);
         }
+        cout << "Result: ";
+        cout << result;
+        cout << endl;
         cout << (player ? "Black" : "White")
              << " moves at pos = " << pos << (pos == 36 ? " (pass)" : "")
              << endl;

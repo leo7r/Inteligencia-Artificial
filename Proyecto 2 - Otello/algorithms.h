@@ -19,9 +19,13 @@
 /**
  * Algoritmo MinMax
  */
-int minMax(state_t , int, bool);
+int miniMax(state_t , int, bool);
 
 /**
  * Algoritmo MaxMin
  */
 int maxMin(state_t, int, bool);
+/**
+ * Algoritmo negamax
+ */
+int negamax(state_t n, int depth, bool jugador);
