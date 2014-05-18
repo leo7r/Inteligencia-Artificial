@@ -88,7 +88,7 @@ int alphabeta(state_t n, int depth, int alpha, int beta, bool jugador){
         while (!succ.empty()){
             pos = succ.front();
             state_t new_state = n.move(jugador,pos);
-            alpha = min(alpha, alphabeta(new_state,depth-1,alpha,beta,!jugador)); 
+            beta = min(alpha, alphabeta(new_state,depth-1,alpha,beta,!jugador)); 
             if (alpha <= beta) break;
             succ.pop_front();
         }
@@ -113,3 +113,5 @@ int negamax_pruning(state_t n, int depth, int alpha, int beta, bool jugador){
     }
     return m;
 }
+
+//bool test(state_t n, int depth, int value,  )
