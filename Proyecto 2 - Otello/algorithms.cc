@@ -50,7 +50,9 @@ int maxMin(state_t n, int depth, bool jugador){
     }
     return value;
 }
-
+/**
+ * Implementacion de algoritmo negamax
+ */
 int negamax(state_t n, int depth, bool jugador){
     if ( n.terminal() || (depth == 0)) return n.value();
     int value = numeric_limits<int>::min();       
@@ -63,7 +65,11 @@ int negamax(state_t n, int depth, bool jugador){
     }
     return value;
 }
-
+/**
+ * Implementacion de algoritmo alphabeta.
+ * alpha es el menor valor posible.
+ * beta es el mayor valor posible.
+ */
 int alphabeta(state_t n, int depth, int alpha, int beta, bool jugador){
     if ( n.terminal() || (depth == 0)) return n.value();
     int pos; 
@@ -90,6 +96,9 @@ int alphabeta(state_t n, int depth, int alpha, int beta, bool jugador){
     }
 }
 
+/**
+ * Implementacion de algoritmo negamax con cortes determinados.
+ */
 int negamax_pruning(state_t n, int depth, int alpha, int beta, bool jugador){
     if ( n.terminal() || (depth == 0)) return n.value();
     int m = alpha;

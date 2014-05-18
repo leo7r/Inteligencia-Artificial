@@ -19,6 +19,7 @@
  */
 
 #include "algorithms.h" // won't work correctly until .h is fixed!
+#include <limits>
 #include <iostream>
 #include <stdlib.h>
 
@@ -26,7 +27,7 @@ using namespace std;
 
 void print_help(){
     cout << "Usage: ./othello -a { algorithm } -d {depth}\n";
-    cout << "Algorithms: minimax, negamax \n";
+    cout << "Algorithms: minimax, negamax, alphabeta, negamaxp \n";
 }
 
 int main(int argc, const char **argv) {
@@ -58,6 +59,10 @@ int main(int argc, const char **argv) {
             result = miniMax(state,depth,player);
         } else if(*algorithm == "negamax"){
             result = negamax(state,depth,player);
+        } else if (*algorithm == "alphabeta"){
+            result = alphabeta(state,depth,numeric_limits<int>::min(), numeric_limits<int>::max(), player);
+        } else if (*algorithm == "negamaxp"){
+            result = negamax_pruning(state, depth, numeric_limits<int>::min(), numeric_limits<int>::max(), player);
         }
         cout << "Result: ";
         cout << result;
