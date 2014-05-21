@@ -19,12 +19,12 @@
 /**
  * Algoritmo MinMax
  */
-int miniMax(state_t , int, bool);
+int miniMax(state_t , int);
 
 /**
  * Algoritmo MaxMin
  */
-int maxMin(state_t, int, bool);
+int maxMin(state_t, int);
 /**
  * Algoritmo negamax
  */

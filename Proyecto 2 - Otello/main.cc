@@ -56,7 +56,7 @@ int main(int argc, const char **argv) {
         int pos = PV[i];
         cout << state;
         if (*algorithm == "minimax"){
-            result = miniMax(state,depth,player);
+            result = miniMax(state,depth);
         } else if(*algorithm == "negamax"){
             result = negamax(state,depth,player);
         } else if (*algorithm == "alphabeta"){
