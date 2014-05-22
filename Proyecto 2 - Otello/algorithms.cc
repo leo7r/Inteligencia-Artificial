@@ -140,6 +140,28 @@ bool test(state_t n, int depth, int value, bool (*c)(int, int), bool jugador){
         }
         return false;
     }
+    if (jugador) return false; else true;
 }
 
-//////////////int scout
+bool mayorQue(int a, int b){
+    return a > b;
+}
+
+bool menorQue(int a, int b){
+    return a < b;
+}
+
+int scout(state_t n, int depth, bool jugador){
+    if ( n.terminal() || (depth == 0)) n.value();
+    list<int> succ = n.succ(jugador); 
+    int pos = succ.front();
+    state_t new_state = n.move(jugador,pos);
+    int v = scout(n,depth-1,!jugador);
+    succ.pop_front();
+    while (!succ.empty()){
+        if (jugador && test(n,depth-1,v, mayorQue,jugador)) v = scout(n,depth-1,!jugador);
+        if (!jugador && test(n,depth-1,v,menorQue,jugador)) v = scout (n,depth-1,!jugador);
+        succ.pop_front();
+    }
+    return v;
+}
