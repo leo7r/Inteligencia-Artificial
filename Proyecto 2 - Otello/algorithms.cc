@@ -141,5 +141,44 @@ bool test(state_t n, int depth, int value, bool (*c)(int, int), bool jugador){
         return false;
     }
 }
+/**
+ * Implementacion de scout	.
+ */
+int scout(state_t n, int depth , bool jugador){
+	int v;
+	state_t new_state;
+	
+	list<int> succ = n.succ(jugador); 
+	if ( succ.empty() || depth == 0 ){
+		return n.value(); //pendiente a q se refiere f en el algoritmo
+	}else{
+		int pos = succ.front();
+		new_state = n.move(jugador,pos);
+		v = scout(new_state,depth-1,!jugador);
+		succ.pop_front();
+	}
+	
+	while (!succ.empty()){
+		int pos = succ.front();
+		new_state = n.move(jugador,pos);
+		
+		if( jugador && test(new_state,depth-1,v,mayor,!jugador) ){//OJO con el >
+			v = scout(new_state, depth-1,!jugador);
+		}
+		if( !jugador && test(new_state,depth-1,v,menor,!jugador) ){//OJO con el <
+			v = scout(new_state, depth-1,!jugador);
+		}
+		
+		succ.pop_front();	
+	}
+		
+	return v;
+}
 
-//////////////int scout
+bool menor (int a, int b){
+	return a<b;
+}
+
+bool mayor (int a, int b){
+	return a>b;
+}
