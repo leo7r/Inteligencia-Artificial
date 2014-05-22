@@ -27,7 +27,7 @@ using namespace std;
 
 void print_help(){
     cout << "Usage: ./othello -a { algorithm } -d {depth}\n";
-    cout << "Algorithms: minimax, negamax, alphabeta, negamaxp \n";
+    cout << "Algorithms: minimax, negamax, alphabeta, negamaxp, scout \n";
 }
 
 int main(int argc, const char **argv) {
@@ -63,6 +63,8 @@ int main(int argc, const char **argv) {
             result = alphabeta(state,depth,numeric_limits<int>::min(), numeric_limits<int>::max(), player);
         } else if (*algorithm == "negamaxp"){
             result = negamax_pruning(state, depth, numeric_limits<int>::min(), numeric_limits<int>::max(), player);
+        } else if (*algorithm == "scout"){
+            result = scout(state, depth, player);
         }
         cout << "Result: ";
         cout << result;
