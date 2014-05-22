@@ -121,7 +121,7 @@ int negamax_pruning(state_t n, int depth, int alpha, int beta, bool jugador){
  */
 bool test(state_t n, int depth, int value, bool (*c)(int, int), bool jugador){
     if ( n.terminal() || (depth == 0)) return c(n.value(),value);
-    if (player){
+    if (jugador){
         list<int> succ = n.succ(jugador); 
         while (!succ.empty()){
             int pos = succ.front();
@@ -141,3 +141,5 @@ bool test(state_t n, int depth, int value, bool (*c)(int, int), bool jugador){
         return false;
     }
 }
+
+//////////////int scout
