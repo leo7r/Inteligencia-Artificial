@@ -142,7 +142,9 @@ bool test(state_t n, int depth, int value, bool (*c)(int, int), bool jugador){
     }
     if (jugador) return false; else true;
 }
-
+/**
+ * Si Mahoma no va a la montaña, la montaña vendrá a Mahoma.
+ */
 bool mayorQue(int a, int b){
     return a > b;
 }
@@ -159,9 +161,34 @@ int scout(state_t n, int depth, bool jugador){
     int v = scout(n,depth-1,!jugador);
     succ.pop_front();
     while (!succ.empty()){
-        if (jugador && test(n,depth-1,v, mayorQue,jugador)) v = scout(n,depth-1,!jugador);
-        if (!jugador && test(n,depth-1,v,menorQue,jugador)) v = scout (n,depth-1,!jugador);
+        pos = succ.front();
+        new_state = n.move(jugador,pos);
+        if (jugador && test(new_state,depth-1,v, mayorQue,jugador)) v = scout(n,depth-1,!jugador);
+        if (!jugador && test(new_state,depth-1,v,menorQue,jugador)) v = scout (n,depth-1,!jugador);
         succ.pop_front();
     }
     return v;
+}
+
+int nega_scout(state_t state, int depth, int alpha, int beta, bool jugador){
+    if ( state.terminal() || (depth == 0)) state.value();
+    int m = numeric_limits<int>::min();
+    int n = beta;
+    list<int> succ = state.succ(jugador); // Si agarra mucha memoria. Hacerlo a mano.
+    while (!succ.empty()){
+        int pos = succ.front();
+        state_t new_state = state.move(jugador,pos);
+        int t = -nega_scout(new_state, depth-1, -n, -max(m,alpha), !jugador);
+        if (t > m){
+            if (n == beta || depth < 3 || t >= beta){
+                m = t;
+            } else {
+                m = nega_scout(new_state, depth - 1 , -beta, -t, !jugador);
+            }
+        }
+        if (m >= beta) return m; // Este algoritmo es burda de raro.
+        n = max(alpha,m) + 1;
+        succ.pop_front();
+    }
+    return m;
 }
