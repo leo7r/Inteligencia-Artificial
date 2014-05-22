@@ -28,7 +28,7 @@ using namespace std;
 int miniMax(state_t n, int depth){
     if ( n.terminal() || (depth == 0)) return n.value();
     int value = numeric_limits<int>::max();       
-    list<int> succ = n.succ(true); // Si agarra mucha memoria. Hacerlo a mano.
+    list<int> succ = n.succ(true); // Maximizo el negro.
     while (!succ.empty()){
          int pos = succ.front();
          state_t new_state = n.move(true,pos);
@@ -115,5 +115,29 @@ int negamax_pruning(state_t n, int depth, int alpha, int beta, bool jugador){
     }
     return m;
 }
-
-//bool test(state_t n, int depth, int value,  )
+/**
+ * Implementacion de test.
+ * @param (*c)(int, int): Funcion de comparacion.
+ */
+bool test(state_t n, int depth, int value, bool (*c)(int, int), bool jugador){
+    if ( n.terminal() || (depth == 0)) return c(n.value(),value);
+    if (player){
+        list<int> succ = n.succ(jugador); 
+        while (!succ.empty()){
+            int pos = succ.front();
+            state_t new_state = n.move(jugador,pos);
+            if (!test(new_state, depth -1 , value, c,!jugador)) return false; // Pendiente aca.
+            succ.pop_front();
+        }
+        return true;
+    } else{
+        list<int> succ = n.succ(jugador); 
+        while (!succ.empty()){
+            int pos = succ.front();
+            state_t new_state = n.move(jugador,pos);
+            if (!test(new_state, depth -1 , value, c, !jugador)) return true;
+            succ.pop_front();
+        }
+        return false;
+    }
+}

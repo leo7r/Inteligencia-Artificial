@@ -206,10 +206,14 @@ class state_t {
     /* Nuevas funciones. */
 
     /**
-     * Retorna los posibles movimientos del estado dado.
+     * Retorna todos los posibles movimientos del estado dado.
+     * @param color: Color del estado. 
+     * Para poder optimizar podemos usar un apuntador a la lista.
      */
     std::list<int> succ(bool color){
-        std::list<int> sucesores; 
+        //std::list<int>* tmp = new std::list<int>(); 
+        std::list<int>  sucesores;
+
         for( int pos = 0; pos < DIM; ++pos ) {
             if((color && is_black_move(pos)) || (!color && is_white_move(pos))) {
                 sucesores.push_back(pos);
