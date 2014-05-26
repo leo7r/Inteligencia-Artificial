@@ -25,9 +25,17 @@
 
 using namespace std;
 
+int get_size(int* arr){
+    int result = 0;
+    for (int i = 0; arr[i] != -1 ; i++){
+        result++;
+    }
+    return result;
+}
+
 void print_help(){
     cout << "Usage: ./othello -a { algorithm } -d {depth}\n";
-    cout << "Algorithms: minimax, negamax, alphabeta, negamaxp, scout \n";
+    cout << "Algorithms: minimax, negamax, alphabeta, negamaxp, scout, nega_scout \n";
 }
 
 int main(int argc, const char **argv) {
@@ -48,7 +56,7 @@ int main(int argc, const char **argv) {
         print_help();
         return 0;
     }
-
+    int size = get_size(PV);
     int result;
     cout << "Principal variation:" << endl;
     for( int i = 0; PV[i] != -1; ++i ) {
@@ -65,6 +73,8 @@ int main(int argc, const char **argv) {
             result = negamax_pruning(state, depth, numeric_limits<int>::min(), numeric_limits<int>::max(), player);
         } else if (*algorithm == "scout"){
             result = scout(state, depth, player);
+        } else if (*algorithm == "nega_scout") {
+            result = nega_scout(state, depth, numeric_limits<int>::min(), numeric_limits<int>::max(), player);
         }
         cout << "Result: ";
         cout << result;

@@ -49,3 +49,8 @@ int negamax_pruning(state_t n, int depth, int alpha, int beta, bool jugador);
 int scout(state_t, int depth , bool );
 bool menor (int a, int b);
 bool mayor (int a, int b);
+
+/**
+ * Negascout
+ */
+int nega_scout(state_t state, int depth, int alpha, int beta, bool jugador);

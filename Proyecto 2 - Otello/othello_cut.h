@@ -93,6 +93,11 @@ static int PV[] = {
     31, 20, 32, 30, 10, 25, 24, 34, 28, 16,  4, 29, 35, 36,  8,  9, -1
 };
 
+static int Reverse_PV[] = { 
+    9, 8, 36 , 35, 29, 4, 16, 28, 34, 24, 25, 10, 30, 32, 20, 31, 14, 15 , 19
+    , 11, 17 , 23, 33, 27, 5, 6 , 7 , 18, 22, 13, 26, 21, 12 , -1
+};
+
 class state_t {
     unsigned char t_; /* Representa las 4 posiciones iniciales. Los 1 son & y los 0 son 0 */
     unsigned free_;   /* Indican que posiciones se encuentran libres en el tablero.  */
@@ -217,6 +222,17 @@ class state_t {
         for( int pos = 0; pos < DIM; ++pos ) {
             if((color && is_black_move(pos)) || (!color && is_white_move(pos))) {
                 sucesores.push_back(pos);
+            }
+        }
+        return sucesores;
+    }
+
+    std::list<int>* succ_p(bool color){
+        std::list<int>* sucesores = new std::list<int>();
+
+        for( int pos = 0; pos < DIM; ++pos ) {
+            if((color && is_black_move(pos)) || (!color && is_white_move(pos))) {
+                sucesores->push_back(pos);
             }
         }
         return sucesores;
