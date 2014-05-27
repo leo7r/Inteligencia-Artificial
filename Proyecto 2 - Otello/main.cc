@@ -34,8 +34,9 @@ int get_size(int* arr){
 }
 
 void print_help(){
-    cout << "Usage: ./othello -a { algorithm } -d {depth}\n";
+    cout << "Usage: ./othello -a { algorithm } -s {depth}\n";
     cout << "Algorithms: minimax, negamax, alphabeta, negamaxp, scout, nega_scout \n";
+    cout << "State: state in the Principal Variation between 0 and 33."
 }
 
 int main(int argc, const char **argv) {
@@ -43,11 +44,10 @@ int main(int argc, const char **argv) {
     string *algorithm = 0;
     int depth = 0;
 
-    /* Windows es una mierda. */
     for (int i = 0; i < argc ; i++){
         if (argv[i] == string("-a") && (i + 1 < argc)){
             algorithm = new string(argv[i+1]);
-        } else if (argv[i] == string("-d") && (i + 1 < argc)){
+        } else if (argv[i] == string("-s") && (i + 1 < argc)){
             depth = atoi(argv[i+1]);
         }
     }
@@ -56,6 +56,12 @@ int main(int argc, const char **argv) {
         print_help();
         return 0;
     }
+    /**
+     * Hay que guardar todos los estados en un vector.
+     * El depth debe ser entre 0 .. 32
+     * Calculamos desde el estado vector[depth] hasta el estado final. Con un depth = 33 - (estado requerido). 
+     * Eso deberia darnos siempre -4 (o 4 y -4 si estamos con negamax).
+     */
     int size = get_size(PV);
     int result;
     cout << "Principal variation:" << endl;
@@ -88,6 +94,7 @@ int main(int argc, const char **argv) {
             cout << "Result: ";
             cout << result;
             cout << endl;
+
     cout << state;
     cout << "Value of the game = " << state.value() << endl;
     cout << "#bits per state = " << sizeof(state) * 8 << endl;
