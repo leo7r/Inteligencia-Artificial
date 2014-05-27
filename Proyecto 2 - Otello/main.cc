@@ -52,7 +52,7 @@ int main(int argc, const char **argv) {
         }
     }
 
-    if (algorithm == 0 || depth <= 0){
+    if (algorithm == 0 || depth < 0 || depth > 33){
         print_help();
         return 0;
     }
@@ -90,7 +90,7 @@ int main(int argc, const char **argv) {
 	
 	bool player = depth % 2 == 0; // black moves first! ojo aca not sure
 	if (*algorithm == "minimax"){
-            result = miniMax(PV_states[depth],33-depth);
+            result = miniMax(PV_states[depth],33-depth,player);
         } else if(*algorithm == "negamax"){
             result = negamax(PV_states[depth],33-depth,player);
         } else if (*algorithm == "alphabeta"){

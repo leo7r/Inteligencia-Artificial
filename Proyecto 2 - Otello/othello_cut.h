@@ -219,9 +219,9 @@ class state_t {
         //std::list<int>* tmp = new std::list<int>(); 
         std::list<int>  sucesores;
 
-        for( int i = 0; PV[i] != -1; ++i ) {
-            if((color && is_black_move(PV[i])) || (!color && is_white_move(PV[i]))) {
-                sucesores.push_back(PV[i]);
+        for( int i = 0; i < DIM; ++i ) {
+            if((color && is_black_move(i)) || (!color && is_white_move(i))) {
+                sucesores.push_back(i);
             }
         }
         return sucesores;
