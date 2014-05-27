@@ -34,9 +34,9 @@ int get_size(int* arr){
 }
 
 void print_help(){
-    cout << "Usage: ./othello -a { algorithm } -s {depth}\n";
+    cout << "\nUsage: ./othello -a { algorithm } -s {State #}\n";
     cout << "Algorithms: minimax, negamax, alphabeta, negamaxp, scout, nega_scout \n";
-    cout << "State: state in the Principal Variation between 0 and 33."
+    cout << "State #: state in the Principal Variation between 0 and 33.\n";
 }
 
 int main(int argc, const char **argv) {
@@ -48,7 +48,7 @@ int main(int argc, const char **argv) {
         if (argv[i] == string("-a") && (i + 1 < argc)){
             algorithm = new string(argv[i+1]);
         } else if (argv[i] == string("-s") && (i + 1 < argc)){
-            depth = atoi(argv[i+1]);
+            depth = atoi(argv[i+1]);// OJO aca se cambia de una el depth como 33-estadoRequerido
         }
     }
 
@@ -62,8 +62,52 @@ int main(int argc, const char **argv) {
      * Calculamos desde el estado vector[depth] hasta el estado final. Con un depth = 33 - (estado requerido). 
      * Eso deberia darnos siempre -4 (o 4 y -4 si estamos con negamax).
      */
+	 
     int size = get_size(PV);
     int result;
+	
+	
+	
+	//llenar arreglo con los 33 estados de la PV
+	state_t PV_states[34]; //33 pasos de la VP + estado incial
+	state_t aux_state;
+	PV_states[0]=aux_state; //estado inicial (6)
+	
+	for( int i = 0; PV[i] != -1; ++i ){
+		bool aux_player = i % 2 == 0; // black moves first!
+		aux_state = aux_state.move(aux_player, PV[i]);
+		PV_states[i+1] = aux_state;
+	}
+	//chequeando si se guardaron bien
+	/* 
+	for(int i = 0; i<34; i++){
+		cout << "estado" << i <<"\n";
+		cout << PV_states[i];
+		cout << "\n";
+		cin.get();
+	}
+	*/
+	
+	bool player = depth % 2 == 0; // black moves first! ojo aca not sure
+	if (*algorithm == "minimax"){
+            result = miniMax(PV_states[depth],33-depth);
+        } else if(*algorithm == "negamax"){
+            result = negamax(PV_states[depth],33-depth,player);
+        } else if (*algorithm == "alphabeta"){
+            result = alphabeta(PV_states[depth],33-depth,numeric_limits<int>::min(), numeric_limits<int>::max(), player);
+        } else if (*algorithm == "negamaxp"){
+            result = negamax_pruning(PV_states[depth], 33-depth, numeric_limits<int>::min(), numeric_limits<int>::max(), player);
+        } else if (*algorithm == "scout"){
+            result = scout(PV_states[depth], 33-depth, player);
+        } else if (*algorithm == "nega_scout") {
+            result = nega_scout(PV_states[depth], 33-depth, numeric_limits<int>::min(), numeric_limits<int>::max(), player);
+        }
+	
+	
+	// end new
+	
+	
+	/*
     cout << "Principal variation:" << endl;
     for( int i = 0; PV[i] != -1; ++i ) {
         bool player = i % 2 == 0; // black moves first!
@@ -91,13 +135,14 @@ int main(int argc, const char **argv) {
         state = state.move(player, pos);
         cout << "Board after " << i+1 << (i == 0 ? " ply:" : " plies:") << endl;
     }
+	*/
             cout << "Result: ";
             cout << result;
             cout << endl;
 
-    cout << state;
-    cout << "Value of the game = " << state.value() << endl;
-    cout << "#bits per state = " << sizeof(state) * 8 << endl;
+    cout << PV_states[depth];
+    cout << "Value of the game = " << PV_states[depth].value() << endl;
+    cout << "#bits per state = " << sizeof(PV_states[depth]) * 8 << endl;
 	
 	/*
     if( argc > 1 ) {
