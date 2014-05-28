@@ -441,7 +441,7 @@ inline void state_t::print(std::ostream &os, int depth) const {
         os << "|";
         for( int j = 0; j < N; ++j ) {
             if( ((i != 2) && (i != 3)) || ((j != 2) && (j != 3)) ) {
-                os << (is_free(pos) ? '.' : (is_black(pos) ? '&' : 'O'));
+                os << (is_free(pos) ? '.' : (is_black(pos) ? '&' : '0'));
                 ++pos;
             } else {
                 assert(((i == 2) || (i == 3)) && ((j == 2) || (j == 3)));

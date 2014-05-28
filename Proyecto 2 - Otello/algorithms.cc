@@ -32,6 +32,11 @@ int miniMax(state_t n, int depth, bool jugador){
     if ( n.terminal() || (depth == 0)) return n.value();
     int value = numeric_limits<int>::max();       
     list<int> succ = n.succ(jugador); // Maximizo el negro.
+	
+	if ( succ.empty() ){
+		return maxMin( n , depth-1 , !jugador );
+	}
+	
     while (!succ.empty()){
          int pos = succ.front();
          state_t new_state = n.move(jugador,pos);
@@ -51,6 +56,11 @@ int maxMin(state_t n, int depth, bool jugador){
     if ( n.terminal() || (depth == 0)) return n.value();
     int value = numeric_limits<int>::min();       
     list<int> succ = n.succ(jugador); // Si agarra mucha memoria. Hacerlo a mano.
+	
+	if ( succ.empty() ){
+		return miniMax( n , depth-1 , !jugador );
+	}
+	
     while (!succ.empty()){
          int pos = succ.front();
           /*cout << "Pos: ";
@@ -70,9 +80,15 @@ int maxMin(state_t n, int depth, bool jugador){
  * Implementacion de algoritmo negamax
  */
 int negamax(state_t n, int depth, bool jugador){
-    if ( n.terminal() || (depth == 0)) return n.value();
+	int signo = jugador? 1 : -1 ;
+    if ( n.terminal() || (depth == 0)) return signo*n.value();
     int value = numeric_limits<int>::min();       
-    list<int> succ = n.succ(jugador); 
+    list<int> succ = n.succ(jugador);
+	
+	if ( succ.empty() ){
+		return -negamax( n , depth-1 , !jugador );
+	}
+	
     for (list<int>::iterator it = succ.begin();
          it != succ.end();
          ++it
@@ -88,10 +104,16 @@ int negamax(state_t n, int depth, bool jugador){
  * beta es el mayor valor posible.
  */
 int alphabeta(state_t n, int depth, int alpha, int beta, bool jugador){
-    if ( n.terminal() || (depth == 0)) return n.value();
+	int signo = jugador? 1 : -1 ;
+    if ( n.terminal() || (depth == 0)) return signo*n.value();
     int pos; 
     if (jugador){
         list<int> succ = n.succ(jugador);
+		
+		if ( succ.empty() ){
+			return alphabeta(n,depth-1,alpha,beta,!jugador);
+		}
+		
         while (!succ.empty()){
             pos = succ.front();
             state_t new_state = n.move(jugador,pos);
@@ -101,12 +123,17 @@ int alphabeta(state_t n, int depth, int alpha, int beta, bool jugador){
         }
         return alpha;
     } else{
-        list<int> succ = n.succ(jugador); 
+        list<int> succ = n.succ(jugador);
+		
+		if ( succ.empty() ){
+			return alphabeta(n,depth-1,alpha,beta,!jugador);
+		}
+		
         while (!succ.empty()){
             pos = succ.front();
             state_t new_state = n.move(jugador,pos);
             beta = min(beta, alphabeta(new_state,depth-1,alpha,beta,!jugador)); 
-            if (alpha <= beta) break;
+            if (alpha >= beta) break;
             succ.pop_front();
         }
         return beta;
@@ -117,10 +144,14 @@ int alphabeta(state_t n, int depth, int alpha, int beta, bool jugador){
  * Implementacion de algoritmo negamax con cortes determinados.
  */
 int negamax_pruning(state_t n, int depth, int alpha, int beta, bool jugador){
-    if ( n.terminal() || (depth == 0)) return n.value();
+	int signo = jugador? 1 : -1 ;
+    if ( n.terminal() || (depth == 0)) return signo*n.value();
     int m = alpha;
     list<int> succ = n.succ(jugador); // Si agarra mucha memoria. Hacerlo a mano.
-    while (!succ.empty()){
+    if(succ.empty()){
+		return -negamax_pruning(n,depth-1,-beta,-m,!jugador);
+	}
+	while (!succ.empty()){
          int pos = succ.front();
          state_t new_state = n.move(jugador,pos);
          int t = -negamax_pruning(new_state,depth-1,-beta,-m,!jugador);
@@ -169,7 +200,8 @@ inline bool menorQue(int a, int b){
 }
 
 int scout(state_t n, int depth, bool jugador){
-    if ( n.terminal() || (depth == 0)) return n.value();
+	int signo = jugador? 1 : -1 ;
+    if ( n.terminal() || (depth == 0)) return signo*n.value();
     list<int> succ = n.succ(jugador); 
     if (succ.empty()) return n.value();
     int pos = succ.front();
@@ -187,24 +219,32 @@ int scout(state_t n, int depth, bool jugador){
 }
 
 int nega_scout(state_t state, int depth, int alpha, int beta, bool jugador){
-    if ( state.terminal() || (depth == 0)) return (state.value());
+    int signo = jugador? 1 : -1 ;
+	if ( state.terminal() || (depth == 0)) return (signo*state.value());
     int m = numeric_limits<int>::min();
     int n = beta;
+	bool succ_vacia = true;
 
     for( int pos = 0; pos < DIM; ++pos ) {
         if((jugador && state.is_black_move(pos)) || (!jugador && state.is_white_move(pos))) {
+			succ_vacia = false;
             state_t new_state = state.move(jugador,pos);
             int t = -nega_scout(new_state, depth-1, -n, -max(m,alpha), !jugador);
             if (t > m){
                 if (n == beta || depth < 3 || t >= beta){
                  m = t;
                 } else {
-                    m = nega_scout(new_state, depth - 1 , -beta, -t, !jugador);
+                    m = -nega_scout(new_state, depth - 1 , -beta, -t, !jugador);
                 }
             }
             if (m >= beta) return m; // Este algoritmo es burda de raro.
             n = max(alpha,m) + 1;
         }
     }
+	
+	if ( succ_vacia ){
+		return -nega_scout(state,depth-1,-beta,-alpha,!jugador);
+	}
+	
     return m;
 }

@@ -79,29 +79,33 @@ int main(int argc, const char **argv) {
 		PV_states[i+1] = aux_state;
 	}
 	//chequeando si se guardaron bien
-	/* 
+	/*
 	for(int i = 0; i<34; i++){
 		cout << "estado" << i <<"\n";
 		cout << PV_states[i];
 		cout << "\n";
 		cin.get();
-	}
-	*/
+	}*/
+	
 	
 	bool player = depth % 2 == 0; // black moves first! ojo aca not sure
 	if (*algorithm == "minimax"){
-            result = miniMax(PV_states[depth],33-depth,player);
-        } else if(*algorithm == "negamax"){
-            result = negamax(PV_states[depth],33-depth,player);
-        } else if (*algorithm == "alphabeta"){
-            result = alphabeta(PV_states[depth],33-depth,numeric_limits<int>::min(), numeric_limits<int>::max(), player);
-        } else if (*algorithm == "negamaxp"){
-            result = negamax_pruning(PV_states[depth], 33-depth, numeric_limits<int>::min(), numeric_limits<int>::max(), player);
-        } else if (*algorithm == "scout"){
-            result = scout(PV_states[depth], 33-depth, player);
-        } else if (*algorithm == "nega_scout") {
-            result = nega_scout(PV_states[depth], 33-depth, numeric_limits<int>::min(), numeric_limits<int>::max(), player);
-        }
+		if(player){
+			result = maxMin(PV_states[depth],33-depth,player);
+		}else{
+			result = miniMax(PV_states[depth],33-depth,player);
+		}
+	} else if(*algorithm == "negamax"){
+		result = negamax(PV_states[depth],33-depth,player);//CREEMOS QUE ESTA BUENO
+	} else if (*algorithm == "alphabeta"){
+		result = alphabeta(PV_states[depth],33-depth,numeric_limits<int>::min(), numeric_limits<int>::max(), player); //esto esta malo
+	} else if (*algorithm == "negamaxp"){
+		result = negamax_pruning(PV_states[depth], 33-depth, numeric_limits<int>::min(), numeric_limits<int>::max(), player);
+	} else if (*algorithm == "scout"){
+		result = scout(PV_states[depth], 33-depth, player);
+	} else if (*algorithm == "nega_scout") {
+		result = nega_scout(PV_states[depth], 33-depth, numeric_limits<int>::min(), numeric_limits<int>::max(), player);
+	}
 	
 	
 	// end new
