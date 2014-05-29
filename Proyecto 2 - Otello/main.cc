@@ -101,9 +101,9 @@ int main(int argc, const char **argv) {
 	} else if (*algorithm == "negamaxp"){
 		result = negamax_pruning(PV_states[depth], numeric_limits<int>::min(), numeric_limits<int>::max(), player); //esta malo
 	} else if (*algorithm == "scout"){
-		result = scout(PV_states[depth], 33-depth, player); // este esta malisimo
+		result = scout(PV_states[depth], player); // este esta malisimo
 	} else if (*algorithm == "nega_scout") {
-		result = nega_scout(PV_states[depth], 33-depth, numeric_limits<int>::min(), numeric_limits<int>::max(), player); //esta malo tambien
+		result = nega_scout(PV_states[depth], numeric_limits<int>::min(), numeric_limits<int>::max(), player); 
 	}
 	
 	
