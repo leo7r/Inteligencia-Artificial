@@ -123,7 +123,8 @@ int negamax(state_t n, int depth, bool jugador){
  * Implementacion de algoritmo negamax sin el depth.
  */
 int negamax(state_t n, bool jugador){
-    if ( n.terminal()) return n.value();
+    int signo = jugador? 1 : -1 ;
+    if ( n.terminal()) return signo*n.value();
     int value = numeric_limits<int>::min();       
     list<int> succ = n.succ(jugador);
 	
@@ -206,7 +207,8 @@ int alphabeta(state_t n, int alpha, int beta, bool jugador){
  * Implementacion de algoritmo negamax con cortes determinados.
  */
 int negamax_pruning(state_t n, int depth, int alpha, int beta, bool jugador){
-    if ( n.terminal() || (depth == 0)) return n.value();
+    int signo = jugador? 1 : -1 ;
+    if ( n.terminal() || (depth == 0)) return signo*n.value();
     int m = alpha;
     list<int> succ = n.succ(jugador); // Si agarra mucha memoria. Hacerlo a mano.
     while (!succ.empty()){
@@ -223,7 +225,8 @@ int negamax_pruning(state_t n, int depth, int alpha, int beta, bool jugador){
  * Implementacion de algoritmo negamax con cortes determinados y sin depth.
  */
 int negamax_pruning(state_t n, int alpha, int beta, bool jugador){
-    if ( n.terminal()) return n.value();
+    int signo = jugador? 1 : -1 ;
+    if ( n.terminal()) return signo*n.value();
     int m = alpha;
     list<int> succ = n.succ(jugador); // Si agarra mucha memoria. Hacerlo a mano.
     while (!succ.empty()){
@@ -325,7 +328,8 @@ int scout(state_t n, int depth, bool jugador){
  * Scout sin depth.
  */
 int scout(state_t n, bool jugador){
-    if ( n.terminal()) return n.value();
+    int signo = jugador? 1 : -1 ;
+    if ( n.terminal()) return signo*n.value();
     list<int> succ = n.succ(jugador); 
     if (succ.empty()) return n.value();
     int pos = succ.front();
