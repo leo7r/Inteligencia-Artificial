@@ -89,14 +89,14 @@ int main(int argc, const char **argv) {
 	
 	bool player = depth % 2 == 0; // black moves first! ojo aca not sure
 	if (*algorithm == "minimax"){
-		if(player){
+		if(player){ //Malo
 			result = maxMin(PV_states[depth],player);
 		}else{
 			result = miniMax(PV_states[depth],player);
 		}
-	} else if(*algorithm == "negamax"){
+	} else if(*algorithm == "negamax"){ // chevere
 		result = negamax(PV_states[depth],player);
-	} else if (*algorithm == "alphabeta"){
+	} else if (*algorithm == "alphabeta"){ //chevere
 		result = alphabeta(PV_states[depth],numeric_limits<int>::min(), numeric_limits<int>::max(), player); 
 	} else if (*algorithm == "negamaxp"){
 		result = negamax_pruning(PV_states[depth], numeric_limits<int>::min(), numeric_limits<int>::max(), player); //esta malo
@@ -104,7 +104,9 @@ int main(int argc, const char **argv) {
 		result = scout(PV_states[depth], player); // este esta malisimo
 	} else if (*algorithm == "nega_scout") {
 		result = nega_scout(PV_states[depth], numeric_limits<int>::min(), numeric_limits<int>::max(), player); 
-	}
+	} else{
+            return 0;
+        }
 	
 	
 	// end new
@@ -140,7 +142,7 @@ int main(int argc, const char **argv) {
     }
 	*/
 
-    cout << PV_states[depth];
+    //cout << PV_states[depth];
     cout << "Result: ";
     cout << result;
     cout << endl;
