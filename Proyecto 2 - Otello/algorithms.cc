@@ -193,13 +193,13 @@ int negamax_pruning(state_t n, int alpha, int beta, bool jugador){
     while (!succ.empty()){
          int pos = succ.front();
          state_t new_state = n.move(jugador,pos);
-         value = -negamax_pruning(new_state,-beta,-alpha_,!jugador);
+         int value = -negamax_pruning(new_state,-beta,-alpha,!jugador);
          succ.pop_front();
-         best_value = max(best_value,value);
-         alpha_ = max(value,alpha_);
-         if (alpha_ >= beta) break;
+         m = max(m,value);
+         alpha = max(value,alpha);
+         if (alpha >= beta) break;
     }
-    return best_value;
+    return m;
 }
 
 
