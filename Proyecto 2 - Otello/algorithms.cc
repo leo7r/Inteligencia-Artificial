@@ -97,7 +97,7 @@ int negamax(state_t n, bool jugador){
  * beta es el mayor valor posible.
  */
 int alphabeta(state_t n, int depth, int alpha, int beta, bool jugador){
-	int signo = jugador? 1 : -1 ;
+    int signo = jugador? 1 : -1 ;
     if ( n.terminal() || (depth == 0)) return signo*n.value();
     int pos; 
     if (jugador){
