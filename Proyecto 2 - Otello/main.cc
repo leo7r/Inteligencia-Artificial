@@ -95,7 +95,11 @@ int main(int argc, const char **argv) {
 	} else if (*algorithm == "alphabeta"){ //chevere
 		result = alphabeta(PV_states[depth],numeric_limits<int>::min(), numeric_limits<int>::max(), player); 
 	} else if (*algorithm == "negamaxp"){
-		result = negamax_pruning(PV_states[depth], numeric_limits<int>::min(), numeric_limits<int>::max(), player); //esta malo
+            if (player){
+	        result = negamax_pruning(PV_states[depth], numeric_limits<int>::min(), numeric_limits<int>::max(), player);
+            } else {
+	        result = -negamax_pruning(PV_states[depth], numeric_limits<int>::min(), numeric_limits<int>::max(), player); 
+            }
 	} else if (*algorithm == "scout"){
 		result = scout(PV_states[depth], player); // este esta malisimo
 	} else if (*algorithm == "nega_scout") {
