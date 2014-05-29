@@ -88,12 +88,8 @@ int main(int argc, const char **argv) {
 	
 	
 	bool player = depth % 2 == 0; // black moves first! ojo aca not sure
-	if (*algorithm == "minimax"){
-		if(player){ //Malo
-			result = maxMin(PV_states[depth],player);
-		}else{
-			result = miniMax(PV_states[depth],player);
-		}
+	if (*algorithm == "minimax"){ //bueno
+	    result = minimax(PV_states[depth],player);
 	} else if(*algorithm == "negamax"){ // chevere
 		result = negamax(PV_states[depth],player);
 	} else if (*algorithm == "alphabeta"){ //chevere

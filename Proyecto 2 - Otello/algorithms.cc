@@ -26,9 +26,6 @@ using namespace std;
  * Black es true y false es White.
  */
 int miniMax(state_t n, int depth, bool jugador){
-    /*cout << "Depth: ";
-    cout << depth;
-    cout << endl;*/
     if ( n.terminal() || (depth == 0)) return n.value();
     int value = numeric_limits<int>::max();       
     list<int> succ = n.succ(jugador); // Maximizo el negro.
@@ -41,9 +38,6 @@ int miniMax(state_t n, int depth, bool jugador){
          value = min(value,maxMin(new_state,depth-1, !jugador));
          succ.pop_front();
     }
-    /*cout << "Value: ";
-    cout << value;
-    cout << endl;*/
     return value;
 }
 
@@ -100,6 +94,36 @@ int maxMin(state_t n, bool jugador){
     
     return value;
 }
+
+int minimax(state_t n, bool jugador){
+    if ( n.terminal()) return n.value();
+    int pos; 
+    int value;
+    if (jugador){
+        list<int> succ = n.succ(jugador);
+        value = numeric_limits<int>::min();       
+		
+        while (!succ.empty()){
+            pos = succ.front();
+            state_t new_state = n.move(jugador,pos);
+            value = max(value, minimax(new_state,!jugador)); 
+            succ.pop_front();
+        }
+        return value;
+    } else{
+        list<int> succ = n.succ(jugador);
+        value = numeric_limits<int>::max();       
+        
+        while (!succ.empty()){
+            pos = succ.front();
+            state_t new_state = n.move(jugador,pos);
+            value = min(value, minimax(new_state,!jugador)); 
+            succ.pop_front();
+        }
+        return value;
+    }
+}
+
 /**
  * Implementacion de algoritmo negamax
  */

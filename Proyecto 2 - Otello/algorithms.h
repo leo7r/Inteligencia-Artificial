@@ -35,6 +35,10 @@ int miniMax(state_t n, bool jugador);
  * Algoritmo MaxMin
  */
 int maxMin(state_t,  bool jugador);
+/**
+ * Otra implementacion de minimax. Esta si funciona.
+ */
+int minimax(state_t n, bool jugador);
 
 /**
  * Algoritmo negamax
