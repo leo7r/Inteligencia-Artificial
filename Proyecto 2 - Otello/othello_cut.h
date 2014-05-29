@@ -224,9 +224,11 @@ class state_t {
                 sucesores.push_back(i);
             }
         }
-        if (sucesores.empty()){
+        
+		/*if (sucesores.empty()){
             sucesores.push_back(DIM);
-        }
+        }*/
+		
         return sucesores;
     }
 

@@ -99,7 +99,7 @@ int main(int argc, const char **argv) {
 	} else if (*algorithm == "scout"){
 		result = scout(PV_states[depth], player); // este esta malisimo
 	} else if (*algorithm == "nega_scout") {
-		result = nega_scout(PV_states[depth], numeric_limits<int>::min(), numeric_limits<int>::max(), player); 
+		result = nega_scout(PV_states[depth], numeric_limits<int>::min(), numeric_limits<int>::max(), player); // Malo
 	} else{
             return 0;
         }

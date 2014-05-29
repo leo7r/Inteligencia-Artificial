@@ -253,6 +253,13 @@ int negamax_pruning(state_t n, int alpha, int beta, bool jugador){
     if ( n.terminal()) return signo*n.value();
     int m = alpha;
     list<int> succ = n.succ(jugador); // Si agarra mucha memoria. Hacerlo a mano.
+		
+	if ( succ.empty() ){
+		std::cout << "Entrando en succ vacio!\n";
+		std::cin.get();
+		return -negamax_pruning(n, -beta , -alpha , !jugador );
+	}
+	
     while (!succ.empty()){
          int pos = succ.front();
          state_t new_state = n.move(jugador,pos);
@@ -263,6 +270,19 @@ int negamax_pruning(state_t n, int alpha, int beta, bool jugador){
     }
     return m;
 }
+
+
+/**
+ * Si Mahoma no va a la montaña, la montaña vendrá a Mahoma.
+ */
+inline bool mayorQue(int a, int b){
+    return a > b;
+}
+
+inline bool menorQue(int a, int b){
+    return a < b;
+}
+
 
 /**
  * Implementacion de test.
@@ -299,36 +319,53 @@ bool test(state_t n, int depth, int value, bool (*c)(int, int), bool jugador){
 bool test(state_t n, int value, bool (*c)(int, int), bool jugador){
     if ( n.terminal()) return c(n.value(),value);
     if (jugador){
-        std::list<int> succ = n.succ(jugador);    
-        while(!succ.empty()) {
-            int pos = succ.front();
-            state_t new_state = n.move(jugador,pos);
-            if (test(new_state, value, c,!jugador)) return true; // Pendiente aca.
-            succ.pop_front();
-        }
-        return true;
+        std::list<int> succ = n.succ(jugador);  
+		
+		if ( c == mayorQue ){
+			while(!succ.empty()) {
+				int pos = succ.front();
+				state_t new_state = n.move(jugador,pos);				
+				if (test(new_state, value, c,!jugador)) return true; // Pendiente aca.
+				succ.pop_front();
+			}
+			return false;
+		}
+		else{
+			while(!succ.empty()) {
+				int pos = succ.front();
+				state_t new_state = n.move(jugador,pos);
+				if (!test(new_state, value, c,!jugador)) return false; // Pendiente aca.
+				succ.pop_front();
+			}
+			return true;
+		}
+		
+        
     } else{
-        std::list<int> succ = n.succ(jugador);    
-        while(!succ.empty()) {
-            int pos = succ.front();
-            state_t new_state = n.move(jugador,pos);
-            if (!test(new_state, value, c,!jugador)) return false; // Pendiente aca.
-            succ.pop_front();
-        }
-        return false;
+        std::list<int> succ = n.succ(jugador); 
+
+		if ( c == mayorQue ){
+			while(!succ.empty()) {
+				int pos = succ.front();
+				state_t new_state = n.move(jugador,pos);
+				if (!test(new_state, value, c,!jugador)) return false; // Pendiente aca.
+				succ.pop_front();
+			}
+			return true;
+		}
+		else{
+			while(!succ.empty()) {
+				int pos = succ.front();
+				state_t new_state = n.move(jugador,pos);
+				if (test(new_state, value, c,!jugador)) return true; // Pendiente aca.
+				succ.pop_front();
+			}
+			return false;
+		}
+			
+        
     }
-    return !jugador;
-}
-
-/**
- * Si Mahoma no va a la montaña, la montaña vendrá a Mahoma.
- */
-inline bool mayorQue(int a, int b){
-    return a > b;
-}
-
-inline bool menorQue(int a, int b){
-    return a < b;
+    
 }
 
 int scout(state_t n, int depth, bool jugador){
@@ -352,8 +389,8 @@ int scout(state_t n, int depth, bool jugador){
  * Scout sin depth.
  */
 int scout(state_t n, bool jugador){
-    int signo = jugador? 1 : -1 ;
-    if ( n.terminal()) return signo*n.value();
+    
+	if ( n.terminal()) return n.value();
     list<int> succ = n.succ(jugador); 
     if (succ.empty()) return n.value();
     int pos = succ.front();
