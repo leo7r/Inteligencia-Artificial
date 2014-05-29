@@ -63,6 +63,7 @@ bool mayor (int a, int b);
 /**
  * Negascout
  */
+/*
 int nega_scout(state_t state, int depth, int alpha, int beta, bool jugador);
-
-int nega_scout(state_t state, int alpha, int beta, bool jugador);
+*/
+int nega_scout(state_t state, int depth, int alpha, int beta, bool jugador);

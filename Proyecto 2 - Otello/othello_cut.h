@@ -29,7 +29,8 @@
 #define MAXVALUE      1000
 #define DIM           36
 #define N             6
-
+#define MIN_INT			-420
+#define MAX_INT			420
 const int rows[][7] = {
     { 4, 5, 6, 7, 8, 9,-1 }, { 4, 5, 6, 7, 8, 9,-1 }, { 4, 5, 6, 7, 8, 9,-1 },
     { 4, 5, 6, 7, 8, 9,-1 }, { 4, 5, 6, 7, 8, 9,-1 }, { 4, 5, 6, 7, 8, 9,-1 },
@@ -228,7 +229,7 @@ class state_t {
 		/*if (sucesores.empty()){
             sucesores.push_back(DIM);
         }*/
-		
+
         return sucesores;
     }
 

@@ -30,7 +30,7 @@ int minimax(state_t n, bool jugador){
     int value;
     if (jugador){
         list<int> succ = n.succ(jugador);
-        value = numeric_limits<int>::min();       
+        value = MIN_INT;       
 		
         while (!succ.empty()){
             pos = succ.front();
@@ -41,7 +41,7 @@ int minimax(state_t n, bool jugador){
         return value;
     } else{
         list<int> succ = n.succ(jugador);
-        value = numeric_limits<int>::max();       
+        value = MAX_INT;       
         
         while (!succ.empty()){
             pos = succ.front();
@@ -59,7 +59,7 @@ int minimax(state_t n, bool jugador){
 int negamax(state_t n, int depth, bool jugador){
 	int signo = jugador? 1 : -1 ;
     if ( n.terminal() || (depth == 0)) return signo*n.value();
-    int value = numeric_limits<int>::min();       
+    int value = MIN_INT;       
     list<int> succ = n.succ(jugador);
 	
     for (list<int>::iterator it = succ.begin();
@@ -78,7 +78,7 @@ int negamax(state_t n, int depth, bool jugador){
 int negamax(state_t n, bool jugador){
     int signo = jugador? 1 : -1 ;
     if ( n.terminal()) return signo*n.value();
-    int value = numeric_limits<int>::min();       
+    int value = MIN_INT;       
     list<int> succ = n.succ(jugador);
 	
     for (list<int>::iterator it = succ.begin();
@@ -185,8 +185,6 @@ int negamax_pruning(state_t n, int alpha, int beta, bool jugador){
     list<int> succ = n.succ(jugador); // Si agarra mucha memoria. Hacerlo a mano.
 		
 	if ( succ.empty() ){
-		std::cout << "Entrando en succ vacio!\n";
-		std::cin.get();
 		return -negamax_pruning(n, -beta , -alpha , !jugador );
 	}
 	
@@ -338,6 +336,7 @@ int scout(state_t n, bool jugador){
     return v;
 }
 
+/*
 int nega_scout(state_t state, int depth, int alpha, int beta, bool jugador){
     int signo = jugador? 1 : -1 ;
 	if ( state.terminal() || (depth == 0)) return (signo*state.value());
@@ -368,16 +367,44 @@ int nega_scout(state_t state, int depth, int alpha, int beta, bool jugador){
 	
     return m;
 }
-
-int nega_scout(state_t state, int alpha, int beta, bool jugador){
+*/
+int nega_scout(state_t state, int depth , int alpha, int beta, bool jugador){
     int signo = jugador? 1 : -1 ;
     if ( state.terminal()) return (signo*state.value());
     list<int> succ = state.succ(jugador);
-    int pos = succ.front();
-    state_t first = state.move(jugador, pos);
-    int score = -nega_scout(first,-beta,-alpha,!jugador);
+	
+	int best_m = -100;
+	int best_n = beta;
+	
+	if ( succ.empty() ){
+		return -nega_scout(state, depth -1, -beta, -alpha, !jugador);
+	}
+	
+	while ( !succ.empty() ){
+		int pos = succ.front();
+		state_t new_state = state.move(jugador, pos);
+		int score = -nega_scout(new_state,depth-1,-best_n,-max(alpha , best_m ),!jugador);
+		
+		if ( score > best_m ){
+			if ( best_n == beta || depth < 3 || score >= beta ){
+				best_m = score;
+			}
+			else{
+				best_m = -nega_scout(new_state , depth-1, -beta , -score , !jugador);
+			}
+		}
+		
+		if ( best_m >= beta ) return best_m;
+		
+		best_n = max(alpha,best_m) + 1;
+		succ.pop_front();
+	}
+	
+	return best_m;
+	
+	/*
+	
     int alpha_ = max(score,alpha);
-    succ.pop_front();
     while (!succ.empty()){
         pos = succ.front();
         state_t new_state = state.move(jugador,pos);
@@ -388,5 +415,5 @@ int nega_scout(state_t state, int alpha, int beta, bool jugador){
         if (alpha_ >= beta) break;
         succ.pop_front();
     }
-    return alpha_;
+    return alpha_;*/
 }

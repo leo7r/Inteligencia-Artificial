@@ -93,17 +93,17 @@ int main(int argc, const char **argv) {
 	} else if(*algorithm == "negamax"){ // chevere
 		result = negamax(PV_states[depth],player);
 	} else if (*algorithm == "alphabeta"){ //chevere
-		result = alphabeta(PV_states[depth],numeric_limits<int>::min(), numeric_limits<int>::max(), player); 
+		result = alphabeta(PV_states[depth],MIN_INT, MAX_INT, player); 
 	} else if (*algorithm == "negamaxp"){
             if (player){
-	        result = negamax_pruning(PV_states[depth], numeric_limits<int>::min(), numeric_limits<int>::max(), player);
+	        result = negamax_pruning(PV_states[depth], -100, 100, player);
             } else {
-	        result = -negamax_pruning(PV_states[depth], numeric_limits<int>::min(), numeric_limits<int>::max(), player); 
+	        result = -negamax_pruning(PV_states[depth], -100, 100, player); 
             }
 	} else if (*algorithm == "scout"){
 		result = scout(PV_states[depth], player); // este esta malisimo
 	} else if (*algorithm == "nega_scout") {
-		result = nega_scout(PV_states[depth], numeric_limits<int>::min(), numeric_limits<int>::max(), player); // Malo
+		result = nega_scout(PV_states[depth], depth ,-100, 100, player); // Malo
 	} else{
             return 0;
         }
