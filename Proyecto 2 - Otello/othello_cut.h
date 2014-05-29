@@ -224,6 +224,9 @@ class state_t {
                 sucesores.push_back(i);
             }
         }
+        if (sucesores.empty()){
+            sucesores.push_back(DIM);
+        }
         return sucesores;
     }
 
@@ -349,7 +352,7 @@ inline void state_t::set_color(bool color, int pos) {
  */
 inline state_t state_t::move(bool color, int pos) const {
     state_t s(*this);
-    if( pos >= DIM ) return s;
+    if( pos >= DIM ) return s; // Cuando la posicion es mayor o igual que DIM, este "pasa" la jugada
 
     assert(outflank(color, pos));
     s.set_color(color, pos);

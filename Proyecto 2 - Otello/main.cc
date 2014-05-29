@@ -42,7 +42,7 @@ void print_help(){
 int main(int argc, const char **argv) {
     state_t state;
     string *algorithm = 0;
-    int depth = 0;
+    int depth = -1;
 
     for (int i = 0; i < argc ; i++){
         if (argv[i] == string("-a") && (i + 1 < argc)){
@@ -79,28 +79,27 @@ int main(int argc, const char **argv) {
 		PV_states[i+1] = aux_state;
 	}
 	//chequeando si se guardaron bien
-	/*
-	for(int i = 0; i<34; i++){
+	
+	/*for(int i = 0; i<34; i++){
 		cout << "estado" << i <<"\n";
 		cout << PV_states[i];
 		cout << "\n";
-		cin.get();
 	}*/
 	
 	
 	bool player = depth % 2 == 0; // black moves first! ojo aca not sure
 	if (*algorithm == "minimax"){
 		if(player){
-			result = maxMin(PV_states[depth],33-depth,player);
+			result = maxMin(PV_states[depth],player);
 		}else{
-			result = miniMax(PV_states[depth],33-depth,player);
+			result = miniMax(PV_states[depth],player);
 		}
 	} else if(*algorithm == "negamax"){
-		result = negamax(PV_states[depth],33-depth,player);//CREEMOS QUE ESTA BUENO
+		result = negamax(PV_states[depth],player);
 	} else if (*algorithm == "alphabeta"){
-		result = alphabeta(PV_states[depth],33-depth,numeric_limits<int>::min(), numeric_limits<int>::max(), player); //esto esta malo
+		result = alphabeta(PV_states[depth],numeric_limits<int>::min(), numeric_limits<int>::max(), player); 
 	} else if (*algorithm == "negamaxp"){
-		result = negamax_pruning(PV_states[depth], 33-depth, numeric_limits<int>::min(), numeric_limits<int>::max(), player); //esta malo
+		result = negamax_pruning(PV_states[depth], numeric_limits<int>::min(), numeric_limits<int>::max(), player); //esta malo
 	} else if (*algorithm == "scout"){
 		result = scout(PV_states[depth], 33-depth, player); // este esta malisimo
 	} else if (*algorithm == "nega_scout") {
@@ -140,11 +139,11 @@ int main(int argc, const char **argv) {
         cout << "Board after " << i+1 << (i == 0 ? " ply:" : " plies:") << endl;
     }
 	*/
-            cout << "Result: ";
-            cout << result;
-            cout << endl;
 
     cout << PV_states[depth];
+    cout << "Result: ";
+    cout << result;
+    cout << endl;
     cout << "Value of the game = " << PV_states[depth].value() << endl;
     cout << "#bits per state = " << sizeof(PV_states[depth]) * 8 << endl;
 	

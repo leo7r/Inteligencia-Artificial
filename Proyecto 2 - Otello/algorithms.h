@@ -25,10 +25,25 @@ int miniMax(state_t , int, bool jugador);
  * Algoritmo MaxMin
  */
 int maxMin(state_t, int, bool jugador);
+
+/**
+ * Algoritmo MinMax
+ */
+int miniMax(state_t n, bool jugador);
+
+/**
+ * Algoritmo MaxMin
+ */
+int maxMin(state_t,  bool jugador);
+
 /**
  * Algoritmo negamax
  */
 int negamax(state_t n, int depth, bool jugador);
+/**
+ * Algoritmo negamax sin depth
+ */
+int negamax(state_t n, bool jugador);
 
 /**
  * Implementacion de algoritmo alphabeta.
@@ -36,11 +51,20 @@ int negamax(state_t n, int depth, bool jugador);
  * beta es el mayor valor posible.
  */
 int alphabeta(state_t n, int depth, int alpha, int beta, bool jugador);
+/**
+ * Alphabeta sin el depth
+ */
+int alphabeta(state_t n, int alpha, int beta, bool jugador);
 
 /**
  * Implementacion de algoritmo negamax con cortes determinados.
  */
 int negamax_pruning(state_t n, int depth, int alpha, int beta, bool jugador);
+
+/**
+ * Implementacion de algoritmo negamax con cortes determinados.
+ */
+int negamax_pruning(state_t n, int alpha, int beta, bool jugador);
 
 
 /**
