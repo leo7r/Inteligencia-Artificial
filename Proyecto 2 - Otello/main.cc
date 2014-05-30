@@ -22,6 +22,7 @@
 #include <limits>
 #include <iostream>
 #include <stdlib.h>
+#include <ctime>
 
 using namespace std;
 
@@ -85,84 +86,45 @@ int main(int argc, const char **argv) {
 		cout << PV_states[i];
 		cout << "\n";
 	}*/
+		
+	for ( int out_depth = 33 ; out_depth >= depth ; out_depth-- ){
+	
+		clock_t begin = clock();
+		
+		bool player = out_depth % 2 == 0; // black moves first! ojo aca not sure
+		if (*algorithm == "minimax"){ 
+			result = minimax(PV_states[out_depth],player);
+		} else if(*algorithm == "negamax"){ // chevere
+			result = negamax(PV_states[out_depth],player);
+		} else if (*algorithm == "alphabeta"){ //chevere
+			result = alphabeta(PV_states[out_depth],MIN_INT, MAX_INT, player); 
+		} else if (*algorithm == "negamaxp"){
+				if (player){
+				result = negamax_pruning(PV_states[out_depth], -100, 100, player);
+				} else {
+				result = -negamax_pruning(PV_states[out_depth], -100, 100, player); 
+				}
+		} else if (*algorithm == "scout"){
+			result = scout(PV_states[out_depth], player); // este esta malisimo
+		} else if (*algorithm == "nega_scout") {
+			result = nega_scout(PV_states[out_depth], out_depth ,-100, 100, player); // Malo
+		} else{
+				return 0;
+			}
+			
+		
+		clock_t end = clock();
+		double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+		
+		cout << "Resultado de " << *algorithm << " para profundidad " << out_depth << " | t: " << elapsed_secs << ": ";
+		cout << result;
+		cout << endl;
+		//cin.get();
+	}
 	
 	
-	bool player = depth % 2 == 0; // black moves first! ojo aca not sure
-	if (*algorithm == "minimax"){ 
-	    result = minimax(PV_states[depth],player);
-	} else if(*algorithm == "negamax"){ // chevere
-		result = negamax(PV_states[depth],player);
-	} else if (*algorithm == "alphabeta"){ //chevere
-		result = alphabeta(PV_states[depth],MIN_INT, MAX_INT, player); 
-	} else if (*algorithm == "negamaxp"){
-            if (player){
-	        result = negamax_pruning(PV_states[depth], -100, 100, player);
-            } else {
-	        result = -negamax_pruning(PV_states[depth], -100, 100, player); 
-            }
-	} else if (*algorithm == "scout"){
-		result = scout(PV_states[depth], player); // este esta malisimo
-	} else if (*algorithm == "nega_scout") {
-		result = nega_scout(PV_states[depth], depth ,-100, 100, player); // Malo
-	} else{
-            return 0;
-        }
-	
-	
-	// end new
-	
-	
-	/*
-    cout << "Principal variation:" << endl;
-    for( int i = 0; PV[i] != -1; ++i ) {
-        bool player = i % 2 == 0; // black moves first!
-        int pos = PV[i];
-        cout << state;
-        if (*algorithm == "minimax"){
-            result = miniMax(state,depth);
-        } else if(*algorithm == "negamax"){
-            result = negamax(state,depth,player);
-        } else if (*algorithm == "alphabeta"){
-            result = alphabeta(state,depth,numeric_limits<int>::min(), numeric_limits<int>::max(), player);
-        } else if (*algorithm == "negamaxp"){
-            result = negamax_pruning(state, depth, numeric_limits<int>::min(), numeric_limits<int>::max(), player);
-        } else if (*algorithm == "scout"){
-            result = scout(state, depth, player);
-        } else if (*algorithm == "nega_scout") {
-            result = nega_scout(state, depth, numeric_limits<int>::min(), numeric_limits<int>::max(), player);
-        }
-        cout << "Result: ";
-        cout << result;
-        cout << endl;
-        cout << (player ? "Black" : "White")
-             << " moves at pos = " << pos << (pos == 36 ? " (pass)" : "")
-             << endl;
-        state = state.move(player, pos);
-        cout << "Board after " << i+1 << (i == 0 ? " ply:" : " plies:") << endl;
-    }
-	*/
-
-    //cout << PV_states[depth];
-    cout << "Result: ";
-    cout << result;
-    cout << endl;
-    cout << "Value of the game = " << PV_states[depth].value() << endl;
-    cout << "#bits per state = " << sizeof(PV_states[depth]) * 8 << endl;
-	
-	/*
-    if( argc > 1 ) {
-        int n = atoi(argv[1]);
-        cout << endl << "Apply " << n << " random movements at empty board:";
-        state = state_t();
-        for( int i = 0; i < n; ++i ) {
-            bool player = i % 2 == 0; // black moves first
-            int pos = state.get_random_move(player);
-            state = state.move(player, pos);
-            cout << " " << pos;
-        }
-        cout << endl << state;
-    }
-	*/
+    //cout << "Value of the game = " << PV_states[depth].value() << endl;
+    //cout << "#bits per state = " << sizeof(PV_states[depth]) * 8 << endl;
 	
     return 0;
 }
