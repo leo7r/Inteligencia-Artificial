@@ -54,25 +54,6 @@ int minimax(state_t n, bool jugador){
 }
 
 /**
- * Implementacion de algoritmo negamax
- */
-int negamax(state_t n, int depth, bool jugador){
-	int signo = jugador? 1 : -1 ;
-    if ( n.terminal() || (depth == 0)) return signo*n.value();
-    int value = MIN_INT;       
-    list<int> succ = n.succ(jugador);
-	
-    for (list<int>::iterator it = succ.begin();
-         it != succ.end();
-         ++it
-        ){
-            state_t new_state = n.move(jugador,*it);
-            value = max(value, -negamax(new_state,depth-1,!jugador));
-         }
-    return value;
-}
-
-/**
  * Implementacion de algoritmo negamax sin el depth.
  */
 int negamax(state_t n, bool jugador){
@@ -91,39 +72,6 @@ int negamax(state_t n, bool jugador){
     return value;
 }
 
-/**
- * Implementacion de algoritmo alphabeta.
- * alpha es el menor valor posible.
- * beta es el mayor valor posible.
- */
-int alphabeta(state_t n, int depth, int alpha, int beta, bool jugador){
-    int signo = jugador? 1 : -1 ;
-    if ( n.terminal() || (depth == 0)) return signo*n.value();
-    int pos; 
-    if (jugador){
-        list<int> succ = n.succ(jugador);
-		
-        while (!succ.empty()){
-            pos = succ.front();
-            state_t new_state = n.move(jugador,pos);
-            alpha = max(alpha, alphabeta(new_state,depth-1,alpha,beta,!jugador)); 
-            if (alpha >= beta) break;
-            succ.pop_front();
-        }
-        return alpha;
-    } else{
-        list<int> succ = n.succ(jugador);
-		
-        while (!succ.empty()){
-            pos = succ.front();
-            state_t new_state = n.move(jugador,pos);
-            beta = min(beta, alphabeta(new_state,depth-1,alpha,beta,!jugador)); 
-            if (alpha >= beta) break;
-            succ.pop_front();
-        }
-        return beta;
-    }
-}
 /**
  * Alphabeta sin el depth.
  */
@@ -155,26 +103,6 @@ int alphabeta(state_t n, int alpha, int beta, bool jugador){
     }
 }
 
-
-/**
- * Implementacion de algoritmo negamax con cortes determinados.
- * Presenta ciertas fallas.
- */
-int negamax_pruning(state_t n, int depth, int alpha, int beta, bool jugador){
-    int signo = jugador? 1 : -1 ;
-    if ( n.terminal() || (depth == 0)) return signo* n.value();
-    int m = alpha;
-    list<int> succ = n.succ(jugador); // Si agarra mucha memoria. Hacerlo a mano.
-    while (!succ.empty()){
-         int pos = succ.front();
-         state_t new_state = n.move(jugador,pos);
-         int t = -negamax_pruning(new_state,depth-1,-beta,-m,!jugador);
-         succ.pop_front();
-         if (t > m) m = t;
-         if (m >= beta) return m;
-    }
-    return m;
-}
 /**
  * Implementacion de algoritmo negamax con cortes determinados y sin depth.
  */
@@ -200,7 +128,6 @@ int negamax_pruning(state_t n, int alpha, int beta, bool jugador){
     return m;
 }
 
-
 /**
  * Si Mahoma no va a la montaña, la montaña vendrá a Mahoma.
  */
@@ -210,35 +137,6 @@ inline bool mayorQue(int a, int b){
 
 inline bool menorQue(int a, int b){
     return a < b;
-}
-
-
-/**
- * Implementacion de test.
- * @param (*c)(int, int): Funcion de comparacion.
- */
-bool test(state_t n, int depth, int value, bool (*c)(int, int), bool jugador){
-    if ( n.terminal() || (depth == 0)) return c(n.value(),value);
-    if (jugador){
-    
-        for( int pos = 0; pos < DIM; ++pos ) {
-            if((jugador && n.is_black_move(pos)) || (!jugador && n.is_white_move(pos))) {
-                state_t new_state = n.move(jugador,pos);
-                if (test(new_state, depth -1 , value, c,!jugador)) return true; // Pendiente aca.
-            }
-        }
-
-        return true;
-    } else{
-        for( int pos = 0; pos < DIM; ++pos ) {
-            if((jugador && n.is_black_move(pos)) || (!jugador && n.is_white_move(pos))) {
-                state_t new_state = n.move(jugador,pos);
-                if (!test(new_state, depth -1 , value, c,!jugador)) return false; // Pendiente aca.
-            }
-        }
-        return false;
-    }
-    return !jugador;
 }
 
 /**
@@ -297,23 +195,6 @@ bool test(state_t n, int value, bool (*c)(int, int), bool jugador){
     
 }
 
-int scout(state_t n, int depth, bool jugador){
-    if ( n.terminal() || (depth == 0)) return n.value();
-    list<int> succ = n.succ(jugador); 
-    if (succ.empty()) return n.value();
-    int pos = succ.front();
-    state_t new_state = n.move(jugador,pos);
-    int v = scout(new_state,depth-1,!jugador);
-    succ.pop_front();
-    while (!succ.empty()){
-        pos = succ.front();
-        new_state = n.move(jugador,pos);
-        if (jugador && test(new_state,depth-1,v, mayorQue,jugador)) v = scout(new_state,depth-1,!jugador);
-        if (!jugador && test(new_state,depth-1,v,menorQue,jugador)) v = scout(new_state,depth-1,!jugador);
-        succ.pop_front();
-    }
-    return v;
-}
 /**
  * Scout sin depth.
  */
