@@ -86,7 +86,8 @@ int main(int argc, const char **argv) {
 		cout << PV_states[i];
 		cout << "\n";
 	}*/
-		
+	
+	cout << "ALGORITMO" << "\t" << " PROFUNDIDAD " << "\t" << "RESULTADO" << "\t" << "TIEMPO (SEGS)" << endl;
 	for ( int out_depth = 33 ; out_depth >= depth ; out_depth-- ){
 	
 		clock_t begin = clock();
@@ -100,14 +101,14 @@ int main(int argc, const char **argv) {
 			result = alphabeta(PV_states[out_depth],MIN_INT, MAX_INT, player); 
 		} else if (*algorithm == "negamaxp"){
 				if (player){
-				result = negamax_pruning(PV_states[out_depth], -100, 100, player);
+				result = negamax_pruning(PV_states[out_depth], MIN_INT, MAX_INT, player);
 				} else {
-				result = -negamax_pruning(PV_states[out_depth], -100, 100, player); 
+				result = -negamax_pruning(PV_states[out_depth], MIN_INT, MAX_INT, player); 
 				}
 		} else if (*algorithm == "scout"){
 			result = scout(PV_states[out_depth], player); // este esta malisimo
 		} else if (*algorithm == "nega_scout") {
-			result = nega_scout(PV_states[out_depth], out_depth ,-100, 100, player); // Malo
+			result = -nega_scout(PV_states[out_depth], out_depth ,MIN_INT, MAX_INT, player); // Malo
 		} else{
 				return 0;
 			}
@@ -116,9 +117,7 @@ int main(int argc, const char **argv) {
 		clock_t end = clock();
 		double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 		
-		cout << "Resultado de " << *algorithm << " para profundidad " << out_depth << " | t: " << elapsed_secs << ": ";
-		cout << result;
-		cout << endl;
+		cout << *algorithm << "\t" << out_depth << "\t\t" << result << "\t\t" << elapsed_secs << endl;
 		//cin.get();
 	}
 	
