@@ -321,16 +321,17 @@ int scout(state_t n, bool jugador){
     
 	if ( n.terminal()) return n.value();
     list<int> succ = n.succ(jugador); 
-    if (succ.empty()) return n.value();
+    if (succ.empty()) return scout(n, !jugador);
     int pos = succ.front();
     state_t new_state = n.move(jugador,pos);
     int v = scout(new_state,!jugador);
     succ.pop_front();
+	
     while (!succ.empty()){
         pos = succ.front();
         new_state = n.move(jugador,pos);
-        if (jugador && test(new_state,v, mayorQue,jugador)) v = scout(new_state,!jugador);
-        if (!jugador && test(new_state,v,menorQue,jugador)) v = scout(new_state,!jugador);
+        if (jugador && test(new_state,v, mayorQue,!jugador)) v = scout(new_state,!jugador);
+        if (!jugador && test(new_state,v,menorQue,!jugador)) v = scout(new_state,!jugador);
         succ.pop_front();
     }
     return v;
