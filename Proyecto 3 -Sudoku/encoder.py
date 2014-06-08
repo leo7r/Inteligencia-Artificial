@@ -16,7 +16,7 @@ def inicializar_diccionarios():
     y otro para decodificar el resultado dador por el solver
     :return: Dict diccionario de codificacion
     :return: Dict2 diccionario de decodificacion"""
-    num = 0
+    num = 1 #Empiezo desde 1 ya que el 0 esta reservado para /\ en formato CNF
     Dict = {}
     Dict2 = {}
     for valor in range(1,10):
@@ -27,6 +27,18 @@ def inicializar_diccionarios():
                     Dict2[num] = tupla_temporal
                     num += 1
     return Dict,Dict2
+
+def escribir_en_archivo_final(tmp_cerrar,archivo):
+    """Escribe el contenido de tmp_cerrar en archivo y
+       luego cierra a este.
+       :param tmp_cerrar: Archivo temporal a cerrar.
+       :param archivo: Archivo en el que se va a escribir."""
+    tmp_cerrar.seek(0) #Me pongo en el principio del archivo.
+    for linea in tmp_cerrar:
+        archivo.write(linea)
+    tmp_cerrar.close()
+
+
 
 def escribir_header(tmp):
     """Escribe un comentario inicial para cada archivo.
@@ -62,51 +74,54 @@ def escribir_regla_una_sola_casilla(fila, columna, dict_encoder, tmp_casillas, v
     elif(valor_str in posibles_valores):
         valor = int(valor_str)
         casilla = (fila,columna,valor)
-        tmp_casillas.write(str(dict_encoder[casilla]) + " ")
+        tmp_casillas.write( str(dict_encoder[casilla]) + " ")
         for i in range(1,10):
-            casilla_tmp = (fila,columna,valor)
+            casilla_tmp = (fila,columna,i)
             if (casilla_tmp == casilla): continue
-            tmp_casillas.write(str(dict_encoder[casilla_tmp])+ "  ")
+            tmp_casillas.write("-"+str(dict_encoder[casilla_tmp])+ " ")
         tmp_casillas.write("0\n")
         return 1
     return 0
 
 
-def regla_un_solo_numero_casilla(linea, tmp_casillas, dict_encoder, dict_decoder):
+def regla_un_solo_numero_casilla(linea, tmp_casillas, dict_encoder):
     """Funcion que llama a escribir_regla_una_sola_casilla en cada caso
        de la instancia del sudoku que se encuentra en linea.
        :param linea: Instancia del sudoku.
        :param tmp_casillas: Archivo temporal en donde se van a escribir las reglas.
        :param dict_encoder: Diccionario para codificar las reglas."""
     #if (not isinstance(dict_encoder,dict)): return
-    #if (not isinstance(dict_decoder,dict)): return
     #if (not isinstance(tmp_casillas,file)): return
     #if (not isinstance(linea,str)): return
     i = 0
     fila = 0
+    clausulas = 0
     while (i < len(linea)):
         columna = i % 9
         if (columna == 0 and i != 0): fila += 1
-        escribir_regla_una_sola_casilla(fila,columna, dict_encoder, tmp_casillas, linea[i])
+        clausulas += escribir_regla_una_sola_casilla(fila,columna, dict_encoder, tmp_casillas, linea[i])
         i += 1
-    return 0
+    return clausulas
 
 
 
-def escribir_instancia_sudoku(linea, tmp,dict_encoder,dict_decoder):
+def escribir_instancia_sudoku(linea, tmp,dict_encoder):
     """Escribe todas las reglas de la instancia del sudoku que se encuentra en linea.
        :param linea: Instancia del sudoku.
        :param tmp: Archivo temporal en donde se escribiran todas las reglas.
        :param dict_encoder: Diccionario de codificacion."""
     #if (not isinstance(dict_encoder,dict)): return
-    #if (not isinstance(dict_decoder,dict)): return
     #if (not isinstance(tmp,file)): return
     #if (not isinstance(linea,str)): return 
     escribir_header(tmp)
     num_var = len(dict_encoder)
     tmp.write("p cnf "+str(num_var)+ " ")
     tmp_casillas = tempfile.NamedTemporaryFile() 
-    clausulas_casilla = regla_un_solo_numero_casilla(linea,tmp_casillas, dict_encoder,dict_decoder) 
+    clausulas_casilla = regla_un_solo_numero_casilla(linea,tmp_casillas, dict_encoder) 
+    clausulas = clausulas_casilla
+    print "Hola:"+ str(clausulas)
+    tmp.write(str(clausulas)+'\n')
+    escribir_en_archivo_final(tmp_casillas,tmp)
     return clausulas_casilla
 
 
@@ -137,8 +152,9 @@ def main():
     archivo = open(nombre_archivo,"r")
 
     for linea in archivo:
+        if (len(linea)  < 80): continue
         tmp = open("prueba","w") # NamedTemporaryFile()
-        escribir_instancia_sudoku(linea, tmp,dict_encoder,dict_decoder)
+        escribir_instancia_sudoku(linea, tmp,dict_encoder)
 
 
 
