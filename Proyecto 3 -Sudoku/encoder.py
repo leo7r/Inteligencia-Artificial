@@ -5,6 +5,7 @@
    :version:0.1"""
 import sys
 import tempfile
+import subprocess
 
 def mensaje_ayuda():
     """Imprime un mensaje de ayuda."""
@@ -39,7 +40,6 @@ def escribir_en_archivo_final(tmp_cerrar,archivo):
     tmp_cerrar.close()
 
 
-
 def escribir_header(tmp):
     """Escribe un comentario inicial para cada archivo.
        Esta funcion no es necesaria pero se coloca para verificar la escritura.
@@ -51,8 +51,33 @@ def escribir_header(tmp):
     tmp.write("c de una instancia determinada de Sudoku.\n")
     tmp.write("c\n")
 
+def escribir_regla_un_numero_casilla(fila,columna, dict_encoder, tmp_numero, valor_str):
+    """Escribe la regla de que toda casilla debe tener un numero.
+       :param fila: Fila en la que se debe colocar la regla. 
+       :param columna: Columna en la que se debe colocar la regla.
+       :param dict_encoder: Diccionario con el nombre de todas las variables a usar.
+       :param tmp_numero: Archivo temporal en el que se va a escribir.
+       :param valor_str: Valor de la casilla que se debe considerar, si este es '.' se deben colocar todos los valores numericos. 
+       :return clausulas: Numero de clausulas escritas.
+    """
+    posibles_valores = ['1','2','3','4','5','6','7','8','9']
+    if (valor_str == "."):
+        for valor_str_tmp in posibles_valores:
+            valor_tmp = int(valor_str_tmp)
+            casilla = (fila,columna,valor_tmp)
+            tmp_numero.write( str(dict_encoder[casilla]) + " ")
+        tmp_numero.write("0\n")
+        return 1
+    elif (valor_str in posibles_valores):
+        # Representar que existe un numero en la fila y columna 'fila','columna' de valor 'valor'
+        valor = int(valor_str)
+        casilla = (fila,columna,valor)
+        tmp_numero.write( str(dict_encoder[casilla]) + " 0\n")
+        return 1
+    return 0
+
 def escribir_regla_una_sola_casilla(fila, columna, dict_encoder, tmp_casillas, valor_str):
-    """Escribe la regla de que no puede existir otro valor_str en la casilla [fila][columna].
+    """Escribe la regla de que no puede existir otro valor_str en la misma casilla [fila][columna].
        :param fila: Fila en la que se debe colocar la regla. 
        :param columna: Columna en la que se debe colocar la regla.
        :param dict_encoder: Diccionario con el nombre de todas las variables a usar.
@@ -84,12 +109,30 @@ def escribir_regla_una_sola_casilla(fila, columna, dict_encoder, tmp_casillas, v
     return 0
 
 
+
+def regla_un_numero_casilla(linea,tmp_numero, dict_encoder):
+    """Escribe la regla de que cada casilla debe tener un numero.
+       :param linea: Instancia del sudoku.
+       :param tmp_numero: Archivo temporal en donde se van a escribir las reglas.
+       :param dict_encoder: Diccionario para codificar las reglas.
+    """
+    i = 0
+    fila = 0
+    clausulas = 0
+    while (i < len(linea)):
+        columna = i % 9
+        if (columna == 0 and i != 0): fila += 1
+        clausulas += escribir_regla_un_numero_casilla(fila,columna, dict_encoder, tmp_numero, linea[i])
+        i += 1
+    return clausulas
+
 def regla_un_solo_numero_casilla(linea, tmp_casillas, dict_encoder):
     """Funcion que llama a escribir_regla_una_sola_casilla en cada caso
        de la instancia del sudoku que se encuentra en linea.
        :param linea: Instancia del sudoku.
        :param tmp_casillas: Archivo temporal en donde se van a escribir las reglas.
-       :param dict_encoder: Diccionario para codificar las reglas."""
+       :param dict_encoder: Diccionario para codificar las reglas.
+    """
     #if (not isinstance(dict_encoder,dict)): return
     #if (not isinstance(tmp_casillas,file)): return
     #if (not isinstance(linea,str)): return
@@ -115,12 +158,14 @@ def escribir_instancia_sudoku(linea, tmp,dict_encoder):
     #if (not isinstance(linea,str)): return 
     escribir_header(tmp)
     num_var = len(dict_encoder)
-    tmp.write("p cnf "+str(num_var)+ " ")
     tmp_casillas = tempfile.NamedTemporaryFile() 
+    tmp_numero = tempfile.NamedTemporaryFile()
+    tmp.write("p cnf "+str(num_var)+ " ")
+    clausulas_un_numero_casilla = regla_un_numero_casilla(linea,tmp_numero,dict_encoder)
     clausulas_casilla = regla_un_solo_numero_casilla(linea,tmp_casillas, dict_encoder) 
-    clausulas = clausulas_casilla
-    print "Hola:"+ str(clausulas)
+    clausulas = clausulas_casilla + clausulas_un_numero_casilla
     tmp.write(str(clausulas)+'\n')
+    escribir_en_archivo_final(tmp_numero,tmp)
     escribir_en_archivo_final(tmp_casillas,tmp)
     return clausulas_casilla
 
@@ -138,7 +183,7 @@ def main():
         if (sys.argv[i] == "-f"):
             if ( i + 1 < len(sys.argv)):
                 nombre_archivo = sys.argv[i + 1] 
-        elif (sys.argv[i] == "-a"):
+        elif (sys.argv[i] == "-s"):
             if ( i + 1 < len(sys.argv)):
                 sat_solver = sys.argv[i + 1] 
         i += 1
@@ -150,15 +195,15 @@ def main():
     dict_encoder,dict_decoder = inicializar_diccionarios()
 
     archivo = open(nombre_archivo,"r")
-
+    nombre = "prueba"
     for linea in archivo:
         if (len(linea)  < 80): continue
-        tmp = open("prueba","w") # NamedTemporaryFile()
+        tmp = open(nombre,"w") # NamedTemporaryFile()
         escribir_instancia_sudoku(linea, tmp,dict_encoder)
+        tmp.seek(0)
+        subprocess.call([sat_solver,nombre])
+        tmp.close()
 
-
-
-    tmp.close
 
 if __name__ == "__main__":
     main()

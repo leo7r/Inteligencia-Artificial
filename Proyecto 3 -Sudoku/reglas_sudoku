@@ -20,7 +20,7 @@ Estas son las reglas que debemos codificar en lenguaje SAT:
     (-X0,0,1 \/ -X1,0,1 \/ -X2,0,1 \/ -X3,0,1 \/ -X4,0,1 \/ -X5,0,1 \/ -X6,0,1 \/ -X7,0,1 \/ -X8,0,1)
     /\ ...
 
-5. En la misma casilla no puede estar el mismo número:
+5. En el mismo bloque no puede estar el mismo número:
 
     (-X0,0,1 \/ -X0,1,1 \/ -X0,2,1 \/ -X1,0,1 \/ -X1,1,1 \/ -X1,2,1 \/ -X2,0,1 \/ -X2,1,1 \/ -X2,2,1)
     /\ ...
