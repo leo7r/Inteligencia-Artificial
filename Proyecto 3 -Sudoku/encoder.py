@@ -76,6 +76,61 @@ def escribir_regla_un_numero_casilla(fila,columna, dict_encoder, tmp_numero, val
         return 1
     return 0
 
+def escribir_regla_columna(fila,columna,dict_encoder,tmp_col, valor_str):
+    """Escribe la regla de que no puede existir otro valor_str en la misma columna [columna].
+       :param fila: Fila en la que se debe colocar la regla. 
+       :param columna: Columna en la que se debe colocar la regla.
+       :param dict_encoder: Diccionario con el nombre de todas las variables a usar.
+       :param tmp_col: Archivo temporal en el que se va a escribir.
+       :param valor_str: Valor de la casilla a considerar, si este es '.' se deben colocar todos los casos de columna. 
+       :return clausulas: Numero de clausulas escritas.
+    """
+    posibles_valores = ['1','2','3','4','5','6','7','8','9']
+    if (valor_str == "."):
+        clausulas = 0
+        for valor_str_tmp in posibles_valores:
+            clausulas += escribir_regla_columna(fila,columna,dict_encoder,tmp_col,valor_str_tmp)
+        return clausulas
+    elif(valor_str in posibles_valores):
+        valor = int(valor_str)
+        casilla = (fila,columna,valor)
+        tmp_col.write("-"+str(dict_encoder[casilla]) + " ")
+        for i in range(0,9):
+            casilla_tmp = (i,columna,valor) #Cambio el valor de la columna
+            if (casilla_tmp == casilla): continue
+            tmp_col.write("-"+str(dict_encoder[casilla_tmp])+ " ")
+        tmp_col.write("0\n")
+        return 1
+    return 0
+
+
+def escribir_regla_fila(fila,columna, dict_encoder, tmp_fila, valor_str):
+    """Escribe la regla de que no puede existir otro valor_str en la misma fila [fila].
+       :param fila: Fila en la que se debe colocar la regla. 
+       :param columna: Columna en la que se debe colocar la regla.
+       :param dict_encoder: Diccionario con el nombre de todas las variables a usar.
+       :param tmp_fila: Archivo temporal en el que se va a escribir.
+       :param valor_str: Valor de la casilla a considerar, si este es '.' se deben colocar todos los casos de fila. 
+       :return clausulas: Numero de clausulas escritas.
+    """
+    posibles_valores = ['1','2','3','4','5','6','7','8','9']
+    if (valor_str == "."):
+        clausulas = 0
+        for valor_str_tmp in posibles_valores:
+            clausulas += escribir_regla_fila(fila,columna,dict_encoder,tmp_fila,valor_str_tmp)
+        return clausulas
+    elif(valor_str in posibles_valores):
+        valor = int(valor_str)
+        casilla = (fila,columna,valor)
+        tmp_fila.write("-"+str(dict_encoder[casilla]) + " ")
+        for i in range(0,9):
+            casilla_tmp = (fila,i,valor) #Cambio el valor de la columna
+            if (casilla_tmp == casilla): continue
+            tmp_fila.write("-"+str(dict_encoder[casilla_tmp])+ " ")
+        tmp_fila.write("0\n")
+        return 1
+    return 0
+
 def escribir_regla_una_sola_casilla(fila, columna, dict_encoder, tmp_casillas, valor_str):
     """Escribe la regla de que no puede existir otro valor_str en la misma casilla [fila][columna].
        :param fila: Fila en la que se debe colocar la regla. 
@@ -108,7 +163,37 @@ def escribir_regla_una_sola_casilla(fila, columna, dict_encoder, tmp_casillas, v
         return 1
     return 0
 
+def regla_columna(linea,tmp_col,dict_encoder):
+    """Escribe la regla de que un numero no puede repetirse en una misma fila.
+       :param linea: Instancia del sudoku.
+       :param tmp_numero: Archivo temporal en donde se van a escribir las reglas.
+       :param dict_encoder: Diccionario para codificar las reglas.
+    """
+    i = 0
+    fila = 0
+    clausulas = 0
+    while (i < len(linea)):
+        columna = i % 9
+        if (columna == 0 and i != 0): fila += 1
+        clausulas += escribir_regla_columna(fila,columna, dict_encoder, tmp_col, linea[i])
+        i += 1
+    return clausulas
 
+def regla_fila(linea,tmp_fila,dict_encoder):
+    """Escribe la regla de que un numero no puede repetirse en una misma fila.
+       :param linea: Instancia del sudoku.
+       :param tmp_numero: Archivo temporal en donde se van a escribir las reglas.
+       :param dict_encoder: Diccionario para codificar las reglas.
+    """
+    i = 0
+    fila = 0
+    clausulas = 0
+    while (i < len(linea)):
+        columna = i % 9
+        if (columna == 0 and i != 0): fila += 1
+        clausulas += escribir_regla_fila(fila,columna, dict_encoder, tmp_fila, linea[i])
+        i += 1
+    return clausulas
 
 def regla_un_numero_casilla(linea,tmp_numero, dict_encoder):
     """Escribe la regla de que cada casilla debe tener un numero.
@@ -160,13 +245,19 @@ def escribir_instancia_sudoku(linea, tmp,dict_encoder):
     num_var = len(dict_encoder)
     tmp_casillas = tempfile.NamedTemporaryFile() 
     tmp_numero = tempfile.NamedTemporaryFile()
+    tmp_fila = tempfile.NamedTemporaryFile()
+    tmp_col = tempfile.NamedTemporaryFile()
     tmp.write("p cnf "+str(num_var)+ " ")
     clausulas_un_numero_casilla = regla_un_numero_casilla(linea,tmp_numero,dict_encoder)
     clausulas_casilla = regla_un_solo_numero_casilla(linea,tmp_casillas, dict_encoder) 
-    clausulas = clausulas_casilla + clausulas_un_numero_casilla
+    clausulas_fila = regla_fila(linea,tmp_fila,dict_encoder)
+    clausulas_col = regla_columna(linea,tmp_col,dict_encoder)
+    clausulas = clausulas_casilla + clausulas_un_numero_casilla + clausulas_fila + clausulas_col
     tmp.write(str(clausulas)+'\n')
     escribir_en_archivo_final(tmp_numero,tmp)
     escribir_en_archivo_final(tmp_casillas,tmp)
+    escribir_en_archivo_final(tmp_fila,tmp)
+    escribir_en_archivo_final(tmp_col,tmp)
     return clausulas_casilla
 
 
