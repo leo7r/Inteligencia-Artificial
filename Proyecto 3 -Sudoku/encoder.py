@@ -2,15 +2,41 @@
 """Codificador y decodificador para el juego de Sudoku
    en formato CNF.
    :author: Ruben
-   :version:0.1"""
+   :version:0.6"""
 import sys
 import tempfile
 import subprocess
+
+class Sector:
+    sector0 = [ (0,0), (0,1), (0,2), (1,0), (1,1), (1,2), (2,0), (2,1), (2,2)]
+    sector1 = [ (0,3), (0,4), (0,5), (1,3), (1,4), (1,5), (2,3), (2,4), (2,5)]
+    sector2 = [ (0,6), (0,7), (0,8), (1,6), (1,7), (1,8), (2,6), (2,7), (2,8)]
+
+    sector3 = [ (3,0), (3,1), (3,2), (4,0), (4,1), (4,2), (5,0), (5,1), (5,2)]
+    sector4 = [ (3,3), (3,4), (3,5), (4,3), (4,4), (4,5), (5,3), (5,4), (5,5)]
+    sector5 = [ (3,6), (3,7), (3,8), (4,6), (4,7), (4,8), (5,6), (5,7), (5,8)]
+
+    sector6 = [ (6,0), (6,1), (6,2), (7,0), (7,1), (7,2), (8,0), (8,1), (8,2)]
+    sector7 = [ (6,3), (6,4), (6,5), (7,3), (7,4), (7,5), (8,3), (8,4), (8,5)]
+    sector8 = [ (6,6), (6,7), (6,8), (7,6), (7,7), (7,8), (8,6), (8,7), (8,8)]
+    
+    Diccionario = {}
+
+    def __init__(self):
+        for tuplas in sector0:
+            Diccionario[tuplas] = sector0
+
+
+    def buscar_sector(self,fila,columna):
+        return self.Diccionario[(fila,columna)]
+
+
 
 def mensaje_ayuda():
     """Imprime un mensaje de ayuda."""
     print "encoder.py: Coder/Decoder in CNF Format for the problem of Sudoku"
     print "Usage: python encoder.py [-s <sat_solver>]  -f <instance_file>"
+
 
 def inicializar_diccionarios():
     """Inicializa dos diccionarios: uno para codificar la instancia en formato CNF
@@ -96,7 +122,7 @@ def escribir_regla_columna(fila,columna,dict_encoder,tmp_col, valor_str):
         casilla = (fila,columna,valor)
         tmp_col.write("-"+str(dict_encoder[casilla]) + " ")
         for i in range(0,9):
-            casilla_tmp = (i,columna,valor) #Cambio el valor de la columna
+            casilla_tmp = (i,columna,valor) #Cambio el valor de la fila
             if (casilla_tmp == casilla): continue
             tmp_col.write("-"+str(dict_encoder[casilla_tmp])+ " ")
         tmp_col.write("0\n")
@@ -184,6 +210,7 @@ def regla_fila(linea,tmp_fila,dict_encoder):
        :param linea: Instancia del sudoku.
        :param tmp_numero: Archivo temporal en donde se van a escribir las reglas.
        :param dict_encoder: Diccionario para codificar las reglas.
+       :return clausulas: Retorna el numero de clausulas realizadas.
     """
     i = 0
     fila = 0
@@ -200,6 +227,7 @@ def regla_un_numero_casilla(linea,tmp_numero, dict_encoder):
        :param linea: Instancia del sudoku.
        :param tmp_numero: Archivo temporal en donde se van a escribir las reglas.
        :param dict_encoder: Diccionario para codificar las reglas.
+       :return clausulas: Retorna el numero de clausulas realizadas.
     """
     i = 0
     fila = 0
@@ -243,21 +271,24 @@ def escribir_instancia_sudoku(linea, tmp,dict_encoder):
     #if (not isinstance(linea,str)): return 
     escribir_header(tmp)
     num_var = len(dict_encoder)
-    tmp_casillas = tempfile.NamedTemporaryFile() 
-    tmp_numero = tempfile.NamedTemporaryFile()
-    tmp_fila = tempfile.NamedTemporaryFile()
-    tmp_col = tempfile.NamedTemporaryFile()
+    tmp_casillas = tempfile.NamedTemporaryFile()
+    tmp_numero   = tempfile.NamedTemporaryFile()
+    tmp_fila     = tempfile.NamedTemporaryFile()
+    tmp_col      = tempfile.NamedTemporaryFile()
+    tmp_sector   = tempfile.NamedTemporaryFile() 
     tmp.write("p cnf "+str(num_var)+ " ")
-    clausulas_un_numero_casilla = regla_un_numero_casilla(linea,tmp_numero,dict_encoder)
-    clausulas_casilla = regla_un_solo_numero_casilla(linea,tmp_casillas, dict_encoder) 
-    clausulas_fila = regla_fila(linea,tmp_fila,dict_encoder)
-    clausulas_col = regla_columna(linea,tmp_col,dict_encoder)
-    clausulas = clausulas_casilla + clausulas_un_numero_casilla + clausulas_fila + clausulas_col
+    clausulas_un_numero_casilla           = regla_un_numero_casilla(linea,tmp_numero,dict_encoder)
+    clausulas_casilla                     = regla_un_solo_numero_casilla(linea,tmp_casillas, dict_encoder)
+    clausulas_fila                        = regla_fila(linea,tmp_fila,dict_encoder)
+    clausulas_col                         = regla_columna(linea,tmp_col,dict_encoder)
+    clausulas_sector                      = regla_sector(linea,tmp_sector,dict_encoder)
+    clausulas                             = clausulas_casilla + clausulas_un_numero_casilla + clausulas_fila + clausulas_col
     tmp.write(str(clausulas)+'\n')
     escribir_en_archivo_final(tmp_numero,tmp)
     escribir_en_archivo_final(tmp_casillas,tmp)
     escribir_en_archivo_final(tmp_fila,tmp)
     escribir_en_archivo_final(tmp_col,tmp)
+    escribir_en_archivo_final(tmp_sector,tmp)
     return clausulas_casilla
 
 
