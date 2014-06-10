@@ -8,29 +8,28 @@ import tempfile
 import subprocess
 
 class Sector:
-	sectores = [[ (0,0), (0,1), (0,2), (1,0), (1,1), (1,2), (2,0), (2,1), (2,2)],
-				[ (0,3), (0,4), (0,5), (1,3), (1,4), (1,5), (2,3), (2,4), (2,5)],
-				[ (0,6), (0,7), (0,8), (1,6), (1,7), (1,8), (2,6), (2,7), (2,8)],
-				[ (3,0), (3,1), (3,2), (4,0), (4,1), (4,2), (5,0), (5,1), (5,2)],
-				[ (3,3), (3,4), (3,5), (4,3), (4,4), (4,5), (5,3), (5,4), (5,5)],
-				[ (3,6), (3,7), (3,8), (4,6), (4,7), (4,8), (5,6), (5,7), (5,8)],
-				[ (6,0), (6,1), (6,2), (7,0), (7,1), (7,2), (8,0), (8,1), (8,2)],
-				[ (6,3), (6,4), (6,5), (7,3), (7,4), (7,5), (8,3), (8,4), (8,5)],
-				[ (6,6), (6,7), (6,8), (7,6), (7,7), (7,8), (8,6), (8,7), (8,8)]]
+    sectores =[[ (0,0), (0,1), (0,2), (1,0), (1,1), (1,2), (2,0), (2,1), (2,2)],
+	       [ (0,3), (0,4), (0,5), (1,3), (1,4), (1,5), (2,3), (2,4), (2,5)],
+	       [ (0,6), (0,7), (0,8), (1,6), (1,7), (1,8), (2,6), (2,7), (2,8)],
+	       [ (3,0), (3,1), (3,2), (4,0), (4,1), (4,2), (5,0), (5,1), (5,2)],
+	       [ (3,3), (3,4), (3,5), (4,3), (4,4), (4,5), (5,3), (5,4), (5,5)],
+	       [ (3,6), (3,7), (3,8), (4,6), (4,7), (4,8), (5,6), (5,7), (5,8)],
+	       [ (6,0), (6,1), (6,2), (7,0), (7,1), (7,2), (8,0), (8,1), (8,2)],
+	       [ (6,3), (6,4), (6,5), (7,3), (7,4), (7,5), (8,3), (8,4), (8,5)],
+	       [ (6,6), (6,7), (6,8), (7,6), (7,7), (7,8), (8,6), (8,7), (8,8)]]
 				
-	Diccionario = {}
+    Diccionario = {}
 
-	def __init__(self):
-		for i in range(9):
-			for tuplas in self.sectores[i]:
-				self.Diccionario[tuplas] = self.sectores[i]
+    def __init__(self):
+	for i in range(9):
+	    for tuplas in self.sectores[i]:
+		self.Diccionario[tuplas] = self.sectores[i]
 
-
-	def buscar_sector(self,fila,columna):
-		return self.Diccionario[(fila,columna)]
-
-		
-sector = Sector()
+    def buscar_sector(self,fila,columna):
+        """Dado una fila y columna rectorna el sector en donde
+           se encuentra la casilla
+        """
+	return self.Diccionario[(fila,columna)]
 
 
 def mensaje_ayuda():
@@ -100,6 +99,35 @@ def escribir_regla_un_numero_casilla(fila,columna, dict_encoder, tmp_numero, val
 		valor = int(valor_str)
 		casilla = (fila,columna,valor)
 		tmp_numero.write( str(dict_encoder[casilla]) + " 0\n")
+		return 1
+	return 0
+
+def escribir_regla_sector(fila,columna,dict_encoder, tmp_sector, valor_str,sector):
+	"""Escribe la regla de que no puede existir otro valor_str en un mismo sector.
+	   :param fila: Fila en la que se debe colocar la regla. 
+	   :param columna: Columna en la que se debe colocar la regla.
+	   :param dict_encoder: Diccionario con el nombre de todas las variables a usar.
+	   :param tmp_sector: Archivo temporal en el que se va a escribir.
+	   :param valor_str: Valor de la casilla a considerar, si este es '.' se deben colocar todos los casos de columna. 
+           :param sector: Clase que nos indica el sector en donde se encuetra la casilla.
+	   :return clausulas: Numero de clausulas escritas.
+	"""
+	posibles_valores = ['1','2','3','4','5','6','7','8','9']
+	if (valor_str == "."):
+		clausulas = 0
+		for valor_str_tmp in posibles_valores:
+			clausulas += escribir_regla_sector(fila,columna,dict_encoder,tmp_sector,valor_str_tmp,sector)
+		return clausulas
+	elif(valor_str in posibles_valores):
+		valor = int(valor_str)
+		casilla = (fila,columna,valor)
+		tmp_sector.write("-"+str(dict_encoder[casilla]) + " ")
+                sectores_arr = sector.buscar_sector(fila,columna)
+		for tupla in sectores_arr:
+			casilla_tmp = (tupla[0],tupla[1],valor)
+			if (casilla_tmp == casilla): continue
+			tmp_sector.write("-"+str(dict_encoder[casilla_tmp])+ " ")
+		tmp_sector.write("0\n")
 		return 1
 	return 0
 
@@ -260,13 +288,36 @@ def regla_un_solo_numero_casilla(linea, tmp_casillas, dict_encoder):
 		i += 1
 	return clausulas
 
+def regla_sector(linea,tmp_sector,dict_encoder, sector):
+	"""Funcion que llama a escribir_regla_una_sola_casilla en cada caso
+	   de la instancia del sudoku que se encuentra en linea.
+	   :param linea: Instancia del sudoku.
+	   :param tmp_casillas: Archivo temporal en donde se van a escribir las reglas.
+	   :param dict_encoder: Diccionario para codificar las reglas.
+           :param sector: Clase sector que nos indicara en que sector nos encontramos.
+           :return clausulas: Numero de clausulas escritas.
+	"""
+	#if (not isinstance(dict_encoder,dict)): return
+	#if (not isinstance(tmp_casillas,file)): return
+	#if (not isinstance(linea,str)): return
+	i = 0
+	fila = 0
+	clausulas = 0
+	while (i < len(linea)):
+		columna = i % 9
+		if (columna == 0 and i != 0): fila += 1
+		clausulas += escribir_regla_sector(fila,columna, dict_encoder, tmp_sector, linea[i], sector)
+		i += 1
+	return clausulas
 
-
-def escribir_instancia_sudoku(linea, tmp,dict_encoder):
+def escribir_instancia_sudoku(linea, tmp,dict_encoder, sector):
 	"""Escribe todas las reglas de la instancia del sudoku que se encuentra en linea.
 	   :param linea: Instancia del sudoku.
 	   :param tmp: Archivo temporal en donde se escribiran todas las reglas.
-	   :param dict_encoder: Diccionario de codificacion."""
+	   :param dict_encoder: Diccionario de codificacion.
+           :param sector: Clase que indica todos los sectores del tablero.
+           :return clausulas_casilla: Retorna el numero de clausulas escritas.
+        """
 	#if (not isinstance(dict_encoder,dict)): return
 	#if (not isinstance(tmp,file)): return
 	#if (not isinstance(linea,str)): return 
@@ -278,12 +329,13 @@ def escribir_instancia_sudoku(linea, tmp,dict_encoder):
 	tmp_col		 = tempfile.NamedTemporaryFile()
 	tmp_sector	 = tempfile.NamedTemporaryFile() 
 	tmp.write("p cnf "+str(num_var)+ " ")
-	clausulas_un_numero_casilla			  = regla_un_numero_casilla(linea,tmp_numero,dict_encoder)
-	clausulas_casilla					  = regla_un_solo_numero_casilla(linea,tmp_casillas, dict_encoder)
-	clausulas_fila						  = regla_fila(linea,tmp_fila,dict_encoder)
-	clausulas_col						  = regla_columna(linea,tmp_col,dict_encoder)
-	clausulas_sector					  = regla_sector(linea,tmp_sector,dict_encoder)
-	clausulas							  = clausulas_casilla + clausulas_un_numero_casilla + clausulas_fila + clausulas_col
+	clausulas_un_numero_casilla           = regla_un_numero_casilla(linea,tmp_numero,dict_encoder)
+	clausulas_casilla                     = regla_un_solo_numero_casilla(linea,tmp_casillas, dict_encoder)
+	clausulas_fila                        = regla_fila(linea,tmp_fila,dict_encoder)
+	clausulas_col                         = regla_columna(linea,tmp_col,dict_encoder)
+	clausulas_sector                      = regla_sector(linea,tmp_sector,dict_encoder, sector)
+	clausulas                             = clausulas_casilla + clausulas_un_numero_casilla + clausulas_fila + clausulas_col\
+                                                + clausulas_sector
 	tmp.write(str(clausulas)+'\n')
 	escribir_en_archivo_final(tmp_numero,tmp)
 	escribir_en_archivo_final(tmp_casillas,tmp)
@@ -303,29 +355,30 @@ def main():
 	nombre_archivo = ""
 	sat_solver = ""
 	while (i < len(sys.argv)):
-		if (sys.argv[i] == "-f"):
-			if ( i + 1 < len(sys.argv)):
-				nombre_archivo = sys.argv[i + 1] 
-		elif (sys.argv[i] == "-s"):
-			if ( i + 1 < len(sys.argv)):
-				sat_solver = sys.argv[i + 1] 
-		i += 1
+	    if (sys.argv[i] == "-f"):
+		if ( i + 1 < len(sys.argv)):
+		    nombre_archivo = sys.argv[i + 1] 
+	    elif (sys.argv[i] == "-s"):
+		if ( i + 1 < len(sys.argv)):
+		    sat_solver = sys.argv[i + 1] 
+	    i += 1
 
 	if (nombre_archivo == "" and sat_solver == ""):
 		mensaje_ayuda()
 		return 
 
 	dict_encoder,dict_decoder = inicializar_diccionarios()
+        sector = Sector()
 
 	archivo = open(nombre_archivo,"r")
-	nombre = "prueba"
+        nombre = "prueba"
 	for linea in archivo:
-		if (len(linea)	< 80): continue
-		tmp = open(nombre,"w") # NamedTemporaryFile()
-		escribir_instancia_sudoku(linea, tmp,dict_encoder)
-		tmp.seek(0)
-		subprocess.call([sat_solver,nombre])
-		tmp.close()
+	    if (len(linea)	< 80): continue
+	    tmp = open(nombre,"r+w") #tempfile.NamedTemporaryFile()
+	    escribir_instancia_sudoku(linea, tmp,dict_encoder, sector)
+	    tmp.seek(0)
+            subprocess.call([sat_solver,"-model",tmp.name])
+	    tmp.close()
 
 
 if __name__ == "__main__":
