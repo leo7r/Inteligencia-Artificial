@@ -227,6 +227,7 @@ def regla_columna(linea,tmp_col,dict_encoder):
 	i = 0
 	fila = 0
 	clausulas = 0
+        #tmp_col.write("c Reglas Columna\n")
 	while (i < len(linea)):
 		columna = i % 9
 		if (columna == 0 and i != 0): fila += 1
@@ -244,6 +245,7 @@ def regla_fila(linea,tmp_fila,dict_encoder):
 	i = 0
 	fila = 0
 	clausulas = 0
+        #tmp_fila.write("c Reglas Fila\n")
 	while (i < len(linea)):
 		columna = i % 9
 		if (columna == 0 and i != 0): fila += 1
@@ -261,6 +263,7 @@ def regla_un_numero_casilla(linea,tmp_numero, dict_encoder):
 	i = 0
 	fila = 0
 	clausulas = 0
+        #tmp_numero.write("c Reglas Un Numero Casilla\n")
 	while (i < len(linea)):
 		columna = i % 9
 		if (columna == 0 and i != 0): fila += 1
@@ -281,6 +284,7 @@ def regla_un_solo_numero_casilla(linea, tmp_casillas, dict_encoder):
 	i = 0
 	fila = 0
 	clausulas = 0
+        #tmp_casillas.write("c Reglas Casilla\n")
 	while (i < len(linea)):
 		columna = i % 9
 		if (columna == 0 and i != 0): fila += 1
@@ -303,6 +307,7 @@ def regla_sector(linea,tmp_sector,dict_encoder, sector):
 	i = 0
 	fila = 0
 	clausulas = 0
+        #tmp_sector.write("c Reglas Sector\n")
 	while (i < len(linea)):
 		columna = i % 9
 		if (columna == 0 and i != 0): fila += 1
@@ -334,8 +339,7 @@ def escribir_instancia_sudoku(linea, tmp,dict_encoder, sector):
 	clausulas_fila                        = regla_fila(linea,tmp_fila,dict_encoder)
 	clausulas_col                         = regla_columna(linea,tmp_col,dict_encoder)
 	clausulas_sector                      = regla_sector(linea,tmp_sector,dict_encoder, sector)
-	clausulas                             = clausulas_casilla + clausulas_un_numero_casilla + clausulas_fila + clausulas_col\
-                                                + clausulas_sector
+	clausulas                             = clausulas_casilla + clausulas_un_numero_casilla + clausulas_fila + clausulas_col +clausulas_sector
 	tmp.write(str(clausulas)+'\n')
 	escribir_en_archivo_final(tmp_numero,tmp)
 	escribir_en_archivo_final(tmp_casillas,tmp)
@@ -371,10 +375,10 @@ def main():
         sector = Sector()
 
 	archivo = open(nombre_archivo,"r")
-        nombre = "prueba"
 	for linea in archivo:
+            resultados = ""
 	    if (len(linea)	< 80): continue
-	    tmp = open(nombre,"r+w") #tempfile.NamedTemporaryFile()
+	    tmp = tempfile.NamedTemporaryFile()
 	    escribir_instancia_sudoku(linea, tmp,dict_encoder, sector)
 	    tmp.seek(0)
             subprocess.call([sat_solver,"-model",tmp.name])
