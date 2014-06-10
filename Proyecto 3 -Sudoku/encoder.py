@@ -8,6 +8,7 @@ import tempfile
 import subprocess
 
 class Sector:
+    """Clase que indica en que sector nos encontramos"""
     sectores =[[ (0,0), (0,1), (0,2), (1,0), (1,1), (1,2), (2,0), (2,1), (2,2)],
 	       [ (0,3), (0,4), (0,5), (1,3), (1,4), (1,5), (2,3), (2,4), (2,5)],
 	       [ (0,6), (0,7), (0,8), (1,6), (1,7), (1,8), (2,6), (2,7), (2,8)],
@@ -37,6 +38,27 @@ def mensaje_ayuda():
 	print "encoder.py: Coder/Decoder in CNF Format for the problem of Sudoku"
 	print "Usage: python encoder.py [-s <sat_solver>]  -f <instance_file>"
 
+
+def imprimir_matriz(linea_resultados,dict_decoder):
+    valor_str = ""
+    matriz = [[0 for x in range(0,9)] for x in range(0,9)]
+    i = 0
+    while (i < len(linea_resultados)):
+
+        if (linea_resultados[i] == "-"):
+            while (linea_resultados[i] != " "):
+                i += 1
+
+        if (linea_resultados[i].isdigit()):
+            valor_str += linea_resultados[i]
+        elif(linea_resultados[i].isspace() and valor_str.isdigit()):
+            if (valor_str == "0"): break
+            tupla = dict_decoder[int(valor_str)]
+            matriz[tupla[0]][tupla[1]] = tupla[2]
+            valor_str = ""
+        i += 1
+
+    print matriz
 
 def inicializar_diccionarios():
 	"""Inicializa dos diccionarios: uno para codificar la instancia en formato CNF
@@ -379,9 +401,16 @@ def main():
             resultados = ""
 	    if (len(linea)	< 80): continue
 	    tmp = tempfile.NamedTemporaryFile()
+            tmp_resultado = tempfile.NamedTemporaryFile()
 	    escribir_instancia_sudoku(linea, tmp,dict_encoder, sector)
 	    tmp.seek(0)
             subprocess.call([sat_solver,"-model",tmp.name])
+            tmp_resultado.seek(0)
+            for linea_resultados in tmp_resultado:
+                if (linea_resultados[0] == "c"): continue # No me importan los comentarios
+                if (linea_resultados[0] == "v"): 
+                    imprimir_matriz(linea_resultados,dict_decoder)
+            tmp_resultado.close()
 	    tmp.close()
 
 
