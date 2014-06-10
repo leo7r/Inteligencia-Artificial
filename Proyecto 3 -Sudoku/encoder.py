@@ -4,6 +4,7 @@
    :author: Ruben
    :version:0.6"""
 import sys
+import time
 import tempfile
 import subprocess
 
@@ -36,7 +37,8 @@ class Sector:
 def mensaje_ayuda():
 	"""Imprime un mensaje de ayuda."""
 	print "encoder.py: Coder/Decoder in CNF Format for the problem of Sudoku"
-	print "Usage: python encoder.py [-s <sat_solver>]  -f <instance_file>"
+	print "Usage: python encoder.py [-s <sat_solver>]  -f <instance_file> [-p]"
+        print "-p: Prints solution for the Sudoku "
 
 
 def imprimir_matriz(linea_resultados,dict_decoder):
@@ -57,8 +59,11 @@ def imprimir_matriz(linea_resultados,dict_decoder):
             matriz[tupla[0]][tupla[1]] = tupla[2]
             valor_str = ""
         i += 1
-
-    print matriz
+    for fila in matriz:
+        for elem in fila:
+            print elem,
+        print
+            
 
 def inicializar_diccionarios():
 	"""Inicializa dos diccionarios: uno para codificar la instancia en formato CNF
@@ -143,14 +148,15 @@ def escribir_regla_sector(fila,columna,dict_encoder, tmp_sector, valor_str,secto
 	elif(valor_str in posibles_valores):
 		valor = int(valor_str)
 		casilla = (fila,columna,valor)
-		tmp_sector.write("-"+str(dict_encoder[casilla]) + " ")
                 sectores_arr = sector.buscar_sector(fila,columna)
+                clausulas = 0
 		for tupla in sectores_arr:
-			casilla_tmp = (tupla[0],tupla[1],valor)
-			if (casilla_tmp == casilla): continue
-			tmp_sector.write("-"+str(dict_encoder[casilla_tmp])+ " ")
-		tmp_sector.write("0\n")
-		return 1
+		    casilla_tmp = (tupla[0],tupla[1],valor)
+		    if (casilla_tmp == casilla): continue
+                    clausulas += 1
+		    tmp_sector.write("-"+str(dict_encoder[casilla]) + " ")
+		    tmp_sector.write("-"+str(dict_encoder[casilla_tmp])+ " 0\n")
+		return clausulas
 	return 0
 
 def escribir_regla_columna(fila,columna,dict_encoder,tmp_col, valor_str):
@@ -171,13 +177,14 @@ def escribir_regla_columna(fila,columna,dict_encoder,tmp_col, valor_str):
 	elif(valor_str in posibles_valores):
 		valor = int(valor_str)
 		casilla = (fila,columna,valor)
-		tmp_col.write("-"+str(dict_encoder[casilla]) + " ")
+                clausulas = 0
 		for i in range(0,9):
-			casilla_tmp = (i,columna,valor) #Cambio el valor de la fila
-			if (casilla_tmp == casilla): continue
-			tmp_col.write("-"+str(dict_encoder[casilla_tmp])+ " ")
-		tmp_col.write("0\n")
-		return 1
+		    casilla_tmp = (i,columna,valor) #Cambio el valor de la fila
+		    if (casilla_tmp == casilla): continue
+                    clausulas += 1
+		    tmp_col.write("-"+str(dict_encoder[casilla]) + " ")
+		    tmp_col.write("-"+str(dict_encoder[casilla_tmp])+ " 0\n")
+		return clausulas
 	return 0
 
 
@@ -199,13 +206,14 @@ def escribir_regla_fila(fila,columna, dict_encoder, tmp_fila, valor_str):
 	elif(valor_str in posibles_valores):
 		valor = int(valor_str)
 		casilla = (fila,columna,valor)
-		tmp_fila.write("-"+str(dict_encoder[casilla]) + " ")
+                clausulas = 0
 		for i in range(0,9):
-			casilla_tmp = (fila,i,valor) #Cambio el valor de la columna
-			if (casilla_tmp == casilla): continue
-			tmp_fila.write("-"+str(dict_encoder[casilla_tmp])+ " ")
-		tmp_fila.write("0\n")
-		return 1
+		    casilla_tmp = (fila,i,valor) #Cambio el valor de la columna
+		    if (casilla_tmp == casilla): continue
+                    clausulas += 1
+		    tmp_fila.write("-"+str(dict_encoder[casilla]) + " ")
+		    tmp_fila.write("-"+str(dict_encoder[casilla_tmp])+ " 0\n")
+		return clausulas
 	return 0
 
 def escribir_regla_una_sola_casilla(fila, columna, dict_encoder, tmp_casillas, valor_str):
@@ -361,13 +369,13 @@ def escribir_instancia_sudoku(linea, tmp,dict_encoder, sector):
 	clausulas_fila                        = regla_fila(linea,tmp_fila,dict_encoder)
 	clausulas_col                         = regla_columna(linea,tmp_col,dict_encoder)
 	clausulas_sector                      = regla_sector(linea,tmp_sector,dict_encoder, sector)
-	clausulas                             = clausulas_casilla + clausulas_un_numero_casilla + clausulas_fila #+ clausulas_col +clausulas_sector
+	clausulas                             = clausulas_casilla + clausulas_un_numero_casilla + clausulas_fila + clausulas_col +clausulas_sector
 	tmp.write(str(clausulas)+'\n')
 	escribir_en_archivo_final(tmp_numero,tmp)
 	escribir_en_archivo_final(tmp_casillas,tmp)
 	escribir_en_archivo_final(tmp_fila,tmp)
-	#escribir_en_archivo_final(tmp_col,tmp)
-	#escribir_en_archivo_final(tmp_sector,tmp)
+	escribir_en_archivo_final(tmp_col,tmp)
+	escribir_en_archivo_final(tmp_sector,tmp)
 	return clausulas_casilla
 
 
@@ -380,6 +388,7 @@ def main():
 	i = 0
 	nombre_archivo = ""
 	sat_solver = ""
+        imprimir = False
 	while (i < len(sys.argv)):
 	    if (sys.argv[i] == "-f"):
 		if ( i + 1 < len(sys.argv)):
@@ -387,6 +396,8 @@ def main():
 	    elif (sys.argv[i] == "-s"):
 		if ( i + 1 < len(sys.argv)):
 		    sat_solver = sys.argv[i + 1] 
+            elif(sys.argv[i] == "-p"):
+                imprimir = True
 	    i += 1
 
 	if (nombre_archivo == "" and sat_solver == ""):
@@ -395,24 +406,35 @@ def main():
 
 	dict_encoder,dict_decoder = inicializar_diccionarios()
         sector = Sector()
-
+        total = 0
 	archivo = open(nombre_archivo,"r")
 	for linea in archivo:
-            print linea
+            #print linea
             resultados = ""
 	    if (len(linea)	< 80): continue
-	    tmp = open("prueba","w+r") #tempfile.NamedTemporaryFile()
+	    #tmp = open("prueba","w+r") 
+            tmp = tempfile.NamedTemporaryFile()
             tmp_resultado = tempfile.NamedTemporaryFile()
 	    escribir_instancia_sudoku(linea, tmp,dict_encoder, sector)
-	    tmp.seek(0)
-            subprocess.call([sat_solver,"-model",tmp.name], stdout=tmp_resultado)
+	    tmp.seek(0) 
+            start = time.time()
+            if imprimir:
+                subprocess.call([sat_solver,"-model",tmp.name], stdout=tmp_resultado)
+            else:
+                subprocess.call([sat_solver,tmp.name])
+            elapsed = time.time() - start
+            total += elapsed
             tmp_resultado.seek(0)
-            for linea_resultados in tmp_resultado:
-                if (linea_resultados[0] == "c"): continue # No me importan los comentarios
-                if (linea_resultados[0] == "v"): 
-                    imprimir_matriz(linea_resultados,dict_decoder)
+            if imprimir:
+                for linea_resultados in tmp_resultado:
+                    if (linea_resultados[0] == "c"): continue # No me importan los comentarios
+                    if (linea_resultados[0] == "v"): 
+                        print "Instance:"+ linea
+                        print "Solution: "
+                        imprimir_matriz(linea_resultados,dict_decoder)
             tmp_resultado.close()
 	    tmp.close()
+        print sat_solver+" time: " + str(total)
 
 
 if __name__ == "__main__":
