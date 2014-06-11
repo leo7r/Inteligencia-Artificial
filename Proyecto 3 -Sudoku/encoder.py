@@ -7,6 +7,15 @@ import sys
 import time
 import tempfile
 import subprocess
+#strings globales
+tmp_casillas 	= ""
+tmp_numero	= ""
+tmp_fila	= ""
+tmp_col		= ""
+tmp_sector	= "" 
+# A sustituir los temp files
+
+
 
 class Sector:
     """Clase que indica en que sector nos encontramos"""
@@ -87,10 +96,10 @@ def escribir_en_archivo_final(tmp_cerrar,archivo):
 	   luego cierra a este.
 	   :param tmp_cerrar: Archivo temporal a cerrar.
 	   :param archivo: Archivo en el que se va a escribir."""
-	tmp_cerrar.seek(0) #Me pongo en el principio del archivo.
-	for linea in tmp_cerrar:
-		archivo.write(linea)
-	tmp_cerrar.close()
+	#tmp_cerrar.seek(0) #Me pongo en el principio del archivo.
+	#for linea in tmp_cerrar:
+	archivo.write(tmp_cerrar)
+	#tmp_cerrar.close()
 
 
 def escribir_header(tmp):
@@ -118,14 +127,14 @@ def escribir_regla_un_numero_casilla(fila,columna, dict_encoder, tmp_numero, val
 		for valor_str_tmp in posibles_valores:
 			valor_tmp = int(valor_str_tmp)
 			casilla = (fila,columna,valor_tmp)
-			tmp_numero.write( str(dict_encoder[casilla]) + " ")
-		tmp_numero.write("0\n")
+			tmp_numero+=( str(dict_encoder[casilla]) + " ")
+		tmp_numero+=("0\n")
 		return 1
 	elif (valor_str in posibles_valores):
 		# Representar que existe un numero en la fila y columna 'fila','columna' de valor 'valor'
 		valor = int(valor_str)
 		casilla = (fila,columna,valor)
-		tmp_numero.write( str(dict_encoder[casilla]) + " 0\n")
+		tmp_numero+=( str(dict_encoder[casilla]) + " 0\n")
 		return 1
 	return 0
 
@@ -154,8 +163,8 @@ def escribir_regla_sector(fila,columna,dict_encoder, tmp_sector, valor_str,secto
 		    casilla_tmp = (tupla[0],tupla[1],valor)
 		    if (casilla_tmp == casilla): continue
                     clausulas += 1
-		    tmp_sector.write("-"+str(dict_encoder[casilla]) + " ")
-		    tmp_sector.write("-"+str(dict_encoder[casilla_tmp])+ " 0\n")
+		    tmp_sector+=("-"+str(dict_encoder[casilla]) + " ")
+		    tmp_sector+=("-"+str(dict_encoder[casilla_tmp])+ " 0\n")
 		return clausulas
 	return 0
 
@@ -182,8 +191,8 @@ def escribir_regla_columna(fila,columna,dict_encoder,tmp_col, valor_str):
 		    casilla_tmp = (i,columna,valor) #Cambio el valor de la fila
 		    if (casilla_tmp == casilla): continue
                     clausulas += 1
-		    tmp_col.write("-"+str(dict_encoder[casilla]) + " ")
-		    tmp_col.write("-"+str(dict_encoder[casilla_tmp])+ " 0\n")
+		    tmp_col+=("-"+str(dict_encoder[casilla]) + " ")
+		    tmp_col+=("-"+str(dict_encoder[casilla_tmp])+ " 0\n")
 		return clausulas
 	return 0
 
@@ -211,8 +220,8 @@ def escribir_regla_fila(fila,columna, dict_encoder, tmp_fila, valor_str):
 		    casilla_tmp = (fila,i,valor) #Cambio el valor de la columna
 		    if (casilla_tmp == casilla): continue
                     clausulas += 1
-		    tmp_fila.write("-"+str(dict_encoder[casilla]) + " ")
-		    tmp_fila.write("-"+str(dict_encoder[casilla_tmp])+ " 0\n")
+		    tmp_fila+=("-"+str(dict_encoder[casilla]) + " ")
+		    tmp_fila+=("-"+str(dict_encoder[casilla_tmp])+ " 0\n")
 		return clausulas
 	return 0
 
@@ -239,12 +248,12 @@ def escribir_regla_una_sola_casilla(fila, columna, dict_encoder, tmp_casillas, v
 	elif(valor_str in posibles_valores):
 		valor = int(valor_str)
 		casilla = (fila,columna,valor)
-		tmp_casillas.write( str(dict_encoder[casilla]) + " ")
+		tmp_casillas+=( str(dict_encoder[casilla]) + " ")
 		for i in range(1,10):
 			casilla_tmp = (fila,columna,i)
 			if (casilla_tmp == casilla): continue
-			tmp_casillas.write("-"+str(dict_encoder[casilla_tmp])+ " ")
-		tmp_casillas.write("0\n")
+			tmp_casillas+=("-"+str(dict_encoder[casilla_tmp])+ " ")
+		tmp_casillas+=("0\n")
 		return 1
 	return 0
 
@@ -257,7 +266,7 @@ def regla_columna(linea,tmp_col,dict_encoder):
 	i = 0
 	fila = 0
 	clausulas = 0
-        tmp_col.write("c Reglas Columna\n")
+        tmp_col+=("c Reglas Columna\n")
 	while (i < len(linea)):
 		columna = i % 9
 		if (columna == 0 and i != 0): fila += 1
@@ -275,7 +284,7 @@ def regla_fila(linea,tmp_fila,dict_encoder):
 	i = 0
 	fila = 0
 	clausulas = 0
-        tmp_fila.write("c Reglas Fila\n")
+        tmp_fila+=("c Reglas Fila\n")
 	while (i < len(linea)):
 		columna = i % 9
 		if (columna == 0 and i != 0): fila += 1
@@ -293,7 +302,7 @@ def regla_un_numero_casilla(linea,tmp_numero, dict_encoder):
 	i = 0
 	fila = 0
 	clausulas = 0
-        tmp_numero.write("c Reglas Cada Casilla Debe Tener un Numero\n")
+        tmp_numero+=("c Reglas Cada Casilla Debe Tener un Numero\n")
 	while (i < len(linea)):
 		columna = i % 9
 		if (columna == 0 and i != 0): fila += 1
@@ -314,7 +323,7 @@ def regla_un_solo_numero_casilla(linea, tmp_casillas, dict_encoder):
 	i = 0
 	fila = 0
 	clausulas = 0
-        tmp_casillas.write("c Reglas Un Solo Numero Por Casilla\n")
+        tmp_casillas+=("c Reglas Un Solo Numero Por Casilla\n")
 	while (i < len(linea)):
 		columna = i % 9
 		if (columna == 0 and i != 0): fila += 1
@@ -337,7 +346,7 @@ def regla_sector(linea,tmp_sector,dict_encoder, sector):
 	i = 0
 	fila = 0
 	clausulas = 0
-        tmp_sector.write("c Reglas Sector\n")
+        tmp_sector+=("c Reglas Sector\n")
 	while (i < len(linea)):
 		columna = i % 9
 		if (columna == 0 and i != 0): fila += 1
@@ -358,11 +367,13 @@ def escribir_instancia_sudoku(linea, tmp,dict_encoder, sector):
 	#if (not isinstance(linea,str)): return 
 	escribir_header(tmp)
 	num_var = len(dict_encoder)
+	''' OJO ACA
 	tmp_casillas = tempfile.NamedTemporaryFile()
 	tmp_numero	 = tempfile.NamedTemporaryFile()
 	tmp_fila	 = tempfile.NamedTemporaryFile()
 	tmp_col		 = tempfile.NamedTemporaryFile()
 	tmp_sector	 = tempfile.NamedTemporaryFile() 
+	'''
 	tmp.write("p cnf "+str(num_var)+ " ")
 	clausulas_un_numero_casilla           = regla_un_numero_casilla(linea,tmp_numero,dict_encoder)
 	clausulas_casilla                     = regla_un_solo_numero_casilla(linea,tmp_casillas, dict_encoder)
@@ -408,6 +419,7 @@ def main():
         sector = Sector()
         total = 0
 	archivo = open(nombre_archivo,"r")
+	start = time.time()
 	for linea in archivo:
             #print linea
             resultados = ""
@@ -417,13 +429,15 @@ def main():
             tmp_resultado = tempfile.NamedTemporaryFile()
 	    escribir_instancia_sudoku(linea, tmp,dict_encoder, sector)
 	    tmp.seek(0) 
-            start = time.time()
             if imprimir:
                 subprocess.call([sat_solver,"-model",tmp.name], stdout=tmp_resultado)
             else:
-                subprocess.call([sat_solver,tmp.name])
-            elapsed = time.time() - start
-            total += elapsed
+                subprocess.call([sat_solver,tmp.name])	
+	    tmp_casillas 	= ""
+	    tmp_numero	= ""
+	    tmp_fila	= ""
+	    tmp_col		= ""
+	    tmp_sector	= ""
             tmp_resultado.seek(0)
             if imprimir:
                 for linea_resultados in tmp_resultado:
@@ -434,7 +448,7 @@ def main():
                         imprimir_matriz(linea_resultados,dict_decoder)
             tmp_resultado.close()
 	    tmp.close()
-        print sat_solver+" time: " + str(total)
+        print sat_solver+" time: " + str(time.time() - start)
 
 
 if __name__ == "__main__":
