@@ -2,7 +2,7 @@
 """Codificador y decodificador para el juego de Sudoku
    en formato CNF.
    :author: Ruben
-   :version:0.6"""
+   :version:1.0"""
 import sys
 import time
 import tempfile
@@ -430,9 +430,10 @@ def main():
                         print "Instance:"+ linea
                         print "Solution: "
                         imprimir_matriz(linea_resultados,dict_decoder)
+                        print "Time: " + str(elapsed)
             tmp_resultado.close()
 	    tmp.close()
-        print sat_solver+" time: " + str(total)
+        print sat_solver+" total time: " + str(total)
 
 
 if __name__ == "__main__":
