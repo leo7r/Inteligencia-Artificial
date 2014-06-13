@@ -87,7 +87,7 @@ def escribir_en_archivo_final(tmp_cerrar,archivo):
 	   luego cierra a este.
 	   :param tmp_cerrar: Archivo temporal a cerrar.
 	   :param archivo: Archivo en el que se va a escribir."""
-	#tmp_cerrar.seek(0) #Me pongo en el principio del archivo.
+
 	for linea in tmp_cerrar:
 		archivo.write(linea)
 
@@ -96,8 +96,7 @@ def escribir_header(tmp):
 	"""Escribe un comentario inicial para cada archivo.
 	   Esta funcion no es necesaria pero se coloca para verificar la escritura.
 	   :param tmp: Archivo a escribir."""
-	#if (not isinstance(num_var,int)): return
-	#if (not isinstance(tmp,file)): return
+
 	tmp.write("c\n")
 	tmp.write("c Archivo en formato CNF para las reglas\n")
 	tmp.write("c de una instancia determinada de Sudoku.\n")
@@ -224,11 +223,6 @@ def escribir_regla_una_sola_casilla(fila, columna, dict_encoder, tmp_casillas, v
 	   :param valor_str: Valor de la casilla que se debe considerar, si este es '.' se deben colocar todos los valores numericos. 
 	   :return clausulas: Numero de clausulas escritas.
 	"""
-	#if (not isinstance(dict_encoder,dict)): return
-	#if (not isinstance(tmp_casillas,file)): return
-	#if (not isinstance(valor_str,str)): return
-	#if (not isinstance(fila,int)): return
-	#if (not isinstance(columna,int)): return
 	posibles_valores = ['1','2','3','4','5','6','7','8','9']
 	if (valor_str == "."):
 		clausulas = 0
@@ -307,9 +301,7 @@ def regla_un_solo_numero_casilla(linea, tmp_casillas, dict_encoder):
 	   :param tmp_casillas: Archivo temporal en donde se van a escribir las reglas.
 	   :param dict_encoder: Diccionario para codificar las reglas.
 	"""
-	#if (not isinstance(dict_encoder,dict)): return
-	#if (not isinstance(tmp_casillas,file)): return
-	#if (not isinstance(linea,str)): return
+
 	i = 0
 	fila = 0
 	clausulas = 0
@@ -330,9 +322,7 @@ def regla_sector(linea,tmp_sector,dict_encoder, sector):
            :param sector: Clase sector que nos indicara en que sector nos encontramos.
            :return clausulas: Numero de clausulas escritas.
 	"""
-	#if (not isinstance(dict_encoder,dict)): return
-	#if (not isinstance(tmp_casillas,file)): return
-	#if (not isinstance(linea,str)): return
+
 	i = 0
 	fila = 0
 	clausulas = 0
@@ -352,9 +342,6 @@ def escribir_instancia_sudoku(linea, tmp,dict_encoder, sector):
            :param sector: Clase que indica todos los sectores del tablero.
            :return clausulas_casilla: Retorna el numero de clausulas escritas.
         """
-	#if (not isinstance(dict_encoder,dict)): return
-	#if (not isinstance(tmp,file)): return
-	#if (not isinstance(linea,str)): return 
 	escribir_header(tmp)
 	num_var      = len(dict_encoder)
 	tmp_casillas = []
@@ -409,8 +396,7 @@ def main():
 	archivo = open(nombre_archivo,"r")
 	for linea in archivo:
             resultados = ""
-	    if (len(linea)	< 80): continue
-	    #tmp = open("prueba","w+r") 
+	    if (len(linea)	< 80): continue 
             tmp = tempfile.NamedTemporaryFile()
             tmp_resultado = tempfile.NamedTemporaryFile()
 	    escribir_instancia_sudoku(linea, tmp,dict_encoder, sector)
@@ -425,7 +411,7 @@ def main():
             tmp_resultado.seek(0)
             if imprimir:
                 for linea_resultados in tmp_resultado:
-                    if (linea_resultados[0] == "c"): continue # No me importan los comentarios
+                    if (linea_resultados[0] == "c"): continue # Se ignoran los comentarios
                     if (linea_resultados[0] == "v"): 
                         print "Instance:"+ linea
                         print "Solution: "
