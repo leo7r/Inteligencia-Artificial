@@ -37,7 +37,7 @@ class Perceptron {
     	//std::function<int(std::vector<int>,std::vector<float>)> funcion;
 
     	//Perceptron( std::vector<int> entradas , std::vector<float> pesos , std::function<int(std::vector<int>,std::vector<float>)> funcion );
-    	Perceptron(std::vector<float> pesos):pesos(pesos){}
+    	Perceptron(std::vector<float> pesos):pesos(pesos),tasa_aprendizaje(0.1){}
 		~Perceptron(){}
 		void entrenar(std::vector<Ejemplo> ejemplos , int iteraciones);
 		int procesar(std::vector<int> entrada);

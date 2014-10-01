@@ -87,7 +87,7 @@ int main(int argc, const char **argv) {
 		cout << "\n";
 	}*/
 	
-	cout << "ALGORITMO" << "\t" << " PROFUNDIDAD " << "\t" << "RESULTADO" << "\t" << "TIEMPO (SEGS)" << endl;
+	cout << "ALGORITMO" << "\t" << " PROFUNDIDAD " << "\t" << "RESULTADO" << "\t" << "TIEMPO (SEGS)\n" << endl;
 	for ( int out_depth = 33 ; out_depth >= depth ; out_depth-- ){
 	
 		clock_t begin = clock();
