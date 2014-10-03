@@ -51,6 +51,6 @@ class Perceptron {
         ~Perceptron(){}
 
         void entrenar(std::vector<Ejemplo> ejemplos , int iteraciones);
-        void gradient_descent(std::vector<Ejemplo> ejemplos, float tasa_aprendizaje_);
+        void gradient_descent(std::vector<Ejemplo> ejemplos, int iteraciones);
         int procesar(std::vector<int> entrada);
 };

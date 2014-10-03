@@ -2,15 +2,15 @@ all: main
 
 main: perceptron.o  main.o
 
-	clang++ -std=c++11 -g -o main perceptron.o main.o
+	g++ -std=c++11 -g -o main perceptron.o main.o
 
 perceptron.o: perceptron.cc perceptron.h
 
-	clang++ -std=c++11 -g -c perceptron.cc
+	g++ -std=c++11 -g -c perceptron.cc
 
 main.o: main.cc perceptron.h
 
-	clang++ -std=c++11 -g -c main.cc
+	g++ -std=c++11 -g -c main.cc
 
 clean:
 
