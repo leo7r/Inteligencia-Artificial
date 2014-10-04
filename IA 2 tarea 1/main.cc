@@ -54,10 +54,10 @@ int main(){
 	ejemplos.push_back( and4 );
 
 	Perceptron p( pesos );
+	p.tasa_aprendizaje = 0.1;	
 	p.entrenar( ejemplos , 10 );
 
 	// Prueba
-
 	std::cout << p.procesar( e1 ) << std::endl;
 	std::cout << p.procesar( e2 ) << std::endl;
 	std::cout << p.procesar( e3 ) << std::endl;
