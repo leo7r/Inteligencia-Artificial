@@ -16,51 +16,101 @@
  * =====================================================================================
  */
 #include "perceptron.h"
+#include <iostream>
 #include <stdlib.h>
 
+/** 
+ * Funcion de entrenamiento de perceptron.
+ * @param ejemplos Los ejemplos de entrenamiento (La experiencia).
+ * @param iteraciones Numero de iteraciones maximas a considerar.
+ */
 void Perceptron::entrenar(std::vector<Ejemplo> ejemplos , int iteraciones){
 	
-	float limite = 0.01;
-	int it = 0;
-	float error_total = 0.1;
+    float limite = 0.01;
+    int it = 0;
+    float error_total = 0.1;
 	
-	while ( error_total > limite && it < iteraciones ){
+    while ( error_total > limite && it < iteraciones ){
 		
-		error_total = 0;
+        error_total = 0;
+		
+	for (int i = 0 ; i < ejemplos.size() ; ++i){
+			
+	    float error = (ejemplos[i].valor_esperado - procesar(ejemplos[i].entrada));
+			
+	    for (int j=0 ; j < this->pesos.size() ; ++j ){
+	        float delta = tasa_aprendizaje*error*ejemplos[i].entrada[j];
+		this->pesos[j]+=delta;
+		//std::cout << "Peso " << j << " = " << pesos[j] << "E: " << error << " | ";
+	    }
+
+	    error_total+=abs(error);
+	}
+	it++;
+
+	std::cout << "Error total: " << error_total << " | Iters: " << it << std::endl;
+    }
+
+}
+/**
+ * Funcion que procesa una entrada y retorna el valor dado. 
+ * @param entrada La entrada a procesar
+ * @return int Retorna 1 si la sumatoria de la entrada por los pesos es mayor que 0 o -1 en caso contrario
+ */
+int Perceptron::procesar(std::vector<int> entrada){
+    if (this->pesos.size() != entrada.size()){
+        std::cerr << "Tamaños no coinciden.";
+	return 0;
+    }
+
+    float sumatoria = 0.0;
+        for(int i = 0 ; i < entrada.size() ; ++i){
+	    sumatoria+= entrada[i]*this->pesos[i];	
+    }
+
+    return sumatoria > 0 ? 1:-1;
+}
+
+
+/** 
+ * Este seria el delta
+ */
+void Perceptron::gradient_descent(std::vector<Ejemplo> ejemplos, int iteraciones){
+	
+    float limite = 0.01;
+    int it = 0;
+    float error_total = 0.1;
+	
+    while ( error_total > limite && it < iteraciones ){
+		
+        error_total = 0;
+        std::vector<float> deltas;
+        
+        for ( int ne = 0 ; ne < pesos.size() ; ne++ ){
+        	deltas.push_back(0.0);
+        }
 		
 		for (int i = 0 ; i < ejemplos.size() ; ++i){
 			
-			float error = (ejemplos[i].valor_esperado - procesar(ejemplos[i].entrada));
-			
-			//std::cout << error << std::endl;
-			//std::cin.get();
+			int o = procesar(ejemplos[i].entrada);
+			float error = ejemplos[i].valor_esperado-o;
 
-			for (int j=0 ; j < this->pesos.size() ; ++j ){
-				float delta = tasa_aprendizaje*error*ejemplos[i].entrada[j];
-				this->pesos[j]+=delta;
-				std::cout << "Peso " << j << " = " << pesos[j] << "E: " << error << " | ";
-			}
+			 for (int j=0 ; j < this->pesos.size() ; ++j ){
+		        deltas[j]+= tasa_aprendizaje*error*ejemplos[i].entrada[j];
+		    }
 
-			std::cout << std::endl;
-
-			error_total+=abs(error);
+		    error_total+=abs(error);
 		}
+
+	    for ( int j=0 ; j < this->pesos.size() ; ++j ){
+	    	pesos[j]+=deltas[j];
+	    	//std::cout << "Error: " << error << "| Peso: " << pesos[j] << std::endl;
+	    }
+
 		it++;
 
 		std::cout << "Error total: " << error_total << " | Iters: " << it << std::endl;
-	}
+    }
 
-}
-int Perceptron::procesar(std::vector<int> entrada){
-	if (this->pesos.size() != entrada.size()){
-		std::cout << "ERROR MOTHERFUCKER";
-		return 0;
-	}
 
-	float sumatoria = 0.0;
-	for(int i = 0 ; i < entrada.size() ; ++i){
-		sumatoria+= entrada[i]*this->pesos[i];	
-	}
-
-	return sumatoria > 0 ? 1:-1;
 }

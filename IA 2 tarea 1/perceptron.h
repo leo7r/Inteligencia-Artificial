@@ -20,25 +20,37 @@
 #include <iostream>
 #include <vector>
 
+/** 
+ * Clase que representa un ejemplo para poder entrenar al Perceptron
+ */
 class Ejemplo {
-	public:
-		std::vector<int> entrada;
-		int valor_esperado;
-		Ejemplo(std::vector<int> entrada, int valor_esperado):entrada(entrada),valor_esperado(valor_esperado){} //ojo recordar verificar consistencia en tamaños de vectores de entradas y pesos
-		~Ejemplo(){}
+    public:
+        std::vector<int> entrada; /* Entrada del ejemplo */
+	int valor_esperado; /* Valor esperado */
 
+        /**
+         * Constructor de ejemplo.
+         * Recordar verificar la consistencia del tamaño de los pesos.
+         */
+	Ejemplo(std::vector<int> entrada, int valor_esperado):entrada(entrada),valor_esperado(valor_esperado){} 
+
+	~Ejemplo(){}
 
 };
 
+/**
+ * Clase del Perceptron
+ */
 class Perceptron {
     public:
-    	std::vector<float> pesos;	// incluye w0
+    	std::vector<float> pesos;   /* Este peso incluye w0 */
     	float tasa_aprendizaje;
-    	//std::function<int(std::vector<int>,std::vector<float>)> funcion;
 
-    	//Perceptron( std::vector<int> entradas , std::vector<float> pesos , std::function<int(std::vector<int>,std::vector<float>)> funcion );
-    	Perceptron(std::vector<float> pesos):pesos(pesos),tasa_aprendizaje(0.1){}
-		~Perceptron(){}
-		void entrenar(std::vector<Ejemplo> ejemplos , int iteraciones);
-		int procesar(std::vector<int> entrada);
+        Perceptron(std::vector<float> pesos):pesos(pesos),tasa_aprendizaje(0.1){}
+
+        ~Perceptron(){}
+
+        void entrenar(std::vector<Ejemplo> ejemplos , int iteraciones);
+        void gradient_descent(std::vector<Ejemplo> ejemplos, int iteraciones);
+        int procesar(std::vector<int> entrada);
 };
