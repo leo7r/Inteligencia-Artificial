@@ -96,7 +96,8 @@ void Perceptron::gradient_descent(std::vector<Ejemplo> ejemplos, int iteraciones
 			float error = ejemplos[i].valor_esperado-o;
 
 			 for (int j=0 ; j < this->pesos.size() ; ++j ){
-		        deltas[j]+= tasa_aprendizaje*error*ejemplos[i].entrada[j];
+			 	//deltas[j]+= (tasa_aprendizaje/(it+1))*error*ejemplos[i].entrada[j];
+		    	deltas[j]+= tasa_aprendizaje*error*ejemplos[i].entrada[j];
 		    }
 
 		    error_total+=abs(error);

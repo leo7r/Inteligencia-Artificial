@@ -19,7 +19,7 @@
 #include "perceptron.h"
 
 #define NUM_ITERS 10
-#define TASA_A 0.05
+#define TASA_A 0.5
 
 int main(){
 
@@ -28,7 +28,8 @@ int main(){
 	pesos.push_back(0.1); // w1
 	pesos.push_back(0.1); // w2
 
-        // Aprendiendo AND
+	std::cout << "APRENDIENDO AND:\n";
+    // Aprendiendo AND
 	std::vector<int> e1,e2,e3,e4;
 	e1.push_back(1);
 	e1.push_back(0);
@@ -62,12 +63,15 @@ int main(){
 	p.gradient_descent( ejemplos , NUM_ITERS );
 
 	// Prueba
+	/*
 	std::cout << p.procesar( e1 ) << std::endl;
 	std::cout << p.procesar( e2 ) << std::endl;
 	std::cout << p.procesar( e3 ) << std::endl;
-	std::cout << p.procesar( e4 ) << std::endl;
+	std::cout << p.procesar( e4 ) << std::endl;*/
 
     // Aprendiendo OR 
+
+	std::cout << "APRENDIENDO OR:\n";
     
     int valores_ini_e1[] = { 1, 0, 0 };
     int valores_ini_e2[] = { 1, 0, 1 };
@@ -91,12 +95,16 @@ int main(){
     p_or.tasa_aprendizaje = TASA_A;
     p_or.gradient_descent(ejemplos_or, NUM_ITERS );
 
-	std::cout << p_or.procesar( e1_or ) << std::endl;
+	/*std::cout << p_or.procesar( e1_or ) << std::endl;
 	std::cout << p_or.procesar( e2_or ) << std::endl;
 	std::cout << p_or.procesar( e3_or ) << std::endl;
-	std::cout << p_or.procesar( e4_or ) << std::endl;
+	std::cout << p_or.procesar( e4_or ) << std::endl;*/
 
     //Aprendiendo XOR
+
+	//return 0;
+
+	std::cout << "APRENDIENDO XOR:\n";
 
     int valores_ini_xor_e1[] = { 1, 0, 0 };
     int valores_ini_xor_e2[] = { 1, 0, 1 };
@@ -119,11 +127,11 @@ int main(){
     Perceptron p_xor (pesos);
     p_xor.tasa_aprendizaje = TASA_A;
     p_xor.gradient_descent(ejemplos_xor, NUM_ITERS );
-
+/*
 	std::cout << p_xor.procesar( e1_xor ) << std::endl;
 	std::cout << p_xor.procesar( e2_xor ) << std::endl;
 	std::cout << p_xor.procesar( e3_xor ) << std::endl;
-	std::cout << p_xor.procesar( e4_xor ) << std::endl;
+	std::cout << p_xor.procesar( e4_xor ) << std::endl;*/
         
 	return 0;
 }
