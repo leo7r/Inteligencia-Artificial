@@ -1,0 +1,124 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+%opening
+
+\begin{document}
+
+
+\begin{flushleft}
+ Universidad Simón Bolívar\\
+ Inteligencia Artificial II\\
+ Bernardo Morales, Leonardo Ramos y Rubén Serradas\\
+\end{flushleft}
+
+\section{Resumen}
+
+Se implemento un perceptrón con distintas reglas de aprendizaje para su comparación
+y se le intento enseñar las funciones booleanas de \verb|AND|, \verb|OR| y \verb|XOR|.
+La evolución de su aprendizaje se ve reflejada mediante el error E obtenido con el número
+de iteraciones correspondiente. Los resultados obtenidos son presentados y discutidos mas adelante.
+
+
+\section{Detalles de Implementación/Experimentación}
+
+Se utilizó el lenguaje de programación C++ para la representación del perceptrón y
+la realización del programa principal de experimentos. El perceptrón se modelo mediante
+una clase con métodos relevantes para el estudio como por ejemplo \verb|entrenar|
+y \verb|procesar| que entrenaban al perceptrón y probaban los resultados obtenidos respectivamente.
+Se utilizaron como pesos iniciales 0.1 y de tasa de aprendizaje se utilizó  
+0.01, 0.1, 0.2, 0.5 y 0.99 para los experimentos. Para la primera sección de experimentos se dejó
+como numero máximo de iteraciones 10 y para la segunda 100000.
+
+\section{Presentación y discusión de los resultados}
+
+
+\subsection{Perceptrón con \emph{n} entradas}
+
+\subsubsection{Gráficas del error \emph{E}}
+
+\begin{figure}[htbp]
+  \centering
+ \includegraphics[width=0.8\textwidth]{and}
+ \caption{Gráfica de error para la función AND con una tasa de aprendizaje de 0,1. \label{and}}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+ \includegraphics[width=0.8\textwidth]{or}
+ \caption{Gráfica de error para la función OR con una tasa de aprendizaje de 0,1.\label{or}}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+ \includegraphics[width=0.8\textwidth]{xor}
+ \caption{Gráfica de error para la función XOR con una tasa de aprendizaje de 0,1.\label{xor}}
+\end{figure}
+
+A raíz de las gráficas \ref{and},\ref{or} y \ref{xor} se puede observar que las funciones \verb|AND| y \verb|OR| convergen rápidamente
+a un error aceptable, es decir, el perceptrón ``aprende'' correctamente estas funciones y se esto puede comprobar
+usando el método \verb|procesar| de nuestra clase \verb|Perceptron|. Sin embargo la función \verb|XOR| no converge
+a un error aceptable, peor aún, esta parece empeora mientras mas iteraciones pasan hasta que se estabiliza en un
+error constante. La función \verb|XOR| no puede aprenderse con un solo perceptrón pues esta es una función no separable
+linealmente.
+\newpage
+
+\subsubsection{Pruebas con distintas tasas de aprendizaje}
+
+Se realizaron pruebas para las funciones \verb|AND| y \verb|OR| con los siguientes valores para la tasa
+de aprendizaje: 0,01, 0,1, 0,2, 0,5 y 0,99. Para una tasa de aprendizaje de 0,01 las funciones  \verb|AND| y \verb|OR|
+tardan 4 y 6 iteraciones respectivamente, un resultado peor que obtenido con tasa de aprendizaje 0,1: 2 iteraciones para \verb|AND| y 4 para 
+\verb|OR| (estos resultados se puede observar en las gráficas anteriores). Con tasas de aprendizaje superior o iguales
+a 0,2 se tienen 6 iteraciones para \verb|AND| y 4 para la función \verb|OR|. Esto nos indica que cuando la constante
+es demasiado pequeña se converge ``gastando'' un cierto numero de iteraciones pues la variación de los pesos varia menos 
+pero si es muy grande el error fluctúa con mayor frecuencia lo que dificulta el aprendizaje y no asegura convergencia.
+
+\subsection{Regla de entrenamiento delta para una neurona artificial de \emph{n} entradas}
+
+\subsubsection{Gráficas del error \emph{E}}
+
+\begin{figure}[htbp]
+  \centering
+ \includegraphics[width=0.8\textwidth]{andDelta}
+ \caption{Gráfica de error para la función AND con una tasa de aprendizaje de 0,05 usando
+  la regla de entrenamiento delta. \label{andDelta}}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+ \includegraphics[width=0.8\textwidth]{orDelta}
+ \caption{Gráfica de error para la función OR con una tasa de aprendizaje de 0,05 usando
+  la regla de entrenamiento delta.\label{orDelta}} 
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+ \includegraphics[width=0.8\textwidth]{xorDelta}
+ \caption{Gráfica de error para la función XOR con una tasa de aprendizaje de 0,05 usando
+  la regla de entrenamiento delta.\label{xorDelta}}
+\end{figure}
+\newpage
+Según los resultados que se pueden ver en las gráficas 4, 5 y 6 se
+nota que la regla de entrenamiento delta obtiene resultados superiores a los obtenidos mediante la regla
+de entrenamiento del perceptrón cuando la tasa de aprendizaje es muy pequeña. Observaremos en resultados
+posteriores que con una tasa de entrenamiento mayor (0,1) obtenemos resultados peores que los obtenidos
+por el perceptrón. Por otro lado, se observa que con la función \verb|XOR| el error es constante.
+
+
+\subsubsection{Pruebas con distintas tasas de aprendizaje}
+
+Se realizaron experimentos con tasa de aprendizaje de 0.01, 0.1, 0.2, 0.5 y 0.99; para un experimento 
+se usó tasa de aprendizaje constante mientras que para otro esta era dividida según el numero de iteración.
+Al principio, el primer caso logra converger con 0.01 (con 9 y 90 iteraciones para \verb|AND| y \verb|OR|), 0.1
+(10 y 10 iteraciones para \verb|AND| y \verb|OR|) y 0.2 (6 y 6 iteraciones con \verb|AND| y \verb|OR|). Se 
+advirtió que para tasas de aprendizaje mayores o iguales a 0.313 no convergían ni \verb|AND| ni \verb|OR|.
+Usando decaimiento de la tasa de aprendizaje tenemos resultados bastante mediocres para las primeras
+tasas mas pequeñas como por ejemplo 1038 para el \verb|AND| y no convergencia para el \verb|OR|, sin embargo
+mientras mas subía la tasa menos iteraciones eran necesarias mediante este método. El error de \verb|XOR|
+se mantenía constante para el primer caso mientras que para el segundo caso este pudo reducirse a 2 lo que no
+se había observado en ningún otro experimento.
+
+
+\end{document}
