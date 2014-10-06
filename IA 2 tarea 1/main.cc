@@ -18,8 +18,8 @@
 
 #include "perceptron.h"
 
-#define NUM_ITERS 10
-#define TASA_A 0.5
+#define NUM_ITERS 1000
+#define TASA_A 0.3
 
 int main(){
 

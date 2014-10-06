@@ -53,4 +53,5 @@ class Perceptron {
         void entrenar(std::vector<Ejemplo> ejemplos , int iteraciones);
         void gradient_descent(std::vector<Ejemplo> ejemplos, int iteraciones);
         int procesar(std::vector<int> entrada);
+        float procesar_adaline(std::vector<int> entrada);
 };

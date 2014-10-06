@@ -52,6 +52,7 @@ void Perceptron::entrenar(std::vector<Ejemplo> ejemplos , int iteraciones){
     }
 
 }
+
 /**
  * Funcion que procesa una entrada y retorna el valor dado. 
  * @param entrada La entrada a procesar
@@ -69,6 +70,25 @@ int Perceptron::procesar(std::vector<int> entrada){
     }
 
     return sumatoria > 0 ? 1:-1;
+}
+
+/**
+ * Funcion que procesa una entrada y retorna el valor dado. 
+ * @param entrada La entrada a procesar
+ * @return int Retorna 1 si la sumatoria de la entrada por los pesos es mayor que 0 o -1 en caso contrario
+ */
+float Perceptron::procesar_adaline(std::vector<int> entrada){
+    if (this->pesos.size() != entrada.size()){
+        std::cerr << "Tamaños no coinciden.";
+	return 0;
+    }
+
+    float sumatoria = 0.0;
+        for(int i = 0 ; i < entrada.size() ; ++i){
+	    sumatoria+= entrada[i]*this->pesos[i];	
+    }
+
+    return sumatoria;// > 0 ? 1:-1;
 }
 
 
@@ -92,7 +112,7 @@ void Perceptron::gradient_descent(std::vector<Ejemplo> ejemplos, int iteraciones
 		
 		for (int i = 0 ; i < ejemplos.size() ; ++i){
 			
-			int o = procesar(ejemplos[i].entrada);
+			float o = procesar_adaline(ejemplos[i].entrada);
 			float error = ejemplos[i].valor_esperado-o;
 
 			 for (int j=0 ; j < this->pesos.size() ; ++j ){
