@@ -77,7 +77,7 @@ int Perceptron::procesar(std::vector<int> entrada){
  * @param entrada La entrada a procesar
  * @return int Retorna 1 si la sumatoria de la entrada por los pesos es mayor que 0 o -1 en caso contrario
  */
-float Perceptron::procesar_adaline(std::vector<int> entrada){
+float Perceptron::procesar_adaline(std::vector<float> entrada){
     if (this->pesos.size() != entrada.size()){
         std::cerr << "Tamaños no coinciden.";
 	return 0;
@@ -116,8 +116,8 @@ void Perceptron::gradient_descent(std::vector<Ejemplo> ejemplos, int iteraciones
 			float error = ejemplos[i].valor_esperado-o;
 
 			 for (int j=0 ; j < this->pesos.size() ; ++j ){
-			 	//deltas[j]+= (tasa_aprendizaje/(it+1))*error*ejemplos[i].entrada[j];
-		    	deltas[j]+= tasa_aprendizaje*error*ejemplos[i].entrada[j];
+			 	deltas[j]+= (tasa_aprendizaje/(it+1))*error*ejemplos[i].entrada[j];
+		    	//deltas[j]+= tasa_aprendizaje*error*ejemplos[i].entrada[j];
 		    }
 
 		    error_total+=abs(error);
@@ -132,6 +132,27 @@ void Perceptron::gradient_descent(std::vector<Ejemplo> ejemplos, int iteraciones
 
 		std::cout << "Error total: " << error_total << " | Iters: " << it << std::endl;
     }
+}
 
+/**
+ * Funcion que procesa una entrada para capa de neuronas y retorna los valores procesados por cada una. 
+ * @param entrada La entrada a procesar
+ * @return resultado de procesar sobre cada una de las neuronas de la capa.
+ */
+std::vector<float> Capa_red::procesar_capa(std::vector<float> entrada){
+	std::vector<float> salidas;
+	for (int i = 0 ; i < this.neuronas.size() ; ++i ){
+		salidas.push_back(this.neuronas[i].procesar_adaline(entrada));
+	}
+	return salidas;
+}
 
+std::vector<float> Red_neuronal::procesar_red(std::vector<float> capa_entrada){
+
+	std::vector<float> siguiente_entrada = capa_entrada;
+	for (int i = 0 ; i < this.capas.size() ; ++i ){
+		siguiente_entrada = this.capas[i].procesar_capa(siguiente_entrada);
+	}
+
+	return siguiente_entrada;
 }
