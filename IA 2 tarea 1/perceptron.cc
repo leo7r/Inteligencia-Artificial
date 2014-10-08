@@ -77,7 +77,7 @@ int Perceptron::procesar(std::vector<int> entrada){
  * @param entrada La entrada a procesar
  * @return int Retorna 1 si la sumatoria de la entrada por los pesos es mayor que 0 o -1 en caso contrario
  */
-float Perceptron::procesar_adaline(std::vector<float> entrada){
+float Perceptron::procesar_adaline(std::vector<int> entrada){
     if (this->pesos.size() != entrada.size()){
         std::cerr << "Tamaños no coinciden.";
 	return 0;
@@ -91,6 +91,19 @@ float Perceptron::procesar_adaline(std::vector<float> entrada){
     return sumatoria;// > 0 ? 1:-1;
 }
 
+float Perceptron::procesar_neurona(std::vector<float> entrada){
+    if (this->pesos.size() != entrada.size()){
+        std::cerr << "Tamaños no coinciden.";
+	return 0;
+    }
+
+    float sumatoria = 0.0;
+        for(int i = 0 ; i < entrada.size() ; ++i){
+	    sumatoria+= entrada[i]*this->pesos[i];	
+    }
+
+    return sumatoria;// > 0 ? 1:-1;
+}
 
 /** 
  * Este seria el delta
@@ -141,8 +154,8 @@ void Perceptron::gradient_descent(std::vector<Ejemplo> ejemplos, int iteraciones
  */
 std::vector<float> Capa_red::procesar_capa(std::vector<float> entrada){
 	std::vector<float> salidas;
-	for (int i = 0 ; i < this.neuronas.size() ; ++i ){
-		salidas.push_back(this.neuronas[i].procesar_adaline(entrada));
+	for (int i = 0 ; i < neuronas.size() ; ++i ){
+		salidas.push_back(neuronas[i].procesar_neurona(entrada));
 	}
 	return salidas;
 }
@@ -150,8 +163,8 @@ std::vector<float> Capa_red::procesar_capa(std::vector<float> entrada){
 std::vector<float> Red_neuronal::procesar_red(std::vector<float> capa_entrada){
 
 	std::vector<float> siguiente_entrada = capa_entrada;
-	for (int i = 0 ; i < this.capas.size() ; ++i ){
-		siguiente_entrada = this.capas[i].procesar_capa(siguiente_entrada);
+	for (int i = 0 ; i < capas.size() ; ++i ){
+		siguiente_entrada = capas[i].procesar_capa(siguiente_entrada);
 	}
 
 	return siguiente_entrada;

@@ -53,7 +53,8 @@ class Perceptron {
         void entrenar(std::vector<Ejemplo> ejemplos , int iteraciones);
         void gradient_descent(std::vector<Ejemplo> ejemplos, int iteraciones);
         int procesar(std::vector<int> entrada);
-        float procesar_adaline(std::vector<float> entrada);
+        float procesar_adaline(std::vector<int> entrada);
+        float procesar_neurona(std::vector<float> entrada);
 };
 
 class Capa_red {
@@ -61,7 +62,7 @@ class Capa_red {
 
         std::vector<Perceptron> neuronas;  
 
-        Capa_red(std::vector<Perceptron> neuronas):neuronas(neuronas){} //arreglar constructores URGENTE
+        Capa_red(std::vector<Perceptron> neuronas_):neuronas(neuronas_){} //arreglar constructores URGENTE
 
         ~Capa_red(){}
 
@@ -75,11 +76,11 @@ class Red_neuronal {
         std::vector<Capa_red> capas;
         
 
-        Red_neuronal(std::vector<Capa_red> capas ):capas(capas){} //arreglar constructores URGENTE
+        Red_neuronal(std::vector<Capa_red> capas_ ):capas(capas_){} //arreglar constructores URGENTE
 
         ~Red_neuronal(){}
 
         //por definir
-        float procesar_red(std::vector<float> capa_entrada);
+        std::vector<float> procesar_red(std::vector<float> capa_entrada);
         void entrenar_backpropagation(std::vector<Ejemplo> ejemplos , int iteraciones);
 };
