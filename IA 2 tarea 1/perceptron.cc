@@ -75,7 +75,7 @@ int Perceptron::procesar(std::vector<int> entrada){
 /**
  * Funcion que procesa una entrada y retorna el valor dado. 
  * @param entrada La entrada a procesar
- * @return int Retorna 1 si la sumatoria de la entrada por los pesos es mayor que 0 o -1 en caso contrario
+ * @return int Retorna sumatoria 
  */
 float Perceptron::procesar_adaline(std::vector<int> entrada){
     if (this->pesos.size() != entrada.size()){
@@ -91,6 +91,11 @@ float Perceptron::procesar_adaline(std::vector<int> entrada){
     return sumatoria;// > 0 ? 1:-1;
 }
 
+/**
+ * Funcion que procesa una entrada y retorna el valor dado. 
+ * @param entrada La entrada a procesar
+ * @return float Retorna sumatoria
+ */
 float Perceptron::procesar_neurona(std::vector<float> entrada){
     if (this->pesos.size() != entrada.size()){
         std::cerr << "Tamaños no coinciden.";
@@ -160,6 +165,11 @@ std::vector<float> Capa_red::procesar_capa(std::vector<float> entrada){
 	return salidas;
 }
 
+/**
+ * Funcion que procesa una entrada para la red neuronal y retorna los valores procesados. 
+ * @param capa_entrada La entrada a procesar
+ * @return resultado de procesar sobre toda la red neuronal .
+ */
 std::vector<float> Red_neuronal::procesar_red(std::vector<float> capa_entrada){
 
 	std::vector<float> siguiente_entrada = capa_entrada;

@@ -117,6 +117,45 @@ Error total: 4 | Iters: 8
 Error total: 4 | Iters: 9
 Error total: 4 | Iters: 10
 
+
+-tasa 0.1 
+
+APRENDIENDO AND:
+Error total: 3 | Iters: 1
+Error total: 1 | Iters: 2
+Error total: 1 | Iters: 3
+Error total: 1 | Iters: 4
+Error total: 1 | Iters: 5
+Error total: 1 | Iters: 6
+Error total: 1 | Iters: 7
+Error total: 1 | Iters: 8
+Error total: 1 | Iters: 9
+Error total: 0 | Iters: 10
+APRENDIENDO OR:
+Error total: 1 | Iters: 1
+Error total: 1 | Iters: 2
+Error total: 1 | Iters: 3
+Error total: 1 | Iters: 4
+Error total: 1 | Iters: 5
+Error total: 1 | Iters: 6
+Error total: 1 | Iters: 7
+Error total: 1 | Iters: 8
+Error total: 1 | Iters: 9
+Error total: 0 | Iters: 10
+APRENDIENDO XOR:
+Error total: 2 | Iters: 1
+Error total: 2 | Iters: 2
+Error total: 1 | Iters: 3
+Error total: 1 | Iters: 4
+Error total: 1 | Iters: 5
+Error total: 3 | Iters: 6
+Error total: 3 | Iters: 7                                                                                                                                               
+Error total: 3 | Iters: 8                                                                                                                                               
+Error total: 3 | Iters: 9                                                                                                                                               
+Error total: 3 | Iters: 10                                                                                                                                              
+Error total: 3 | Iters: 11
+
+
 2.b
 
 -tasa 0.01

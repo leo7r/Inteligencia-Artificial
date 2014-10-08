@@ -18,8 +18,13 @@
 
 #include "perceptron.h"
 
+<<<<<<< HEAD
 #define NUM_ITERS 100000
 #define TASA_A 0.99
+=======
+#define NUM_ITERS 100
+#define TASA_A 0.2
+>>>>>>> 2d11c4f95a61974a7e1805430c0e7705bc2856e8
 
 int main(){
 	int ww;
@@ -63,7 +68,7 @@ int main(){
 
 	Perceptron p( pesos );
 	p.tasa_aprendizaje = TASA_A;
-	p.gradient_descent( ejemplos , NUM_ITERS );
+	p.entrenar( ejemplos , NUM_ITERS );
 
 	// Prueba
 	/*
@@ -97,7 +102,7 @@ int main(){
     std::vector<Ejemplo> ejemplos_or (a_ejemplos_or,a_ejemplos_or + sizeof(a_ejemplos_or) / sizeof(Ejemplo));
     Perceptron p_or (pesos);
     p_or.tasa_aprendizaje = TASA_A;
-    p_or.gradient_descent(ejemplos_or, NUM_ITERS );
+    p_or.entrenar(ejemplos_or, NUM_ITERS );
 
 	/*std::cout << p_or.procesar( e1_or ) << std::endl;
 	std::cout << p_or.procesar( e2_or ) << std::endl;
@@ -130,7 +135,7 @@ int main(){
     std::vector<Ejemplo> ejemplos_xor (a_ejemplos_xor,a_ejemplos_xor + sizeof(a_ejemplos_xor) / sizeof(Ejemplo));
     Perceptron p_xor (pesos);
     p_xor.tasa_aprendizaje = TASA_A;
-    p_xor.gradient_descent(ejemplos_xor, NUM_ITERS );
+    p_xor.entrenar(ejemplos_xor, NUM_ITERS );
 /*
 	std::cout << p_xor.procesar( e1_xor ) << std::endl;
 	std::cout << p_xor.procesar( e2_xor ) << std::endl;
