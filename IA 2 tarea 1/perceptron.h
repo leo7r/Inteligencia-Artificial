@@ -38,6 +38,21 @@ class Ejemplo {
 
 };
 
+class Ejemplo_red {
+    public:
+        std::vector<float> entrada; /* Entrada del ejemplo */
+        std::vector<float> valor_esperado; /* Valor esperado */
+
+        /**
+         * Constructor de ejemplo.
+         * Recordar verificar la consistencia del tamaño de los pesos.
+         */
+    Ejemplo_red(std::vector<float> entrada, std::vector<float> valor_esperado):entrada(entrada),valor_esperado(valor_esperado){} //arreglar constructores URGENTE
+
+    ~Ejemplo_red(){}
+
+};
+
 /**
  * Clase del Perceptron
  */
@@ -82,5 +97,5 @@ class Red_neuronal {
 
         //por definir
         std::vector<float> procesar_red(std::vector<float> capa_entrada);
-        void entrenar_backpropagation(std::vector<Ejemplo> ejemplos , int iteraciones);
+        void entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , int iteraciones);
 };

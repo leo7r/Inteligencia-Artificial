@@ -18,6 +18,7 @@
 #include "perceptron.h"
 #include <iostream>
 #include <stdlib.h>
+#include <math.h>
 
 /** 
  * Funcion de entrenamiento de perceptron.
@@ -102,12 +103,12 @@ float Perceptron::procesar_neurona(std::vector<float> entrada){
 	return 0;
     }
 
-    float sumatoria = 0.0;
-        for(int i = 0 ; i < entrada.size() ; ++i){
+    float sumatoria = 0;
+    for(int i = 0 ; i < entrada.size() ; ++i){
 	    sumatoria+= entrada[i]*this->pesos[i];	
     }
 
-    return sumatoria;// > 0 ? 1:-1;
+    return 1 / ( 1 + ( exp(-sumatoria) ));// sinoidal
 }
 
 /** 
@@ -179,3 +180,86 @@ std::vector<float> Red_neuronal::procesar_red(std::vector<float> capa_entrada){
 
 	return siguiente_entrada;
 }
+
+void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , int iteraciones){
+	int curr_iter = 0;
+	//repeat
+	while(curr_iter < iteraciones ){
+		
+		std::vector<float> a_j;
+
+
+		//for each e in examples do
+		for(int e = 0 ; e < ejemplos.size() ; ++e ){
+			//for each node j in the input layer do a_j <-- x_j[e]
+			a_j = ejemplos[e].entrada;
+			std::vector<float> in;
+			//for L = 2 to M do
+			for (int i = 0 ; i < capas.size() ; ++i ){
+
+				//in_i <-- sumatoria (W[j][i]*a[j])
+				in.clear();
+				float sum = 0;
+				for (int k = 0 ; k < capas[i].neuronas.size() ; ++k ){
+					for (int p = 0; p < capas[i].neuronas[k].pesos.size(); ++p){
+						sum+= capas[i].neuronas[k].pesos[p] * a_j[p];
+					}
+					in.push_back(sum);
+				}
+
+				//a[i] <-- g(in_i)
+				a_j.clear();
+				for (int j = 0; j < in.size() ; ++j){
+					float sino = 1 / ( 1 + ( exp(-in[j]) ));// sinoidal
+					a_j.push_back(sino);
+				}
+
+			}
+
+			// for each node i in the output layer do
+			std::vector<float> delta;
+			for (int i = 0; i < capas.back().neuronas.size(); ++i){
+
+				float sino = 1 / ( 1 + ( exp(-in[i]) ));// sinoidal
+				float sino_p = sino * (1 - sino);
+				float resultado = sino_p * (ejemplos[e].valor_esperado[i] - a_j[i]);
+				delta.push_back(resultado);
+			}
+
+			// for L= M - 1 to 1 do
+			for (int i = capas.size()-1 ; i >= 0 ; --i){
+				//for each node j in layer L do
+				std::vector<float> delta_aux;
+				for (int j = 0; j < capas[i].neuronas.size(); ++j){
+					//ALERTA!!!###################
+					for (int m = 0; m < in.size(); ++m){
+						float sino = 1 / ( 1 + ( exp(-in[j]) ));// sinoidal
+						float sino_p = sino * (1 - sino);
+						float sumatoria = 0;
+						// delta[j] <-- g'(in[j]) * sumatoria(W[j][i]*delta[i])
+						for (int k = 0; k < capas[i].neuronas[j].pesos.size(); ++k){
+							sumatoria+= capas[i].neuronas[j].pesos[k] * delta[k];
+						}
+						delta_aux.push_back(sumatoria * sino_p);
+					}
+					delta = delta_aux;
+					//ALERTA!!!###################
+
+					//for each node i in layer L + 1 do
+					for (int p = 0; p < capas[i+1].neuronas.size(); ++p){
+						//W[p][i] <-- W[p][i] + alfa * a_j * delta[i]
+						for (int k = 0; k < capas[i+1].neuronas[p].pesos.size(); ++k){
+							capas[i+1].neuronas[p].pesos[k]+= capas[i+1].neuronas[p].tasa_aprendizaje * a_j[j] * delta[p] ;
+						}
+					}
+
+				}
+
+				delta = delta_aux;
+
+				
+			}
+		}
+
+	}
+}	

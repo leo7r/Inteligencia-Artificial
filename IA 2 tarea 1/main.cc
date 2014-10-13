@@ -18,13 +18,11 @@
 
 #include "perceptron.h"
 
-<<<<<<< HEAD
-#define NUM_ITERS 100000
-#define TASA_A 0.99
-=======
+
+
 #define NUM_ITERS 100
 #define TASA_A 0.2
->>>>>>> 2d11c4f95a61974a7e1805430c0e7705bc2856e8
+
 
 int main(){
 	int ww;
