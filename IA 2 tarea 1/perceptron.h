@@ -61,7 +61,12 @@ class Perceptron {
     	std::vector<float> pesos;   /* Este peso incluye w0 */
     	float tasa_aprendizaje;
 
+
+        Perceptron(){}
+
         Perceptron(std::vector<float> pesos):pesos(pesos),tasa_aprendizaje(0.1){}
+
+        Perceptron(std::vector<float> pesos, float tasa_aprendizaje_):pesos(pesos),tasa_aprendizaje(tasa_aprendizaje_){}
 
         ~Perceptron(){}
 
@@ -92,6 +97,11 @@ class Red_neuronal {
         
 
         Red_neuronal(std::vector<Capa_red> capas_ ):capas(capas_){} //arreglar constructores URGENTE
+
+        /** 
+         * Constructor que inicializa toda una red neuronal
+         */
+        Red_neuronal(int numero_entrada,std::vector<int> e_capa, float tasa_aprendizaje);
 
         ~Red_neuronal(){}
 

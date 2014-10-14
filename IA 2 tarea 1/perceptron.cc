@@ -152,6 +152,33 @@ void Perceptron::gradient_descent(std::vector<Ejemplo> ejemplos, int iteraciones
 		std::cout << "Error total: " << error_total << " | Iters: " << it << std::endl;
     }
 }
+/** 
+ * Constructor "automatico" de nuestra red neuronal
+ * @param numero_entrada Numero de entradas que va a tener la neurona. Esto es el numero de pesos que voy a inicializar.
+ * @param e_capa Indica una especificacion de las capa. Con este vector de capas nos indica el numero de capas y cuantos perceptrones posee.
+ * @param tasa_aprendizaje Es la tasa del aprendizaje 
+ */
+Red_neuronal::Red_neuronal(int numero_entrada,std::vector<int> e_capa, float tasa_aprendizaje){
+    int numero_neurona;
+    for (int i = 0; i < e_capa.size(); ++i){
+        numero_neurona = e_capa[i];
+        std::vector<Perceptron> neuronas;
+        // En este for inicializo las neuronas
+        for (int i = 0; i < numero_neurona; ++i){
+            std::vector<float> pesos;
+            pesos[0] = 1.0; //wo siempre es 1
+            for (int i = 1 ; i < numero_entrada; ++i){
+                // Genero un numero entre 1 y 10 y lo divido entre 1000 para que sea pequeño
+                pesos.push_back((rand() % 10 + 1) / 1000);
+            }
+            Perceptron* neurona_tmp = new Perceptron(pesos,tasa_aprendizaje);
+            neuronas.push_back(*neurona_tmp); 
+        }
+        Capa_red* capa_tmp = new Capa_red(neuronas);
+        capas.push_back(*capa_tmp);
+    }
+}
+
 
 /**
  * Funcion que procesa una entrada para capa de neuronas y retorna los valores procesados por cada una. 
@@ -165,6 +192,7 @@ std::vector<float> Capa_red::procesar_capa(std::vector<float> entrada){
 	}
 	return salidas;
 }
+
 
 /**
  * Funcion que procesa una entrada para la red neuronal y retorna los valores procesados. 
