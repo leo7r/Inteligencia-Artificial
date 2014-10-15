@@ -18,8 +18,8 @@
 
 #include "perceptron.h"
 
-#define NUM_ITERS 1000
-#define TASA_A 0.3
+#define NUM_ITERS 100000
+#define TASA_A 0.1
 
 int main(){
 
@@ -102,7 +102,7 @@ int main(){
 
     //Aprendiendo XOR
 
-	//return 0;
+	return 0;
 
 	std::cout << "APRENDIENDO XOR:\n";
 
