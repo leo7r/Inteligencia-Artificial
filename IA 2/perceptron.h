@@ -38,6 +38,9 @@ class Ejemplo {
 
 };
 
+/**
+ * Clase que representa un ejemplo para nuestra red.
+ */
 class Ejemplo_red {
     public:
         std::vector<float> entrada; /* Entrada del ejemplo */

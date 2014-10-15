@@ -18,24 +18,18 @@
 
 #include "perceptron.h"
 
-
-
 #define NUM_ITERS 100
 #define TASA_A 0.2
 
-
 int main(){
-	int ww;
+
 	std::vector<float> pesos;
 	pesos.push_back(0.1); // w0
 	pesos.push_back(0.1); // w1
 	pesos.push_back(0.1); // w2
 
 	std::cout << "APRENDIENDO AND:\n";
-
-    
     // Aprendiendo AND
-
 	std::vector<int> e1,e2,e3,e4;
 	e1.push_back(1);
 	e1.push_back(0);
@@ -76,7 +70,6 @@ int main(){
 	std::cout << p.procesar( e4 ) << std::endl;*/
 
     // Aprendiendo OR 
-	std::cin >> ww;
 
 	std::cout << "APRENDIENDO OR:\n";
     
@@ -108,7 +101,7 @@ int main(){
 	std::cout << p_or.procesar( e4_or ) << std::endl;*/
 
     //Aprendiendo XOR
-	std::cin >> ww ;
+
 	//return 0;
 
 	std::cout << "APRENDIENDO XOR:\n";
