@@ -1,0 +1,236 @@
+1.a
+
+APRENDIENDO AND:
+Error total: 2 | Iters: 1
+Error total: 0 | Iters: 2
+APRENDIENDO OR:
+Error total: 4 | Iters: 1
+Error total: 4 | Iters: 2
+Error total: 2 | Iters: 3
+Error total: 0 | Iters: 4
+APRENDIENDO XOR:
+Error total: 6 | Iters: 1
+Error total: 4 | Iters: 2
+Error total: 6 | Iters: 3
+Error total: 6 | Iters: 4
+Error total: 6 | Iters: 5
+Error total: 8 | Iters: 6
+Error total: 8 | Iters: 7
+Error total: 8 | Iters: 8
+Error total: 8 | Iters: 9
+Error total: 8 | Iters: 10
+
+1.b
+
+-tasa: 0.01
+
+APRENDIENDO AND:
+Error total: 6 | Iters: 1
+Error total: 6 | Iters: 2
+Error total: 4 | Iters: 3
+Error total: 0 | Iters: 4
+APRENDIENDO OR:
+Error total: 2 | Iters: 1
+Error total: 2 | Iters: 2
+Error total: 2 | Iters: 3
+Error total: 2 | Iters: 4
+Error total: 2 | Iters: 5
+Error total: 0 | Iters: 6
+
+-tasa: 0.1
+
+APRENDIENDO AND:
+Error total: 2 | Iters: 1
+Error total: 0 | Iters: 2
+APRENDIENDO OR:
+Error total: 4 | Iters: 1
+Error total: 4 | Iters: 2
+Error total: 2 | Iters: 3
+Error total: 0 | Iters: 4
+
+-tasa: 0.2
+
+APRENDIENDO AND:
+Error total: 4 | Iters: 1
+Error total: 6 | Iters: 2
+Error total: 6 | Iters: 3
+Error total: 4 | Iters: 4
+Error total: 2 | Iters: 5
+Error total: 0 | Iters: 6
+APRENDIENDO OR:
+Error total: 4 | Iters: 1
+Error total: 4 | Iters: 2
+Error total: 2 | Iters: 3
+Error total: 0 | Iters: 4
+
+-tasa: 0.5
+
+APRENDIENDO AND:
+Error total: 4 | Iters: 1
+Error total: 6 | Iters: 2
+Error total: 6 | Iters: 3
+Error total: 4 | Iters: 4
+Error total: 2 | Iters: 5
+Error total: 0 | Iters: 6
+APRENDIENDO OR:
+Error total: 4 | Iters: 1
+Error total: 4 | Iters: 2
+Error total: 2 | Iters: 3
+Error total: 0 | Iters: 4
+
+-tasa: 0.99
+
+APRENDIENDO AND:
+Error total: 4 | Iters: 1
+Error total: 6 | Iters: 2
+Error total: 6 | Iters: 3
+Error total: 4 | Iters: 4
+Error total: 2 | Iters: 5
+Error total: 0 | Iters: 6
+APRENDIENDO OR:
+Error total: 4 | Iters: 1
+Error total: 4 | Iters: 2
+Error total: 2 | Iters: 3
+Error total: 0 | Iters: 4
+
+
+2.a
+
+-tasa 0.05
+
+APRENDIENDO AND:
+Error total: 6 | Iters: 1
+Error total: 2 | Iters: 2
+Error total: 0 | Iters: 3
+APRENDIENDO OR:
+Error total: 2 | Iters: 1
+Error total: 0 | Iters: 2
+APRENDIENDO XOR:
+Error total: 4 | Iters: 1
+Error total: 4 | Iters: 2
+Error total: 4 | Iters: 3
+Error total: 4 | Iters: 4
+Error total: 4 | Iters: 5
+Error total: 4 | Iters: 6
+Error total: 4 | Iters: 7
+Error total: 4 | Iters: 8
+Error total: 4 | Iters: 9
+Error total: 4 | Iters: 10
+
+
+-tasa 0.1 
+
+APRENDIENDO AND:
+Error total: 3 | Iters: 1
+Error total: 1 | Iters: 2
+Error total: 1 | Iters: 3
+Error total: 1 | Iters: 4
+Error total: 1 | Iters: 5
+Error total: 1 | Iters: 6
+Error total: 1 | Iters: 7
+Error total: 1 | Iters: 8
+Error total: 1 | Iters: 9
+Error total: 0 | Iters: 10
+APRENDIENDO OR:
+Error total: 1 | Iters: 1
+Error total: 1 | Iters: 2
+Error total: 1 | Iters: 3
+Error total: 1 | Iters: 4
+Error total: 1 | Iters: 5
+Error total: 1 | Iters: 6
+Error total: 1 | Iters: 7
+Error total: 1 | Iters: 8
+Error total: 1 | Iters: 9
+Error total: 0 | Iters: 10
+APRENDIENDO XOR:
+Error total: 2 | Iters: 1
+Error total: 2 | Iters: 2
+Error total: 1 | Iters: 3
+Error total: 1 | Iters: 4
+Error total: 1 | Iters: 5
+Error total: 3 | Iters: 6
+Error total: 3 | Iters: 7                                                                                                                                               
+Error total: 3 | Iters: 8                                                                                                                                               
+Error total: 3 | Iters: 9                                                                                                                                               
+Error total: 3 | Iters: 10                                                                                                                                              
+Error total: 3 | Iters: 11
+
+
+2.b
+
+-tasa 0.01
+
+APRENDIENDO AND:
+Error total: 0 | Iters: 9
+APRENDIENDO OR:
+Error total: 0 | Iters: 90
+APRENDIENDO XOR:
+Error total: 4 | Iters: 100000
+
+-tasa 0.1
+
+APRENDIENDO AND:
+Error total: 0 | Iters: 10
+APRENDIENDO OR:
+Error total: 0 | Iters: 10
+APRENDIENDO XOR:
+Error total: 4 | Iters: 100000
+-tasa 0.2
+
+APRENDIENDO AND:
+Error total: 0 | Iters: 6
+APRENDIENDO OR:
+Error total: 0 | Iters: 6
+APRENDIENDO XOR:
+Error total: 4 | Iters: 100000
+
+tasas de aprendizaje mayores a 0.313 aproximadamente en nuestro algoritmo dejan de converger.
+
+
+
+2.b usando decaimiento de la tasa
+
+-tasa 0.01
+
+APRENDIENDO AND:
+Error total: 0 | Iters: 1038
+APRENDIENDO OR:
+Error total: 1 | Iters: 100000
+APRENDIENDO XOR:
+Error total: 2 | Iters: 100000
+
+-tasa 0.1
+
+APRENDIENDO AND:
+Error total: 0 | Iters: 4420
+APRENDIENDO OR:
+Error total: 0 | Iters: 3852
+APRENDIENDO XOR:
+Error total: 3 | Iters: 100000
+
+-tasa 0.2
+
+APRENDIENDO AND:
+Error total: 0 | Iters: 49
+APR0NDIENDO OR7
+Error total: 0 | Iters: 45
+APRENDIENDO XOR:
+Error total: 3 | Iters: 100000
+
+-tasa 0.5
+
+APRENDIENDO AND:
+Error total: 0 | Iters: 5
+APRENDIENDO OR:
+Error total: 0 | Iters: 3
+APRENDIENDO XOR:
+Error total: 3 | Iters: 100000
+
+-tasa 0.99
+
+APRENDIENDO AND:
+Error total: 0 | Iters: 7
+APRENDIENDO OR:
+Error total: 0 | Iters: 7
+APRENDIENDO XOR:
+Error total: 3 | Iters: 100000
