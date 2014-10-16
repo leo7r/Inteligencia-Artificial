@@ -80,6 +80,7 @@ int main(int argc,char *argv[]){
         std::vector<std::string> tok = split( line , ' ' );
 
         std::vector<float> entradas;
+        //entradas.push_back( 1.0 );
         entradas.push_back( atof( tok[0].c_str() ) );
         entradas.push_back( atof( tok[1].c_str() ) );
 
