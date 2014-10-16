@@ -222,104 +222,85 @@ std::vector<float> Red_neuronal::procesar_red(std::vector<float> capa_entrada){
 
 	return siguiente_entrada;
 }
-
+/** 
+ * Algoritmo de entrenamiento de backpropagation.
+ *
+ * Este esta basado principalmente en el algoritmo del Mitchell de Machine Learning.
+ * Pagina 98 (110 en el pdf). 
+ * Faltan pruebas.
+ *
+ * @param ejemplos Un vector que contiene los ejemplos para el entrenamiento con el valor esperado.
+ * @param iteraciones Numero de iteraciones maximo.
+ */
 void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , int iteraciones){
-    
-    int curr_iter = 0;
-    float error_total = 101;
+    int i = 0;
+    float error_total;
 
-    //repeat
-    while(curr_iter < iteraciones && error_total >= 100 ){
-		
-        std::vector<float> a_j;
+    do{
+        // Itero para cada ejemplo de entrenamiento.                        
         error_total = 0;
-        //std::cout << "Iteracion " << curr_iter << std::endl;
+        for (int ejemplo = 0; ejemplo < ejemplos.size() ; ++ejemplo){
+        
 
-        //for each e in examples do
-        for(int e = 0 ; e < ejemplos.size() ; ++e ){
+            std::vector<float> entradas = ejemplos[ejemplo].entrada;
+            float valor_esperado = ejemplos[ejemplo].valor_esperado[0]; // El valor esperado puede ser solo uno. Cambiar esto.
 
-        	//std::cout << "Ejemplo " << e << std::endl;
+            // Propagar el input hacia delante.
+            // Empiezo por la capa numero 1 pues la capa 0 es solo 
+            // representativa.
+            for (int capa = 1; capa < capas.size(); ++capa){
+                for (int neurona = 0; neurona < capas[capa].neuronas.size(); ++neurona){
+                    for (int p = 0; p < capas[capa].neuronas[neurona].pesos.size(); ++p){
 
-	        //for each node j in the input layer do a_j <-- x_j[e]
-			a_j = ejemplos[e].entrada;
-			std::vector<float> in;
-			//for L = 2 to M do
-			for (int i = 1 ; i < capas.size() ; ++i ){
+                        Perceptron neurona_tmp = capas[capa].neuronas[neurona];
+                        float peso = capas[capa].neuronas[neurona].pesos[p];
 
-			    //in_i <-- sumatoria (W[j][i]*a[j])
-			    in.clear();
-			    float sum = 0;
-			    for (int k = 0 ; k < capas[i].neuronas.size() ; ++k ){
-			        for (int p = 0; p < capas[i].neuronas[k].pesos.size(); ++p){
-			        float peso1 = capas[i].neuronas[k].pesos[p];
-				    sum+= peso1 * a_j[p];
-				}
-				in.push_back(sum);
-			    }
+                        neurona_tmp.output = peso * entradas[p]; // Guardo en cada neurona el valor de su output
+                    }
+                }
+            }
 
-			    //a[i] <-- g(in_i)
-			    a_j.clear();
-			    for (int j = 0; j < in.size() ; ++j){
-			        float sino = 1 / ( 1 + ( exp(-in[j]) ));// sinoidal
-				    a_j.push_back(sino);
-				}
+            // Propagar el error hacia atras a travez de la red.
+            
+            // Calcular el error de las neuronas "output".
+            int final_ = capas.size() - 1;
+            for (int neurona = 0 ; neurona < capas[final_].neuronas.size(); ++neurona){ //Aqui es capa.size() - 1 porque son las finales siempre
+                Perceptron neurona_tmp = capas[final_].neuronas[neurona];
+                neurona_tmp.error = neurona_tmp.output * ( 1 - neurona_tmp.output) * (valor_esperado - neurona_tmp.output);
+                error_total += neurona_tmp.error;
+            }
 
-			}
+            // Calculo el error de todas las neuronas escondidas (hidden units)
+            // Me voy moviendo de alante para atras.
+            // Recordar que la capa input no es modificada. No es usada en nuestra implementacion.
+           for ( int capa = capas.size() - 2 ; capa >= 1  ; --capa){
+               for ( int neurona = 0; neurona < capas[capa].neuronas.size(); ++neurona){
+                    Perceptron neurona_tmp = capas[capa].neuronas[neurona];
+                    float sumatoria = capas[capa + 1].sum_peso_output(neurona_tmp.pesos);         
+                    neurona_tmp.error = neurona_tmp.output * (1 - neurona_tmp.output) * sumatoria;
+                    error_total += neurona_tmp.error;
+               }
+           }
 
-			// for each node i in the output layer do
-			std::vector<float> delta;
-			for (int i = 0; i < capas.back().neuronas.size(); ++i){
-			    float sino = 1 / ( 1 + ( exp(-in[i]) ));// sinoidal
-			    float sino_p = sino * (1 - sino);
+           // Actualizo el peso de las neuronas.
+           std::vector<float> nuevo_peso;
+           nuevo_peso.push_back(1.0); // w0 siempre es 1.
 
-			    //int valor_real = a_j[i] > 0.5 ? 1 : -1;
+            for (int capa = 1; capa < capas.size(); ++capa){
+                for (int neurona = 0; neurona < capas[capa].neuronas.size(); ++neurona){
+                    for (int p = 1; p < capas[capa].neuronas[neurona].pesos.size(); ++p){ // El peso 0 no es necesario actualizarlo. Siempre es 1.
 
-			    float error = ejemplos[e].valor_esperado[i] - a_j[i];
-			    float resultado = sino_p * ( error );
-
-			    //std::cout << "O = " << valor_real << " | Esperado = " << ejemplos[e].valor_esperado[i] << std::endl;
-
-			    error_total += (error >= 0 ? error : -error);
-
-			    delta.push_back(resultado);
-			}
-
-			// for L= M - 1 to 1 do
-			for (int i = capas.size()-2 ; i >= 0 ; --i){
-
-			    //for each node j in layer L do
-			    std::vector<float> delta_aux;
-			    for (int j = 0; j < capas[i].neuronas.size(); ++j){
-			        //ALERTA!!!###################
-					float sino = 1 / ( 1 + ( exp(-in[i]) ));// sinoidal
-			    	float sino_p = sino * (1 - sino);
-			    	
-					//ALERTA!!!###################
-
-			        //for each node i in layer L + 1 do
-			        for (int p = 0; p < capas[i+1].neuronas.size(); ++p){
-				
-			            //W[p][i] <-- W[p][i] + alfa * a_j * delta[i]
-					    for (int k = 1; k < capas[i+1].neuronas[p].pesos.size(); ++k){
-					    	//std::cout << "Peso antiguo " << k << " en neurona " << p << "de la capa " << i+1 << " es: " << capas[i+1].neuronas[p].pesos[k] << std::endl;
-					        capas[i+1].neuronas[p].pesos[k]+= capas[i+1].neuronas[p].tasa_aprendizaje * a_j[j] * delta[p] ;
-					    	//std::cout << "Peso " << k << " en neurona " << p << "de la capa " << i+1 << " es: " << capas[i+1].neuronas[p].pesos[k] << std::endl;
-					    }
-
-			        }
-
-			        //std::cin.get();
-
-			    }
-
-			    delta = delta_aux;
-					
-			}
+                        Perceptron neurona_tmp = capas[capa].neuronas[neurona];
+                        float peso_viejo = capas[capa].neuronas[neurona].pesos[p];
+                        float delta = neurona_tmp.tasa_aprendizaje * neurona_tmp.error * entradas[p];
+                        nuevo_peso.push_back(peso_viejo + delta);
+                    }
+                }
+            }
+            
         }
-
-        std::cout << "Error total: " << error_total << std::endl;
-        curr_iter++;
-    }
+        i++;
+    } while (i < iteraciones && error_total >= 100 );
 }	
 
 void Red_neuronal::probar_red( ){

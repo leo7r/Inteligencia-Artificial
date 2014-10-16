@@ -63,6 +63,8 @@ class Perceptron {
     public:
     	std::vector<float> pesos;   /* Este peso incluye w0 */
     	float tasa_aprendizaje;
+        float output; //Estos son valores para neuronas. Seria bueno cambiarle el nombre o mejorar esta clase.
+        float error;
 
 
         Perceptron(){}
@@ -91,6 +93,22 @@ class Capa_red {
 
         //por definir
         std::vector<float> procesar_capa(std::vector<float> entrada);
+
+        /** 
+         * Funcion que hace la sumatoria de la formula T4.4 del libro de Mitchell
+         * Multiplica los pesos de la neurona anterior por los output de las neuronas de la capa frontal.
+         * @param pesos Son los pesos de la neurona anterior
+         * @return sumatoria Sumatoria de la multiplicacion.
+         */
+        float sum_peso_output(std::vector<float> pesos){
+            float sumatoria = 0;
+            for (int i = 0; i < neuronas.size(); ++i){
+                for (int j = 0 ; j < pesos.size() ; ++j){
+                    sumatoria += neuronas[i].output * pesos[j];
+                }
+            }
+            return sumatoria;
+        }
 };
 
 class Red_neuronal {
