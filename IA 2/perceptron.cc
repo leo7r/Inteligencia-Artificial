@@ -321,10 +321,11 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
             
         }
         i++;
-        std::cout << error_total << std::endl;
+        //std::cout << error_total << std::endl;
 
-    } while (i < iteraciones && error_total >= 0.001 );
-    std::cout << error_total << std::endl;
+    } while (i < iteraciones && error_total >= 0.01 );
+    std::cout << "Error Total: " << error_total << std::endl;
+    std::cout << "Iteraciones dadas: " << i << std::endl;
 }	
 
 void Red_neuronal::probar_red( ){
