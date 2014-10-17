@@ -252,7 +252,7 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
         // Itero para cada ejemplo de entrenamiento.                        
         error_total = 0;
         for (int ejemplo = 0; ejemplo < ejemplos.size() ; ++ejemplo){
-            
+            float error; 
             float valor_esperado = ejemplos[ejemplo].valor_esperado[0]; // Nuestro valor esperado solo tiene uno.
 
             // Seteando las neuronas iniciales
@@ -261,11 +261,7 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
             }
 
             std::vector<float> res = procesar_red( ejemplos[ejemplo].entrada );
-            printvector(res);
-            probar_red();
 
-            //std::cout << "output "<< entradas[0] <<std::endl;
-            std::cin.get();
 
 
             // Propagar el error hacia atras a travez de la red.
@@ -274,8 +270,9 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
 
             int final_ = capas.size() - 1;
             for (int neurona = 0 ; neurona < capas[final_].neuronas.size(); ++neurona){ //Aqui es capa.size() - 1 porque son las finales siempre
-                float error = capas[final_].neuronas[neurona].output * ( 1 - capas[final_].neuronas[neurona].output ) * ( valor_esperado - capas[final_].neuronas[neurona].output );
-                capas[final_].neuronas[neurona].error = error;
+                error = capas[final_].neuronas[neurona].output * ( 1 - capas[final_].neuronas[neurona].output ) * ( valor_esperado - capas[final_].neuronas[neurona].output );
+                capas[final_].neuronas[neurona].error = ( error >= 0 ? error : -error);
+                error_total += ( error >= 0 ? error : -error);
             }
 
             // Calculo el error de todas las neuronas escondidas (hidden units)
@@ -290,8 +287,9 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
                         sumatoria+= capas[final_].neuronas[i].pesos[neurona+1]*capas[final_].neuronas[i].error;
                     }
 
-                    float error = capas[capa].neuronas[neurona].output * ( 1 - capas[capa].neuronas[neurona].output ) * sumatoria;
-                    capas[capa].neuronas[neurona].error = error;
+                    error = capas[capa].neuronas[neurona].output * ( 1 - capas[capa].neuronas[neurona].output ) * sumatoria;
+                    capas[capa].neuronas[neurona].error = ( error >= 0 ? error : -error);
+                    error_total += ( error >= 0 ? error : -error);
                }
            }
 
@@ -323,8 +321,10 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
             
         }
         i++;
+        std::cout << error_total << std::endl;
 
-    } while (i < iteraciones && error_total >= 100 );
+    } while (i < iteraciones && error_total >= 0.001 );
+    std::cout << error_total << std::endl;
 }	
 
 void Red_neuronal::probar_red( ){
