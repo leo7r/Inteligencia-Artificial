@@ -23,6 +23,17 @@
 #include <vector>
 #include <stdlib.h>
 
+/**
+ * Funcion que imprime una salida de vector
+ */
+void imprimir_salida(std::vector<float> salida){
+    for (int i = 0; i < salida.size(); ++i){
+        std::cout << salida[i] << " "; 
+    }
+}
+
+
+
 /** 
  * Función que imprime un mensaje de ayuda.
  */
@@ -77,10 +88,10 @@ int main(int argc,char *argv[]){
         tamano_capas.push_back(i);
         tamano_capas.push_back(1);
 
-        Red_neuronal red( tamano_capas , 0.01 );
+        Red_neuronal red( tamano_capas , 0.1 );
         std::vector<Ejemplo_red> ejemplos;
 
-        std::cout << "Entrenando con " << i << " capas" <<  std::endl;
+        std::cout << "Entrenando con " << i << " neuronas escondidas" <<  std::endl;
         while ( getline (file,line) ){
 
             std::vector<std::string> tok = split( line , ' ' );
@@ -91,7 +102,8 @@ int main(int argc,char *argv[]){
             entradas.push_back( atof( tok[1].c_str() ) );
 
             std::vector<float> salidas;
-            salidas.push_back( atof( tok[2].c_str() ) );
+            float salida = atof( tok[2].c_str() );
+            salidas.push_back( salida  );
 
             ejemplos.push_back( Ejemplo_red( entradas , salidas ) );
 
@@ -99,17 +111,38 @@ int main(int argc,char *argv[]){
         }
 
         //red.probar_red();
-        red.entrenar_backpropagation( ejemplos , 100000 );
+        red.entrenar_backpropagation( ejemplos , 100000000 );
         file.close();
 
         if (argc > 2){
             file_procesamiento.open(argv[2]);
 
+            if (file_procesamiento.is_open()){
+
+                while ( getline (file_procesamiento,line) ){
+                    std::vector<std::string> tok = split( line , ' ' );
+                    std::vector<float> entradas;
+                    entradas.push_back( atof( tok[0].c_str() ) );
+                    entradas.push_back( atof( tok[1].c_str() ) );
+
+                    std::vector<float> salidas;
+                    float salida = atof( tok[2].c_str() );
+                    salidas.push_back(  salida  );
+
+                    //ejemplos.push_back( Ejemplo_red( entradas , salidas ) );
+                    
+                    std::vector<float> salida_red = red.procesar_red(entradas);
+                    std::cout << "Salida Red: ";
+                    imprimir_salida(salida_red);
+
+                    std::cout << " Salida Archivo: ";
+                    imprimir_salida(salidas);
+                    std::cout << std::endl;
+                }
+                file_procesamiento.close();
+            }
         }
 
-        if (file_procesamiento.is_open()){
-            std::cout << "entre" ;
-        }
-    }
+   }
     return 0;
 }

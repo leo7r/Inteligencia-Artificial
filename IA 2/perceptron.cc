@@ -271,8 +271,7 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
             int final_ = capas.size() - 1;
             for (int neurona = 0 ; neurona < capas[final_].neuronas.size(); ++neurona){ //Aqui es capa.size() - 1 porque son las finales siempre
                 error = capas[final_].neuronas[neurona].output * ( 1 - capas[final_].neuronas[neurona].output ) * ( valor_esperado - capas[final_].neuronas[neurona].output );
-                capas[final_].neuronas[neurona].error = ( error >= 0 ? error : -error);
-                error_total += ( error >= 0 ? error : -error);
+                capas[final_].neuronas[neurona].error = error;
             }
 
             // Calculo el error de todas las neuronas escondidas (hidden units)
@@ -288,8 +287,7 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
                     }
 
                     error = capas[capa].neuronas[neurona].output * ( 1 - capas[capa].neuronas[neurona].output ) * sumatoria;
-                    capas[capa].neuronas[neurona].error = ( error >= 0 ? error : -error);
-                    error_total += ( error >= 0 ? error : -error);
+                    capas[capa].neuronas[neurona].error = error;
                }
            }
 
@@ -318,12 +316,19 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
                 }
 
            }
+
+           for (int capa = 1; capa < capas.size(); ++capa){
+               for (int neurona = 0 ; neurona < capas[capa].neuronas.size(); ++neurona){
+                   error_total += (valor_esperado - capas[capa].neuronas[neurona].output)* (valor_esperado - capas[capa].neuronas[neurona].output);
+               }
+           }
+           error_total = error_total/2;
             
         }
         i++;
         //std::cout << error_total << std::endl;
 
-    } while (i < iteraciones && error_total >= 0.01 );
+    } while (i < iteraciones && error_total >= 0.1 );
     std::cout << "Error Total: " << error_total << std::endl;
     std::cout << "Iteraciones dadas: " << i << std::endl;
 }	
