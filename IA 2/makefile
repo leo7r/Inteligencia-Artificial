@@ -1,8 +1,16 @@
 all: main
 
-main: perceptron.o  main.o
+main: punto iris
 
-	g++ -std=c++11 -g -o main perceptron.o main.o
+	
+
+punto: perceptron.o  main.o
+
+	g++ -std=c++11 -g -o punto perceptron.o main.o
+	
+iris: perceptron.o iris.o
+
+	g++ -std=c++11 -g -o iris perceptron.o iris.o
 
 perceptron.o: perceptron.cc perceptron.h
 
@@ -11,7 +19,11 @@ perceptron.o: perceptron.cc perceptron.h
 main.o: main.cc perceptron.h
 
 	g++ -std=c++11 -g -c main.cc
+	
+iris.o: iris.cc perceptron.h
+
+	g++ -std=c++11 -g -c iris.cc
 
 clean:
 
-	rm *.o *.exe main
+	rm *.o *.exe punto iris

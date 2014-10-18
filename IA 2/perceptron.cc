@@ -216,11 +216,9 @@ std::vector<float> Red_neuronal::procesar_red(std::vector<float> capa_entrada){
 
 	std::vector<float> siguiente_entrada = capa_entrada;
 	for (int i = 1 ; i < capas.size() ; ++i ){
-
-        siguiente_entrada.insert(siguiente_entrada.begin(),1.0); // Esto es el x0 que es 1 siempre
-		siguiente_entrada = capas[i].procesar_capa(siguiente_entrada);
+            siguiente_entrada.insert(siguiente_entrada.begin(),1.0); // Esto es el x0 que es 1 siempre
+	    siguiente_entrada = capas[i].procesar_capa(siguiente_entrada);
 	}
-
 	return siguiente_entrada;
 }
 
@@ -280,7 +278,7 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
 
             // Calculo el error de todas las neuronas escondidas (hidden units)
             // Me voy moviendo de alante para atras.
-            // Recordar que la capa input no es modificada. No es usada en nuestra implementacion.
+            // Recordar que la capa input no es modificada.
            for ( int capa = capas.size() - 2 ; capa > 0  ; --capa){
                for ( int neurona = 0; neurona < capas[capa].neuronas.size(); ++neurona){
 
@@ -307,10 +305,10 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
                         float delta;
 
                         if ( p == 0 ){
-                            delta = capas[capa].neuronas[neurona].tasa_aprendizaje * capas[capa].neuronas[neurona].error; // SIempre x0 es 1
+                            delta = (float) capas[capa].neuronas[neurona].tasa_aprendizaje * (float) capas[capa].neuronas[neurona].error; // SIempre x0 es 1
                         }
                         else{
-                            delta = capas[capa].neuronas[neurona].tasa_aprendizaje * capas[capa].neuronas[neurona].error * capas[capa-1].neuronas[p-1].output;
+                            delta = (float) capas[capa].neuronas[neurona].tasa_aprendizaje * (float) capas[capa].neuronas[neurona].error * (float) capas[capa-1].neuronas[p-1].output;
                         }
 
                         capas[capa].neuronas[neurona].pesos[p]+=delta;
