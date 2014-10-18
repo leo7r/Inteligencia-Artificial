@@ -22,6 +22,7 @@
 #include <sstream>
 #include <vector>
 #include <stdlib.h>
+#include <math.h>
 
 /**
  * Funcion que imprime una salida de vector
@@ -62,8 +63,6 @@ int main(int argc,char *argv[]){
     std::ifstream file;
     std::ifstream file_procesamiento;
     std::string line;
-
-
     
     /** 
      * Comienzo a parsear cada una de las
@@ -107,7 +106,8 @@ int main(int argc,char *argv[]){
 
             std::vector<float> salidas;
             float salida = atof( tok[2].c_str() );
-            salidas.push_back( salida  );
+
+            salidas.push_back( salida == -1 ? 0:salida );
 
             ejemplos.push_back( Ejemplo_red( entradas , salidas ) );
 
@@ -115,7 +115,8 @@ int main(int argc,char *argv[]){
         }
 
         //red.probar_red();
-        red.entrenar_backpropagation( ejemplos , 10000 );
+        red.entrenar_backpropagation( ejemplos , 500 );
+
         file.close();
 
         if (argc > 2){
@@ -123,6 +124,8 @@ int main(int argc,char *argv[]){
 
             if (file_procesamiento.is_open()){
 
+                float error_total = 0;
+                
                 while ( getline (file_procesamiento,line) ){
                     std::vector<std::string> tok = split( line , ' ' );
                     std::vector<float> entradas;
@@ -131,18 +134,30 @@ int main(int argc,char *argv[]){
 
                     std::vector<float> salidas;
                     float salida = atof( tok[2].c_str() );
-                    salidas.push_back(  salida  );
+                    salidas.push_back(  salida == -1 ? 0:salida  );
 
                     //ejemplos.push_back( Ejemplo_red( entradas , salidas ) );
                     
                     std::vector<float> salida_red = red.procesar_red(entradas);
-                    std::cout << "Salida Red: ";
+
+                    for( int ultimas = 0 ; ultimas < salida_red.size() ; ultimas++ ){
+                        int step_o = salida_red[ultimas] > 0.0 ? 1:0;
+
+                        if ( step_o != salidas[ultimas] ){
+                            error_total++;
+                        }
+                   }
+
+                    /*std::cout << "Salida Red: ";
                     imprimir_salida(salida_red);
 
                     std::cout << " Salida Archivo: ";
                     imprimir_salida(salidas);
-                    std::cout << std::endl;
+                    std::cout << std::endl;*/
                 }
+
+                std::cout << "El error del test es: " << error_total;
+
                 std::cin.get();
                 file_procesamiento.close();
             }

@@ -116,6 +116,7 @@ class Red_neuronal {
         //no necesita capa entrada (analogo a perceptron)
         std::vector<Capa_red> capas;
         
+        Red_neuronal(){}
 
         Red_neuronal(std::vector<Capa_red> capas_ ):capas(capas_){} //arreglar constructores URGENTE
 

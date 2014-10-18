@@ -108,7 +108,11 @@ float Perceptron::procesar_neurona(std::vector<float> entrada){
     for(int i = 0 ; i < entrada.size() ; ++i){
 	    sumatoria+= entrada[i]*this->pesos[i];	
     }
-    this->output=1 / ( 1 + ( exp(-sumatoria) ));
+    
+    //this->output=1 / ( 1 + ( exp(-sumatoria) ));
+    // Probando con tanh
+    this->output = tanh(sumatoria);
+
     return this->output;// sinoidal
 }
 
@@ -206,6 +210,14 @@ std::vector<float> Capa_red::procesar_capa(std::vector<float> entrada){
 	return salidas;
 }
 
+void printvector(std::vector<float> in){
+    std::string out = "";
+    for (int i = 0; i < in.size(); ++i)
+    {
+        std::cout <<"("<<in[i]<<")";
+    }
+}
+
 
 /**
  * Funcion que procesa una entrada para la red neuronal y retorna los valores procesados. 
@@ -218,6 +230,11 @@ std::vector<float> Red_neuronal::procesar_red(std::vector<float> capa_entrada){
 	for (int i = 1 ; i < capas.size() ; ++i ){
 
         siguiente_entrada.insert(siguiente_entrada.begin(),1.0); // Esto es el x0 que es 1 siempre
+
+        printvector(siguiente_entrada);
+        probar_red();
+        std::cin.get();
+
 		siguiente_entrada = capas[i].procesar_capa(siguiente_entrada);
 	}
 
@@ -227,13 +244,6 @@ std::vector<float> Red_neuronal::procesar_red(std::vector<float> capa_entrada){
 
 
 
-void printvector(std::vector<float> in){
-    std::string out = "";
-    for (int i = 0; i < in.size(); ++i)
-    {
-        std::cout <<"-"<<in[i]<<"-";
-    }
-}
 
 
 /** 
@@ -277,7 +287,9 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
 
             int final_ = capas.size() - 1;
             for (int neurona = 0 ; neurona < capas[final_].neuronas.size(); ++neurona){ //Aqui es capa.size() - 1 porque son las finales siempre
-                error = capas[final_].neuronas[neurona].output * ( 1 - capas[final_].neuronas[neurona].output ) * ( valor_esperado - capas[final_].neuronas[neurona].output );
+                //error = capas[final_].neuronas[neurona].output * ( 1 - capas[final_].neuronas[neurona].output ) * ( valor_esperado - capas[final_].neuronas[neurona].output );
+                error = (1-pow(capas[final_].neuronas[neurona].output,2)) * ( valor_esperado - capas[final_].neuronas[neurona].output );
+
                 capas[final_].neuronas[neurona].error = error;
             }
 
@@ -293,7 +305,8 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
                         sumatoria+= capas[final_].neuronas[i].pesos[neurona+1]*capas[final_].neuronas[i].error;
                     }
 
-                    error = capas[capa].neuronas[neurona].output * ( 1 - capas[capa].neuronas[neurona].output ) * sumatoria;
+                    error = (1-pow(capas[capa].neuronas[neurona].output,2)) * sumatoria;
+                    //error = capas[capa].neuronas[neurona].output * ( 1 - capas[capa].neuronas[neurona].output ) * sumatoria;
                     capas[capa].neuronas[neurona].error = error;
                }
            }
@@ -315,6 +328,8 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
                         else{
                             delta = capas[capa].neuronas[neurona].tasa_aprendizaje * capas[capa].neuronas[neurona].error * capas[capa-1].neuronas[p-1].output;
                         }
+
+                        //std::cout << "Delta: "<< delta << std::endl;
 
                         capas[capa].neuronas[neurona].pesos[p]+=delta;
                     }
@@ -350,7 +365,12 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
             
         }
         i++;
-        std::cout << "error : " << error_total << std::endl;
+
+        probar_red();
+        std::cin.get();
+
+        //std::cout << capas[2].neuronas[0].output << "\n";
+        //std::cout << "error : " << error_total << std::endl;
         float porcentaje = ( (float) i / (float) iteraciones) * 100.0 ;
         //std::cout << "porcentaje: " << porcentaje << std::endl;
 
@@ -360,6 +380,7 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
     //std::cout << "Error Inicial: " << error_inicial << std::endl;
     std::cout << "Error Total: " << error_total << std::endl;
     std::cout << "Iteraciones dadas: " << i << std::endl;
+    //probar_red();
     std::cin.get();
 }	
 
