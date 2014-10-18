@@ -179,7 +179,9 @@ Red_neuronal::Red_neuronal(std::vector<int> e_capa, float tasa_aprendizaje){
             std::vector<float> pesos;
 
             for (int p = 0; p < e_capa[i-1]+1 ; ++p){
-                pesos.push_back( 0.1 );
+                float valor = (rand() % 5 + 1) / 10.0;
+                valor = ( (rand() % 10 + 1) > 5 ? -valor : valor); //Valor entre 0.5 y -0.5
+                pesos.push_back( valor );
             }
 
             neuronas.push_back( Perceptron( pesos , tasa_aprendizaje ) );
@@ -247,6 +249,8 @@ void printvector(std::vector<float> in){
 void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , int iteraciones){
     int i = 0;
     float error_total;
+    float error_inicial;
+    float error_final;
 
     do{
         // Itero para cada ejemplo de entrenamiento.                        
@@ -302,12 +306,12 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
 
                         float delta;
 
-                        if ( p == 0 ){
-                            delta = capas[capa].neuronas[neurona].tasa_aprendizaje * capas[capa].neuronas[neurona].error; // SIempre x0 es 1
-                        }
-                        else{
+                        //if ( p == 0 ){
+                          //  delta = capas[capa].neuronas[neurona].tasa_aprendizaje * capas[capa].neuronas[neurona].error; // SIempre x0 es 1
+                        //}
+                        //else{
                             delta = capas[capa].neuronas[neurona].tasa_aprendizaje * capas[capa].neuronas[neurona].error * capas[capa-1].neuronas[p-1].output;
-                        }
+                        //}
 
                         capas[capa].neuronas[neurona].pesos[p]+=delta;
                     }
@@ -323,14 +327,20 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
                }
            }
            error_total = error_total/2;
+           if (i == 0){
+               error_inicial = error_total;
+           }
             
         }
         i++;
-        //std::cout << error_total << std::endl;
-
+        std::cout << "error : " << error_total << std::endl;
+        float porcentaje = ( (float) i / (float) iteraciones) * 100.0 ;
+        std::cout << "porcentaje: " << porcentaje << std::endl;
     } while (i < iteraciones && error_total >= 0.1 );
+    std::cout << "Error Inicial: " << error_inicial << std::endl;
     std::cout << "Error Total: " << error_total << std::endl;
     std::cout << "Iteraciones dadas: " << i << std::endl;
+    std::cin.get();
 }	
 
 void Red_neuronal::probar_red( ){

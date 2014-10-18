@@ -88,7 +88,7 @@ int main(int argc,char *argv[]){
         tamano_capas.push_back(i);
         tamano_capas.push_back(1);
 
-        Red_neuronal red( tamano_capas , 0.1 );
+        Red_neuronal red( tamano_capas , 0.05 );
         std::vector<Ejemplo_red> ejemplos;
 
         std::cout << "Entrenando con " << i << " neuronas escondidas" <<  std::endl;
@@ -111,7 +111,7 @@ int main(int argc,char *argv[]){
         }
 
         //red.probar_red();
-        red.entrenar_backpropagation( ejemplos , 100000000 );
+        red.entrenar_backpropagation( ejemplos , 1000000 );
         file.close();
 
         if (argc > 2){
