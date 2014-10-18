@@ -133,11 +133,12 @@ int main(int argc, char* argv[]){
      
 
     vector<int> tamano_capas;
-    tamano_capas.push_back(4);
-    tamano_capas.push_back(neuronas);
-    tamano_capas.push_back(1);
+    
 
     if (pregunta == 1){
+        tamano_capas.push_back(4);
+        tamano_capas.push_back(neuronas);
+        tamano_capas.push_back(1);
         cout << "Clasificador Binario Iris Setosa" << endl;
         cout << "Entrenando con " << neuronas << " neuronas " << endl;
 
@@ -199,6 +200,9 @@ int main(int argc, char* argv[]){
         
 
     }else if (pregunta == 2){
+        tamano_capas.push_back(4);
+        tamano_capas.push_back(neuronas);
+        tamano_capas.push_back(3);
         cout << "Clasificador de Flores" << endl;
         cout << "Entrenando con " << neuronas << " neuronas " << endl;
         // Inicializando los vectores de salida relevantes mediante arreglos. 

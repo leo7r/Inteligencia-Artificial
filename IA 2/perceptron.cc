@@ -222,7 +222,16 @@ std::vector<float> Red_neuronal::procesar_red(std::vector<float> capa_entrada){
 	return siguiente_entrada;
 }
 
-
+std::vector<float> Red_neuronal::procesar_red_redondeo(std::vector<float> capa_entrada){
+    std::vector<float> tmp = this->procesar_red(capa_entrada);
+    std::vector<float> result;
+    for (int i = 0 ; i < tmp.size(); ++i){
+        float valor = tmp[i];
+        valor = ( valor > 0.5 ? 1 : 0);
+        result.push_back(valor);
+    }
+    return result;
+}
 
 
 void printvector(std::vector<float> in){
@@ -255,7 +264,6 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
         error_total = 0;
         for (int ejemplo = 0; ejemplo < ejemplos.size() ; ++ejemplo){
             float error; 
-            float valor_esperado = ejemplos[ejemplo].valor_esperado[0]; // Nuestro valor esperado solo tiene uno.
 
             // Seteando las neuronas iniciales
             for ( int i = 0 ; i < ejemplos[ejemplo].entrada.size() ; ++i ){
@@ -275,7 +283,7 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
 
             int final_ = capas.size() - 1;
             for (int neurona = 0 ; neurona < capas[final_].neuronas.size(); ++neurona){ //Aqui es capa.size() - 1 porque son las finales siempre
-                error = capas[final_].neuronas[neurona].output * ( 1 - capas[final_].neuronas[neurona].output ) * ( valor_esperado - capas[final_].neuronas[neurona].output );
+                error = capas[final_].neuronas[neurona].output * ( 1 - capas[final_].neuronas[neurona].output ) * ( ejemplos[ejemplo].valor_esperado[neurona] - capas[final_].neuronas[neurona].output );
                 capas[final_].neuronas[neurona].error = error;
             }
 
@@ -322,40 +330,29 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
 
            }
 
-           //error_total = 0;
-           for(  int ultimas = 0 ; ultimas < capas[final_].neuronas.size() ; ultimas++ ){
-                int step_o = capas[final_].neuronas[ultimas].output > 0.5 ? 1:-1;
-
-                if ( step_o != ejemplos[ejemplo].valor_esperado[ultimas] ){
-                    error_total++;
+            error_total = 0;
+           
+            for (int capa = 1; capa < capas.size(); ++capa){
+                for (int neurona = 0 ; neurona < capas[capa].neuronas.size(); ++neurona){
+                    error_total += (ejemplos[ejemplo].valor_esperado[neurona] - capas[capa].neuronas[neurona].output)* (ejemplos[ejemplo].valor_esperado[neurona] - capas[capa].neuronas[neurona].output);
                 }
+            }
 
-                //int err = (ejemplos[ejemplo].valor_esperado[ultimas] - step_o)/2;
-                //error_total+= pow(err,2);
-                //std::cout << ejemplos[ejemplo].valor_esperado[ultimas] << "|" << capas[final_].neuronas[ultimas].output << std::endl;
-           }
-
-           /*for (int capa = 1; capa < capas.size(); ++capa){
-               for (int neurona = 0 ; neurona < capas[capa].neuronas.size(); ++neurona){
-                   error_total += (valor_esperado - capas[capa].neuronas[neurona].output)* (valor_esperado - capas[capa].neuronas[neurona].output);
-               }
-           }
-
-           error_total = error_total/2;
-           if (i == 0){
+            error_total = error_total/2;
+            if (i == 0){
                error_inicial = error_total;
-           }*/
+            }
             
         }
         i++;
         std::cout << "error : " << error_total << std::endl;
         float porcentaje = ( (float) i / (float) iteraciones) * 100.0 ;
-        //std::cout << "porcentaje: " << porcentaje << std::endl;
+        std::cout << "porcentaje: " << porcentaje << std::endl;
 
         //std::cin.get();
 
-    } while (i < iteraciones && error_total >= 0.1 );
-    //std::cout << "Error Inicial: " << error_inicial << std::endl;
+    } while (i < iteraciones && error_total >= 0.09 );
+    std::cout << "Error Inicial: " << error_inicial << std::endl;
     std::cout << "Error Total: " << error_total << std::endl;
     std::cout << "Iteraciones dadas: " << i << std::endl;
     std::cin.get();

@@ -128,6 +128,7 @@ class Red_neuronal {
 
         //por definir
         std::vector<float> procesar_red(std::vector<float> capa_entrada);
+        std::vector<float> procesar_red_redondeo(std::vector<float> capa_entrada);
         void entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , int iteraciones);
         void probar_red();
 };
