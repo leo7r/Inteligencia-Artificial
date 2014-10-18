@@ -69,9 +69,9 @@ class Perceptron {
 
         Perceptron(){}
 
-        Perceptron(std::vector<float> pesos):pesos(pesos),tasa_aprendizaje(0.1){}
+        Perceptron(std::vector<float> pesos):pesos(pesos),tasa_aprendizaje(0.1),output(0),error(0){}
 
-        Perceptron(std::vector<float> pesos, float tasa_aprendizaje_):pesos(pesos),tasa_aprendizaje(tasa_aprendizaje_){}
+        Perceptron(std::vector<float> pesos, float tasa_aprendizaje_):pesos(pesos),tasa_aprendizaje(tasa_aprendizaje_),output(0),error(0){}
 
         ~Perceptron(){}
 

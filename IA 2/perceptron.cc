@@ -264,6 +264,9 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
 
             std::vector<float> res = procesar_red( ejemplos[ejemplo].entrada );
 
+            /*
+            probar_red();
+            std::cin.get();*/
 
 
             // Propagar el error hacia atras a travez de la red.
@@ -319,23 +322,40 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
 
            }
 
-           for (int capa = 1; capa < capas.size(); ++capa){
+           //error_total = 0;
+           for(  int ultimas = 0 ; ultimas < capas[final_].neuronas.size() ; ultimas++ ){
+                int step_o = capas[final_].neuronas[ultimas].output > 0.5 ? 1:-1;
+
+                if ( step_o != ejemplos[ejemplo].valor_esperado[ultimas] ){
+                    error_total++;
+                }
+
+                //int err = (ejemplos[ejemplo].valor_esperado[ultimas] - step_o)/2;
+                //error_total+= pow(err,2);
+                //std::cout << ejemplos[ejemplo].valor_esperado[ultimas] << "|" << capas[final_].neuronas[ultimas].output << std::endl;
+           }
+
+           /*for (int capa = 1; capa < capas.size(); ++capa){
                for (int neurona = 0 ; neurona < capas[capa].neuronas.size(); ++neurona){
                    error_total += (valor_esperado - capas[capa].neuronas[neurona].output)* (valor_esperado - capas[capa].neuronas[neurona].output);
                }
            }
+
            error_total = error_total/2;
            if (i == 0){
                error_inicial = error_total;
-           }
+           }*/
             
         }
         i++;
         std::cout << "error : " << error_total << std::endl;
         float porcentaje = ( (float) i / (float) iteraciones) * 100.0 ;
-        std::cout << "porcentaje: " << porcentaje << std::endl;
-    } while (i < iteraciones && error_total >= 0.9 );
-    std::cout << "Error Inicial: " << error_inicial << std::endl;
+        //std::cout << "porcentaje: " << porcentaje << std::endl;
+
+        //std::cin.get();
+
+    } while (i < iteraciones && error_total >= 0.1 );
+    //std::cout << "Error Inicial: " << error_inicial << std::endl;
     std::cout << "Error Total: " << error_total << std::endl;
     std::cout << "Iteraciones dadas: " << i << std::endl;
     std::cin.get();
