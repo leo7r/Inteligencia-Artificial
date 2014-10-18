@@ -111,7 +111,7 @@ int main(int argc,char *argv[]){
         }
 
         //red.probar_red();
-        red.entrenar_backpropagation( ejemplos , 1000000 );
+        red.entrenar_backpropagation( ejemplos , 10000 );
         file.close();
 
         if (argc > 2){
