@@ -40,7 +40,7 @@ void imprimir_salida(std::vector<float> salida){
 void help(){
     std::cout << "Clasificador de puntos en una circuferencia.\n";
     std::cout << "Para correr el programa coloque:\n" ;
-    std::cout << "./puntos [archivo de datos entrenamiento] [archivo datos de procesamiento] \n.";
+    std::cout << "./puntos [archivo de datos entrenamiento] [archivo datos de procesamiento] [neuronas capa 2] \n.";
 }
 
 std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
@@ -69,7 +69,11 @@ int main(int argc,char *argv[]){
      * Comienzo a parsear cada una de las
      * lineas para formar los ejemplos
      */
-    for ( int i = 2; i <= 10 ; i++){
+    //for ( int i = 2; i <= 10 ; i++){
+    int i;
+    if (argc > 3){
+        i = atoi(argv[3]);
+    }
 
         if (argc < 2){
             help();
@@ -139,10 +143,11 @@ int main(int argc,char *argv[]){
                     imprimir_salida(salidas);
                     std::cout << std::endl;
                 }
+                std::cin.get();
                 file_procesamiento.close();
             }
         }
 
-   }
+   //}
     return 0;
 }
