@@ -23,7 +23,7 @@
 #include <vector>
 #include <stdlib.h>
 #define TASA_APRENDIZAJE 0.05
-#define ITERACIONES_MAX 1000000
+#define ITERACIONES_MAX 10000
 
 /** 
  * Compara dos vectores.

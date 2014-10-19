@@ -6,7 +6,7 @@ pruebas=(instancia_correcta500 instancia_correcta1000 instancia_correcta2000)
 
 entrenamientos_iris=(entrenamiento_iris50 entrenamiento_iris60 entrenamiento_iris70 entrenamiento_iris80 entrenamiento_iris90)
 
-pruebas_iris=(bezdekIris.data bezdekIris.data bezdekIris.data)
+pruebas_iris=(bezdekIris.data)
 
 make 
 
@@ -44,6 +44,7 @@ do
     echo  $entrenamiento
     for pregunta in {1..2}
     do
+      echo $pregunta
       ./iris -p $pregunta -n $i -f $entrenamiento -c $pruebas >> resultados_iris
     done
     done
