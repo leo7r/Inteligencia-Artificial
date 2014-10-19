@@ -12,29 +12,26 @@ make
 
 echo "" > resultados_puntos
 
-#echo "Pruebas para punto"
+echo "Pruebas para punto"
 
-#for i in {2..10} #Estoy probando todos las neuronas posibles
-#do
-#  for prueba in ${pruebas[*]}
-#  do
-#    for entrenamiento in ${entrenamientos[*]}
-#    do
-#    echo $i
-#    echo $prueba
-#    echo  $entrenamiento
-#    ./punto $entrenamiento $pruebas $i >> resultados_puntos
-#    done
-#  done
-#done
+for i in {2..10} #Estoy probando todos las neuronas posibles
+do
+  for prueba in ${pruebas[*]}
+  do
+    for entrenamiento in ${entrenamientos[*]}
+    do
+    echo $i
+    echo $prueba
+    echo  $entrenamiento
+    ./punto $entrenamiento $pruebas $i >> resultados_puntos
+    done
+  done
+done
 
 echo "Pruebas para iris"
 
 echo "" > resultados_iris
 
-a=-n
-b=-f
-c=-c
 
 for i in {4..10} #Estoy probando todos las neuronas posibles
 do
