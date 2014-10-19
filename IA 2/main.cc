@@ -22,9 +22,20 @@
 #include <sstream>
 #include <vector>
 #include <stdlib.h>
-#include <math.h>
-#define TASA_APRENDIZAJE 0.5
-#define ITERACIONES_MAX 1000
+#define TASA_APRENDIZAJE 0.05
+#define ITERACIONES_MAX 10000
+
+/** 
+ * Compara dos vectores.
+ * @return bool
+ */
+bool comparar(std::vector<float> vector1 , std::vector<float> vector2){
+    if (vector1.size() != vector2.size()) return false;
+    for ( int i = 0; i < vector1.size(); ++i){
+        if (vector1[i] != vector2[i]) return false;
+    }
+    return true;
+}
 
 /**
  * Funcion que imprime una salida de vector
@@ -169,8 +180,10 @@ int main(int argc,char *argv[]){
             if (file_procesamiento.is_open()){
 
                 float error_total = 0;
-                
+                int numero_total = 0;
+                int correctas = 0;
                 while ( getline (file_procesamiento,line) ){
+                    numero_total++;
                     std::vector<std::string> tok = split( line , ' ' );
                     std::vector<float> entradas;
                     float valor1 = atof( tok[0].c_str() );
@@ -197,16 +210,13 @@ int main(int argc,char *argv[]){
                     imprimir_salida(salidas);
                     std::cout << std::endl;
 
-                    
-
-                    if (salidas[0] != salida_red[0]){
-                        error_total++;
+                    if (comparar(salidas,salida_red)){
+                        correctas++;
                     }
+                    
                 }
-
-                std::cout << "El error del test es: " << error_total;
-
-                std::cin.get();
+                std::cout << "Resultado: " << correctas << "/" << numero_total << std::endl; 
+                //std::cin.get();
                 file_procesamiento.close();
             }
         }

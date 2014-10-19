@@ -358,7 +358,7 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
     std::cout << "Error Total: " << error_total << std::endl;
     std::cout << "Iteraciones dadas: " << iter << std::endl;
     std::cin.get();
-}   
+}
 
 void Red_neuronal::probar_red( ){
 

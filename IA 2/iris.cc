@@ -41,9 +41,9 @@ void imprimir_clasificacion(std::vector<float> salida){
         imprimir_salida(salida);
         return;
     }
-    if (salida[0] == 1 && salida[1] == -1 && salida[2] == -1) std::cout << "Iris-setosa";
-    else if (salida[0] == -1 && salida[1] == 1 && salida[2] == -1) std::cout << "Iris-versicolor";
-    else if (salida[0] == -1 && salida[1] == -1 && salida[2] == 1) std::cout << "Iris-virginica";
+    if (salida[0] == 1 && salida[1] == 0 && salida[2] == 0) std::cout << "Iris-setosa";
+    else if (salida[0] == 0 && salida[1] == 1 && salida[2] == 0) std::cout << "Iris-versicolor";
+    else if (salida[0] == 0 && salida[1] == 0 && salida[2] == 1) std::cout << "Iris-virginica";
     else imprimir_salida(salida);
 }
 
@@ -107,6 +107,10 @@ int main(int argc, char* argv[]){
         if ((arg_tmp.compare(string("-c")) == 0) && (i + 1 < argc)){
             nombre_arch_comp = string(argv[i + 1]);
         }
+    }
+
+    if (neuronas <= 0){
+        exit;
     }
 
     if (nombre_arch_datos.compare(string("")) != 0){
@@ -180,17 +184,21 @@ int main(int argc, char* argv[]){
 
             vector<float> entradas;
             vector<float> salidas;
-            entradas.push_back( atof( tok[0].c_str() ) );
-            entradas.push_back( atof( tok[1].c_str() ) );
-            entradas.push_back( atof( tok[2].c_str() ) );
-            entradas.push_back( atof( tok[3].c_str() ) );
+            float valor0 = ( atof( tok[0].c_str() ) < 0 ? 0 : 1);
+            float valor1 = ( atof( tok[1].c_str() ) < 0 ? 0 : 1);
+            float valor2 = ( atof( tok[2].c_str() ) < 0 ? 0 : 1);
+            float valor3 = ( atof( tok[3].c_str() ) < 0 ? 0 : 1);
+            entradas.push_back( valor0 );
+            entradas.push_back( valor1 );
+            entradas.push_back( valor2 );
+            entradas.push_back( valor3 );
 
             if (tok[4].compare(string("Iris-setosa")) == 0){
                 salidas.push_back(1);
             }else{
-                salidas.push_back(-1);
+                salidas.push_back(0);
             }
-            vector<float> salida_red = red.procesar_red(entradas);
+            vector<float> salida_red = red.procesar_red_redondeo(entradas);
             cout << "Salida Red:";
             imprimir_salida(salida_red);
             cout << " Salida Archivo: ";
@@ -206,9 +214,9 @@ int main(int argc, char* argv[]){
         cout << "Clasificador de Flores" << endl;
         cout << "Entrenando con " << neuronas << " neuronas " << endl;
         // Inicializando los vectores de salida relevantes mediante arreglos. 
-        float array_setosa[] = { 1, -1 , -1};
-        float array_versicolor[] = {-1 , 1, -1};
-        float array_virginica[] = {-1 , -1, 1};
+        float array_setosa[] = { 1, 0 , 0};
+        float array_versicolor[] = {0 , 1, 0};
+        float array_virginica[] = {0 , 0, 1};
         vector<float> setosa (array_setosa, array_setosa + sizeof(array_setosa) / sizeof(float) );
         vector<float> versicolor (array_versicolor, array_versicolor + sizeof(array_versicolor) / sizeof(float) );
         vector<float> virginica (array_virginica, array_virginica + sizeof(array_virginica) / sizeof(float) );
@@ -226,10 +234,14 @@ int main(int argc, char* argv[]){
 
             vector<float> entradas;
             vector<float> salidas;
-            entradas.push_back( atof( tok[0].c_str() ) );
-            entradas.push_back( atof( tok[1].c_str() ) );
-            entradas.push_back( atof( tok[2].c_str() ) );
-            entradas.push_back( atof( tok[3].c_str() ) );
+            float valor0 = ( atof( tok[0].c_str() ) < 0 ? 0 : 1);
+            float valor1 = ( atof( tok[1].c_str() ) < 0 ? 0 : 1);
+            float valor2 = ( atof( tok[2].c_str() ) < 0 ? 0 : 1);
+            float valor3 = ( atof( tok[3].c_str() ) < 0 ? 0 : 1);
+            entradas.push_back( valor0 );
+            entradas.push_back( valor1 );
+            entradas.push_back( valor2 );
+            entradas.push_back( valor3 );
 
             // Voy a poner una salida dependiendo del nombre de la flor.
             if (tok[4].compare(string("Iris-setosa")) == 0){
@@ -268,7 +280,7 @@ int main(int argc, char* argv[]){
                 salidas = virginica;
             }
 
-            vector<float> salida_red = red.procesar_red(entradas);
+            vector<float> salida_red = red.procesar_red_redondeo(entradas);
             cout << "Salida Red:";
             imprimir_clasificacion(salida_red);
             cout << " Salida Archivo: ";
