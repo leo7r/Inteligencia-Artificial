@@ -23,6 +23,8 @@
 #include <vector>
 #include <stdlib.h>
 #include <math.h>
+#define TASA_APRENDIZAJE 0.5
+#define ITERACIONES_MAX 1000
 
 /**
  * Funcion que imprime una salida de vector
@@ -60,6 +62,8 @@ std::vector<std::string> split(const std::string &s, char delim) {
 }
 
 int main(int argc,char *argv[]){
+
+
     std::ifstream file;
     std::ifstream file_procesamiento;
     std::string line;
@@ -87,12 +91,28 @@ int main(int argc,char *argv[]){
         }
 
         std::vector<int> tamano_capas;
-        tamano_capas.push_back(2);
+        tamano_capas.push_back(3);
         tamano_capas.push_back(i);
         tamano_capas.push_back(1);
 
-        Red_neuronal red( tamano_capas , 0.05 );
+        Red_neuronal red( tamano_capas , TASA_APRENDIZAJE );
         std::vector<Ejemplo_red> ejemplos;
+
+        /* pesos ficticios
+        std::vector<float> p1;
+        std::vector<float> p2;
+        std::vector<float> p3;
+        p1.push_back(0.1);
+        p1.push_back(0.8);
+        p2.push_back(0.4);
+        p2.push_back(0.6);
+        p3.push_back(0.3);
+        p3.push_back(0.9);
+
+        red.capas[1].neuronas[0].pesos = p1;
+        red.capas[1].neuronas[1].pesos = p2;
+        red.capas[2].neuronas[0].pesos = p3;
+        */
 
         std::cout << "Entrenando con " << i << " neuronas escondidas" <<  std::endl;
         while ( getline (file,line) ){
@@ -101,13 +121,18 @@ int main(int argc,char *argv[]){
 
             std::vector<float> entradas;
             //entradas.push_back( 1.0 );
-            entradas.push_back( atof( tok[0].c_str() ) );
-            entradas.push_back( atof( tok[1].c_str() ) );
+            float valor1 = atof( tok[0].c_str() );
+            float valor2 = atof( tok[1].c_str() );
+            valor1 = (valor1 < 0 ? 0 : valor1);
+            valor2 = (valor2 < 0 ? 0 : valor2);
+            entradas.push_back( valor1 );
+            entradas.push_back( valor2 );
+            entradas.push_back(1.0);
 
+            float valor3 = atof(tok[2].c_str()) ;
             std::vector<float> salidas;
-            float salida = atof( tok[2].c_str() );
-
-            salidas.push_back( salida == -1 ? 0:salida );
+            float salida = valor3;//(valor3 < 0 ? 0 : valor3);
+            salidas.push_back( salida  );
 
             ejemplos.push_back( Ejemplo_red( entradas , salidas ) );
 
@@ -115,9 +140,28 @@ int main(int argc,char *argv[]){
         }
 
         //red.probar_red();
-        red.entrenar_backpropagation( ejemplos , 500 );
-
+        red.entrenar_backpropagation( ejemplos , ITERACIONES_MAX );
         file.close();
+
+        /*std::ofstream myfile;
+        myfile.open ("circulo.txt", std::ios::out | std::ios::app );
+        for ( int i = 0 ; i < 100 ; ++i ){
+            for ( int j = 0 ; j < 100 ; ++j ){
+                float x = i/5.0;
+                float y = j/5.0;
+
+                std::vector<float> entradas;
+                entradas.push_back(x);
+                entradas.push_back(y);
+
+                std::vector<float> salida_red = red.procesar_red_redondeo(entradas);     
+                myfile << salida_red[0] << "\n";
+            }
+        }
+
+        myfile.close();*/
+
+        //return -1;
 
         if (argc > 2){
             file_procesamiento.open(argv[2]);
@@ -129,31 +173,35 @@ int main(int argc,char *argv[]){
                 while ( getline (file_procesamiento,line) ){
                     std::vector<std::string> tok = split( line , ' ' );
                     std::vector<float> entradas;
-                    entradas.push_back( atof( tok[0].c_str() ) );
-                    entradas.push_back( atof( tok[1].c_str() ) );
+                    float valor1 = atof( tok[0].c_str() );
+                    float valor2 = atof( tok[1].c_str() );
+                    valor1 = (valor1 < 0 ? 0 : valor1);
+                    valor2 = (valor2 < 0 ? 0 : valor2);
+                    entradas.push_back( valor1 );
+                    entradas.push_back( valor2 );
+                    entradas.push_back(1.0);
 
                     std::vector<float> salidas;
                     float salida = atof( tok[2].c_str() );
-                    salidas.push_back(  salida == -1 ? 0:salida  );
+
+                    salida = (salida < 0 ? 0 : salida);
+                    salidas.push_back(  salida  );
 
                     //ejemplos.push_back( Ejemplo_red( entradas , salidas ) );
                     
                     std::vector<float> salida_red = red.procesar_red(entradas);
-
-                    for( int ultimas = 0 ; ultimas < salida_red.size() ; ultimas++ ){
-                        int step_o = salida_red[ultimas] > 0.0 ? 1:0;
-
-                        if ( step_o != salidas[ultimas] ){
-                            error_total++;
-                        }
-                   }
-
-                    /*std::cout << "Salida Red: ";
+                    std::cout << "Salida Red: ";
                     imprimir_salida(salida_red);
 
                     std::cout << " Salida Archivo: ";
                     imprimir_salida(salidas);
-                    std::cout << std::endl;*/
+                    std::cout << std::endl;
+
+                    
+
+                    if (salidas[0] != salida_red[0]){
+                        error_total++;
+                    }
                 }
 
                 std::cout << "El error del test es: " << error_total;
