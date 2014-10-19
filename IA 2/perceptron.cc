@@ -345,9 +345,9 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
             
         }
         i++;
-        std::cout << "error : " << error_total << std::endl;
-        float porcentaje = ( (float) i / (float) iteraciones) * 100.0 ;
-        std::cout << "porcentaje: " << porcentaje << std::endl;
+        //std::cout << "error : " << error_total << std::endl;
+        //float porcentaje = ( (float) i / (float) iteraciones) * 100.0 ;
+        //std::cout << "porcentaje: " << porcentaje << std::endl;
 
         //std::cin.get();
 
@@ -355,7 +355,7 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
     std::cout << "Error Inicial: " << error_inicial << std::endl;
     std::cout << "Error Total: " << error_total << std::endl;
     std::cout << "Iteraciones dadas: " << i << std::endl;
-    std::cin.get();
+    //std::cin.get();
 }	
 
 void Red_neuronal::probar_red( ){
