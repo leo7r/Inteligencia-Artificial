@@ -23,7 +23,7 @@
 #include <vector>
 #include <stdlib.h>
 #define TASA_APRENDIZAJE 0.05
-#define ITERACIONES_MAX 10000
+#define ITERACIONES_MAX 1000
 
 /** 
  * Compara dos vectores.
@@ -32,7 +32,7 @@
 bool comparar(std::vector<float> vector1 , std::vector<float> vector2){
     if (vector1.size() != vector2.size()) return false;
     for ( int i = 0; i < vector1.size(); ++i){
-        if (vector1[i] != vector2[i]) return false;
+        if (vector1[i] != (vector2[i] > 0.5 ? 1 : 0 ) ) return false;
     }
     return true;
 }
@@ -136,9 +136,9 @@ int main(int argc,char *argv[]){
             float valor2 = atof( tok[1].c_str() );
             valor1 = (valor1 < 0 ? 0 : valor1);
             valor2 = (valor2 < 0 ? 0 : valor2);
+            entradas.push_back(1.0);
             entradas.push_back( valor1 );
             entradas.push_back( valor2 );
-            entradas.push_back(1.0);
 
             float valor3 = atof(tok[2].c_str()) ;
             std::vector<float> salidas;
@@ -154,7 +154,7 @@ int main(int argc,char *argv[]){
         red.entrenar_backpropagation( ejemplos , ITERACIONES_MAX );
         file.close();
 
-        /*std::ofstream myfile;
+        std::ofstream myfile;
         myfile.open ("circulo.txt", std::ios::out | std::ios::app );
         for ( int i = 0 ; i < 100 ; ++i ){
             for ( int j = 0 ; j < 100 ; ++j ){
@@ -162,15 +162,16 @@ int main(int argc,char *argv[]){
                 float y = j/5.0;
 
                 std::vector<float> entradas;
+                entradas.push_back(1.0);
                 entradas.push_back(x);
                 entradas.push_back(y);
 
-                std::vector<float> salida_red = red.procesar_red_redondeo(entradas);     
-                myfile << salida_red[0] << "\n";
+                std::vector<float> salida_red = red.procesar_red_redondeo(entradas);   
+                myfile << (salida_red[0] == 1 ? 0:1) << "\n";
             }
         }
 
-        myfile.close();*/
+        myfile.close();
 
         //return -1;
 
@@ -188,11 +189,11 @@ int main(int argc,char *argv[]){
                     std::vector<float> entradas;
                     float valor1 = atof( tok[0].c_str() );
                     float valor2 = atof( tok[1].c_str() );
+                    entradas.push_back(1.0);
                     valor1 = (valor1 < 0 ? 0 : valor1);
                     valor2 = (valor2 < 0 ? 0 : valor2);
                     entradas.push_back( valor1 );
                     entradas.push_back( valor2 );
-                    entradas.push_back(1.0);
 
                     std::vector<float> salidas;
                     float salida = atof( tok[2].c_str() );

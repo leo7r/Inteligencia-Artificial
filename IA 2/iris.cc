@@ -23,7 +23,7 @@
 #include <vector>
 #include <stdlib.h>
 #include <iostream>
-#define ITERACIONES_MAX 100000
+#define ITERACIONES_MAX 1000
 #define TASA_APRENDIZAJE 0.05
 
 /**
@@ -140,7 +140,7 @@ int main(int argc, char* argv[]){
     
 
     if (pregunta == 1){
-        tamano_capas.push_back(4);
+        tamano_capas.push_back(5);
         tamano_capas.push_back(neuronas);
         tamano_capas.push_back(1);
         cout << "Clasificador Binario Iris Setosa" << endl;
@@ -159,6 +159,7 @@ int main(int argc, char* argv[]){
 
             vector<float> entradas;
             vector<float> salidas;
+            entradas.push_back( 1.0 );
             entradas.push_back( atof( tok[0].c_str() ) );
             entradas.push_back( atof( tok[1].c_str() ) );
             entradas.push_back( atof( tok[2].c_str() ) );
@@ -167,12 +168,15 @@ int main(int argc, char* argv[]){
             if (tok[4].compare(string("Iris-setosa")) == 0){
                 salidas.push_back(1);
             }else{
-                salidas.push_back(-1);
+                salidas.push_back(0);
             }
             ejemplos.push_back(Ejemplo_red( entradas, salidas));
         }
         file_datos.close();
         red.entrenar_backpropagation(ejemplos,ITERACIONES_MAX);
+
+        int correctas = 0;
+        int lineas = 0;
 
         //Comienzo a probar.
         while( getline(file_comp, line)){
@@ -184,10 +188,11 @@ int main(int argc, char* argv[]){
 
             vector<float> entradas;
             vector<float> salidas;
-            float valor0 = ( atof( tok[0].c_str() ) < 0 ? 0 : 1);
-            float valor1 = ( atof( tok[1].c_str() ) < 0 ? 0 : 1);
-            float valor2 = ( atof( tok[2].c_str() ) < 0 ? 0 : 1);
-            float valor3 = ( atof( tok[3].c_str() ) < 0 ? 0 : 1);
+            float valor0 = ( atof( tok[0].c_str() ));
+            float valor1 = ( atof( tok[1].c_str() ) );
+            float valor2 = ( atof( tok[2].c_str() ) );
+            float valor3 = ( atof( tok[3].c_str() ) );
+            entradas.push_back( 1.0 );
             entradas.push_back( valor0 );
             entradas.push_back( valor1 );
             entradas.push_back( valor2 );
@@ -198,17 +203,33 @@ int main(int argc, char* argv[]){
             }else{
                 salidas.push_back(0);
             }
-            vector<float> salida_red = red.procesar_red_redondeo(entradas);
+/*
+            for (int i = 0; i < entradas.size(); ++i)
+            {
+                std::cout << entradas[i] << " | ";
+            }*/
+
+            vector<float> salida_red = red.procesar_red(entradas); //red.procesar_red_redondeo(entradas);
+            
+            lineas++;
+            if ( (salida_red[0] > 0.5 ? 1 : 0) == salidas[0] ){
+                correctas++;
+            }
+
+            //std::cin.get();
+            /*
             cout << "Salida Red:";
             imprimir_salida(salida_red);
             cout << " Salida Archivo: ";
             imprimir_salida(salidas);
-            cout << endl;
+            cout << endl;*/
         }
+
+        std::cout << "Correctas = " << correctas << " | " << lineas << std::endl;
         
 
     }else if (pregunta == 2){
-        tamano_capas.push_back(4);
+        tamano_capas.push_back(5);
         tamano_capas.push_back(neuronas);
         tamano_capas.push_back(3);
         cout << "Clasificador de Flores" << endl;
@@ -234,10 +255,11 @@ int main(int argc, char* argv[]){
 
             vector<float> entradas;
             vector<float> salidas;
-            float valor0 = ( atof( tok[0].c_str() ) < 0 ? 0 : 1);
-            float valor1 = ( atof( tok[1].c_str() ) < 0 ? 0 : 1);
-            float valor2 = ( atof( tok[2].c_str() ) < 0 ? 0 : 1);
-            float valor3 = ( atof( tok[3].c_str() ) < 0 ? 0 : 1);
+            float valor0 = ( atof( tok[0].c_str() ));
+            float valor1 = ( atof( tok[1].c_str() ) );
+            float valor2 = ( atof( tok[2].c_str() ) );
+            float valor3 = ( atof( tok[3].c_str() ) );
+            entradas.push_back( 1.0 );
             entradas.push_back( valor0 );
             entradas.push_back( valor1 );
             entradas.push_back( valor2 );
@@ -256,6 +278,9 @@ int main(int argc, char* argv[]){
         file_datos.close();
         red.entrenar_backpropagation(ejemplos,ITERACIONES_MAX);
 
+        int buenas = 0;
+        int total = 0;
+
         //Comienzo a probar.
         while( getline(file_comp, line)){
             vector<string> tok = split( line , ',' );
@@ -266,6 +291,7 @@ int main(int argc, char* argv[]){
 
             vector<float> entradas;
             vector<float> salidas;
+            entradas.push_back( 1.0 );
             entradas.push_back( atof( tok[0].c_str() ) );
             entradas.push_back( atof( tok[1].c_str() ) );
             entradas.push_back( atof( tok[2].c_str() ) );
@@ -281,15 +307,22 @@ int main(int argc, char* argv[]){
             }
 
             vector<float> salida_red = red.procesar_red_redondeo(entradas);
-            cout << "Salida Red:";
+
+            total++;
+            if ( salida_red[0] == salidas[0] && salida_red[1] == salidas[1] && salidas[2] == salida_red[2] ){
+                buenas++;
+            }
+
+            /*cout << "Salida Red:";
             imprimir_clasificacion(salida_red);
             cout << " Salida Archivo: ";
             imprimir_salida(salidas);
             cout << " ";
             imprimir_clasificacion(salidas);
-            cout << endl;
+            cout << endl;*/
         }
- 
+    
+        std::cout << "buenas: " << buenas << " | " << total << std::endl;
 
     }
 }
