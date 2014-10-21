@@ -22,7 +22,7 @@
 #include <sstream>
 #include <vector>
 #include <stdlib.h>
-#define TASA_APRENDIZAJE 0.05
+#define TASA_APRENDIZAJE 0.0001
 #define ITERACIONES_MAX 1000
 
 /** 
@@ -106,7 +106,7 @@ int main(int argc,char *argv[]){
         tamano_capas.push_back(i);
         tamano_capas.push_back(1);
 
-        Red_neuronal red( tamano_capas , TASA_APRENDIZAJE );
+        Red_neuronal red( tamano_capas , TASA_APRENDIZAJE ,10, 0.5);
         std::vector<Ejemplo_red> ejemplos;
 
         /* pesos ficticios

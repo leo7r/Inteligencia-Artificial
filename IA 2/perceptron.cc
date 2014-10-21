@@ -164,8 +164,10 @@ void Perceptron::gradient_descent(std::vector<Ejemplo> ejemplos, int iteraciones
  * @param numero_entrada Numero de entradas que va a tener la neurona. Esto es el numero de pesos que voy a inicializar.
  * @param e_capa Indica una especificacion de las capa. Con este vector de capas nos indica el numero de capas y cuantos perceptrones posee.
  * @param tasa_aprendizaje Es la tasa del aprendizaje 
+ * @param random_max Es el valor maximo que puede tener el valor aleatorio
+ *
  */
-Red_neuronal::Red_neuronal(std::vector<int> e_capa, float tasa_aprendizaje){
+Red_neuronal::Red_neuronal(std::vector<int> e_capa, float tasa_aprendizaje, int random_max, float divisor){
 
     std::vector<Perceptron> neuronas;
 
@@ -185,15 +187,10 @@ Red_neuronal::Red_neuronal(std::vector<int> e_capa, float tasa_aprendizaje){
             std::vector<float> pesos;
 
             for (int p = 0; p < e_capa[i-1] ; ++p){
-                float valor = (rand() % 2 + 1) / 10.0;
+                float valor = (rand() % random_max ) / divisor;
                 valor = ( (rand() % 10 + 1) > 5 ? -valor : valor); //Valor entre 0.5 y -0.5
                 
-                //if ( i == e_capa.size()-1 ){
-                //    pesos.push_back( valor * 10.0 );
-                //}
-                //else{
-                    pesos.push_back( valor );
-                //}
+                pesos.push_back( valor );
             }
 
             neuronas.push_back( Perceptron( pesos , tasa_aprendizaje ) );
@@ -280,8 +277,6 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
             float error;
             float valor_esperado = ejemplos[ejemplo].valor_esperado[0]; // Nuestro valor esperado solo tiene uno.
 
-            //probar_red();
-            //std::cin.get();
 
             // Seteando las neuronas iniciales
             for ( int i = 0 ; i < ejemplos[ejemplo].entrada.size() ; ++i ){
@@ -290,9 +285,6 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
 
             std::vector<float> res = procesar_red( ejemplos[ejemplo].entrada );
 
-            /*
-            probar_red();
-            std::cin.get();*/
 
             // Calcular el error de las neuronas "output".
             int final_ = capas.size() - 1;
@@ -322,18 +314,12 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
            for( int hidden = 0 ; hidden < capas[final_-1].neuronas.size() ; hidden++ ){
                 float error = 0;
 
-                for ( int final = 0 ; final < capas[final_].neuronas.size() ; final++ ){
-                    float cambio = capas[final_].neuronas[final].error * capas[final_-1].neuronas[hidden].output;
-                    capas[final_].neuronas[final].pesos[hidden]+= capas[final_].neuronas[final].tasa_aprendizaje * cambio;
+                for ( int final_tmp = 0 ; final_tmp < capas[final_].neuronas.size() ; final_tmp++ ){
+                    float cambio = capas[final_].neuronas[final_tmp].error * capas[final_-1].neuronas[hidden].output;
+                    capas[final_].neuronas[final_tmp].pesos[hidden]+= capas[final_].neuronas[final_tmp].tasa_aprendizaje * cambio;
                 }
            }
 
-
-            /*for (int neurona = 0 ; neurona < capas[final_].neuronas.size(); ++neurona){
-                for( int p = 0 ; p < capas[final_].neuronas[neurona].pesos.size() ; p++ ){
-                    capas[final_].neuronas[neurona].pesos[p]+=capas[final_].neuronas[neurona].tasa_aprendizaje * capas[final_].neuronas[neurona].error * capas[final_-1].neuronas[p].output;
-                }
-            }*/
 
            // Actualizando pesos de cada capa
             for( int entrada = 0 ; entrada < capas[0].neuronas.size() ; entrada++ ){
@@ -344,31 +330,23 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
             }
            
            for( int i = 0 ; i < ejemplos[ejemplo].valor_esperado.size() ; i++ ){
-                error_total+= 0.5*pow( ejemplos[ejemplo].valor_esperado[i] - capas[final_].neuronas[i].output , 2 );
+                error_total+= pow( ejemplos[ejemplo].valor_esperado[i] - capas[final_].neuronas[i].output , 2 );
            }
+           error_total = error_total * 0.5;
 
-           //float ee = valor_esperado - capas[final_].neuronas[0].output;
-           //error_total+= ee > 0 ? ee : -ee ;
-           //error_total = ee;
-
-           //std::cout << "Error: " << error_total << std::endl;
-           //std::cin.get();
         }
         iter++;
 
-        std::cout << "error : " << error_total << std::endl;
+        std::cout << "Error Total Medio : " << error_total << std::endl;
         float porcentaje = ( (float) iter / (float) iteraciones) * 100.0 ;
         //std::cout << "porcentaje: " << porcentaje << std::endl;
 
-        //std::cin.get();
 
-    } while (iter < iteraciones && error_total >= 0.1 );
-    //std::cout << "Error Inicial: " << error_inicial << std::endl;
+    } while (iter < iteraciones && error_total >= 0.01 );
 
     probar_red();
     std::cout << "Error Total: " << error_total << std::endl;
     std::cout << "Iteraciones dadas: " << iter << std::endl;
-    std::cin.get();
 }
 
 void Red_neuronal::probar_red( ){

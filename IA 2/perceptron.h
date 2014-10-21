@@ -123,7 +123,7 @@ class Red_neuronal {
         /** 
          * Constructor que inicializa toda una red neuronal
          */
-        Red_neuronal(std::vector<int> e_capa, float tasa_aprendizaje);
+        Red_neuronal(std::vector<int> e_capa, float tasa_aprendizaje, int random_max = 2, float divisor = 10.0);
 
         ~Red_neuronal(){}
 
