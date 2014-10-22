@@ -239,7 +239,7 @@ std::vector<float> Red_neuronal::procesar_red_redondeo(std::vector<float> capa_e
     std::vector<float> result;
     for (int i = 0 ; i < tmp.size(); ++i){
         float valor = tmp[i];
-        valor = ( valor > 0.5 ? 1 : 0);
+        valor = round(valor) ;
         result.push_back(valor);
     }
     return result;
@@ -344,7 +344,6 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
 
     } while (iter < iteraciones && error_total >= 0.01 );
 
-    probar_red();
     std::cout << "Error Total: " << error_total << std::endl;
     std::cout << "Iteraciones dadas: " << iter << std::endl;
 }
