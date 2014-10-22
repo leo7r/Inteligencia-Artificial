@@ -21,9 +21,10 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <math.h>
 #include <stdlib.h>
-#define TASA_APRENDIZAJE 0.05
-#define ITERACIONES_MAX 1000
+#define TASA_APRENDIZAJE 0.0001
+#define ITERACIONES_MAX 10000
 
 /** 
  * Compara dos vectores.
@@ -32,7 +33,7 @@
 bool comparar(std::vector<float> vector1 , std::vector<float> vector2){
     if (vector1.size() != vector2.size()) return false;
     for ( int i = 0; i < vector1.size(); ++i){
-        if (vector1[i] != (vector2[i] > 0.5 ? 1 : 0 ) ) return false;
+        if (vector1[i] != (vector2[i] == -0 ? 0 : vector2[i]) ) return false;
     }
     return true;
 }
@@ -106,7 +107,7 @@ int main(int argc,char *argv[]){
         tamano_capas.push_back(i);
         tamano_capas.push_back(1);
 
-        Red_neuronal red( tamano_capas , TASA_APRENDIZAJE );
+        Red_neuronal red( tamano_capas , TASA_APRENDIZAJE ,100, 33.0);
         std::vector<Ejemplo_red> ejemplos;
 
         /* pesos ficticios
@@ -203,7 +204,7 @@ int main(int argc,char *argv[]){
 
                     //ejemplos.push_back( Ejemplo_red( entradas , salidas ) );
                     
-                    std::vector<float> salida_red = red.procesar_red(entradas);
+                    std::vector<float> salida_red = red.procesar_red_redondeo(entradas);
                     std::cout << "Salida Red: ";
                     imprimir_salida(salida_red);
 
