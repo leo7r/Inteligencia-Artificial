@@ -25,11 +25,11 @@ with open('test001.txt','w+') as file:
 			unos+=1
 			l1.append([x,y,res])
 
-		if len(l1) >= 500 and len(l2) >= 500:
+		if len(l1) >= 1000 and len(l2) >= 1000:
 			break
 
 	for i in range(len(l1)):
-		if i >= 500:
+		if i >= 1000:
 			break
 		try:
 			file.write('%s %s %s\n' % (l2[i][0],l2[i][1],l2[i][2],) )

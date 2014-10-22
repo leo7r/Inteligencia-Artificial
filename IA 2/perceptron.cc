@@ -187,7 +187,7 @@ Red_neuronal::Red_neuronal(std::vector<int> e_capa, float tasa_aprendizaje, int 
             std::vector<float> pesos;
 
             for (int p = 0; p < e_capa[i-1] ; ++p){
-                float valor = (rand() % random_max ) / divisor;
+                float valor = (rand() % random_max + 1) / 10.0;
                 valor = ( (rand() % 10 + 1) > 5 ? -valor : valor); //Valor entre 0.5 y -0.5
                 
                 pesos.push_back( valor );

@@ -23,8 +23,8 @@
 #include <vector>
 #include <math.h>
 #include <stdlib.h>
-#define TASA_APRENDIZAJE 0.0001
-#define ITERACIONES_MAX 1000
+#define TASA_APRENDIZAJE 0.01
+#define ITERACIONES_MAX 100
 
 /** 
  * Compara dos vectores.
@@ -107,7 +107,9 @@ int main(int argc,char *argv[]){
         tamano_capas.push_back(i);
         tamano_capas.push_back(1);
 
-        Red_neuronal red( tamano_capas , TASA_APRENDIZAJE ,4.0, 1.0);
+        Red_neuronal red( tamano_capas , TASA_APRENDIZAJE ,5.0, 4.0);
+        //red.probar_red();
+        //std::cin.get();
         std::vector<Ejemplo_red> ejemplos;
 
         /* pesos ficticios
@@ -133,8 +135,8 @@ int main(int argc,char *argv[]){
 
             std::vector<float> entradas;
             //entradas.push_back( 1.0 );
-            float valor1 = atof( tok[0].c_str() );
-            float valor2 = atof( tok[1].c_str() );
+            float valor1 = atof( tok[0].c_str() ) / 20.0;
+            float valor2 = atof( tok[1].c_str() ) / 20.0;
             valor1 = (valor1 < 0 ? 0 : valor1);
             valor2 = (valor2 < 0 ? 0 : valor2);
             entradas.push_back(1.0);
@@ -155,25 +157,25 @@ int main(int argc,char *argv[]){
         red.entrenar_backpropagation( ejemplos , ITERACIONES_MAX );
         file.close();
 
-        std::ofstream myfile;
+        /*std::ofstream myfile;
         myfile.open ("circulo.txt", std::ios::out | std::ios::app );
         for ( int i = 0 ; i < 100 ; ++i ){
             for ( int j = 0 ; j < 100 ; ++j ){
-                float x = i/5.0;
-                float y = j/5.0;
+                float x = i/100.0;
+                float y = j/100.0;
 
                 std::vector<float> entradas;
                 entradas.push_back(1.0);
                 entradas.push_back(x);
                 entradas.push_back(y);
 
-                std::vector<float> salida_red = red.procesar_red_redondeo(entradas);   
-                myfile << (salida_red[0] == 1 ? 0:1) << "\n";
+                std::vector<float> salida_red = red.procesar_red(entradas);   
+                myfile << (salida_red[0] > 0.5 ? 1:0) << "\n";
             }
         }
 
         myfile.close();
-
+*/
         //return -1;
 
         if (argc > 2){
@@ -184,12 +186,16 @@ int main(int argc,char *argv[]){
                 float error_total = 0;
                 int numero_total = 0;
                 int correctas = 0;
+
+                std::ofstream myfile;
+                myfile.open ("prueba_estupida_de_bern.txt", std::ios::out | std::ios::app );
+
                 while ( getline (file_procesamiento,line) ){
                     numero_total++;
                     std::vector<std::string> tok = split( line , ' ' );
                     std::vector<float> entradas;
-                    float valor1 = atof( tok[0].c_str() );
-                    float valor2 = atof( tok[1].c_str() );
+                    float valor1 = atof( tok[0].c_str() ) / 20.0;
+                    float valor2 = atof( tok[1].c_str() ) / 20.0;
                     entradas.push_back(1.0);
                     valor1 = (valor1 < 0 ? 0 : valor1);
                     valor2 = (valor2 < 0 ? 0 : valor2);
@@ -215,11 +221,15 @@ int main(int argc,char *argv[]){
                     if (comparar(salidas,salida_red)){
                         correctas++;
                     }
+                    else{
+                        myfile << valor1*20.0 << " " << valor2*20.0 << " " << "1" << "\n";
+                    }
                     
                 }
                 std::cout << "Resultado: " << correctas << "/" << numero_total << std::endl; 
                 //std::cin.get();
                 file_procesamiento.close();
+                myfile.close();
             }
         }
 

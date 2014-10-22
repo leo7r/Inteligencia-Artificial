@@ -4,7 +4,7 @@ import pdb
 img = Image.new( 'RGB', (100,100), "green") # create a new black image
 pixels = img.load() # create the pixel map
 
-with open('datos_P1_2_SD2014_n1000.txt') as file:
+with open('prueba_estupida_de_bern.txt') as file:
 
 	lines = file.readlines()
 
