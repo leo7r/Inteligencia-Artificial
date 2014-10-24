@@ -1,109 +1,487 @@
 
+my_data500
+datos_P1_2_SD2014_n500.txt
 Entrenando con 2 neuronas escondidas
-Error Total: 1.34382
-Iteraciones dadas: 10000
-Resultado: 6348/10201
+Error Total: 1.27814
+Iteraciones dadas: 100
+Resultado: 191/441
+my_data500
+datos_P1_2_SD2014_n1000.txt
 Entrenando con 2 neuronas escondidas
-Error Total: 0.748237
-Iteraciones dadas: 10000
-Resultado: 6348/10201
+Error Total: 0.731617
+Iteraciones dadas: 100
+Resultado: 191/441
+my_data500
+datos_P1_2_SD2014_n2000.txt
 Entrenando con 2 neuronas escondidas
-Error Total: 0.608007
-Iteraciones dadas: 10000
-Resultado: 2848/10201
+Error Total: 0.510138
+Iteraciones dadas: 100
+Resultado: 334/441
+my_data1000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 2 neuronas escondidas
+Error Total: 1.27814
+Iteraciones dadas: 100
+Resultado: 380/880
+my_data1000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 2 neuronas escondidas
+Error Total: 0.731617
+Iteraciones dadas: 100
+Resultado: 380/880
+my_data1000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 2 neuronas escondidas
+Error Total: 0.510138
+Iteraciones dadas: 100
+Resultado: 659/880
+my_data2000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 2 neuronas escondidas
+Error Total: 1.27814
+Iteraciones dadas: 100
+Resultado: 753/1753
+my_data2000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 2 neuronas escondidas
+Error Total: 0.731617
+Iteraciones dadas: 100
+Resultado: 753/1753
+my_data2000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 2 neuronas escondidas
+Error Total: 0.510138
+Iteraciones dadas: 100
+Resultado: 1303/1753
+my_data500
+datos_P1_2_SD2014_n500.txt
 Entrenando con 3 neuronas escondidas
-Error Total: 1.34334
-Iteraciones dadas: 10000
-Resultado: 6348/10201
+Error Total: 0.642883
+Iteraciones dadas: 100
+Resultado: 280/441
+my_data500
+datos_P1_2_SD2014_n1000.txt
 Entrenando con 3 neuronas escondidas
-Error Total: 0.747681
-Iteraciones dadas: 10000
-Resultado: 6348/10201
+Error Total: 1.20121
+Iteraciones dadas: 100
+Resultado: 323/441
+my_data500
+datos_P1_2_SD2014_n2000.txt
 Entrenando con 3 neuronas escondidas
-Error Total: 0.64624
-Iteraciones dadas: 10000
-Resultado: 2808/10201
+Error Total: 0.595939
+Iteraciones dadas: 100
+Resultado: 335/441
+my_data1000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 3 neuronas escondidas
+Error Total: 0.642883
+Iteraciones dadas: 100
+Resultado: 583/880
+my_data1000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 3 neuronas escondidas
+Error Total: 1.20121
+Iteraciones dadas: 100
+Resultado: 681/880
+my_data1000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 3 neuronas escondidas
+Error Total: 0.595939
+Iteraciones dadas: 100
+Resultado: 679/880
+my_data2000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 3 neuronas escondidas
+Error Total: 0.642883
+Iteraciones dadas: 100
+Resultado: 1120/1753
+my_data2000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 3 neuronas escondidas
+Error Total: 1.20121
+Iteraciones dadas: 100
+Resultado: 1304/1753
+my_data2000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 3 neuronas escondidas
+Error Total: 0.595939
+Iteraciones dadas: 100
+Resultado: 1305/1753
+my_data500
+datos_P1_2_SD2014_n500.txt
 Entrenando con 4 neuronas escondidas
-Error Total: 1.14497
-Iteraciones dadas: 10000
-Resultado: 5822/10201
+Error Total: 1.28486
+Iteraciones dadas: 100
+Resultado: 191/441
+my_data500
+datos_P1_2_SD2014_n1000.txt
 Entrenando con 4 neuronas escondidas
-Error Total: 0.327471
-Iteraciones dadas: 10000
-Resultado: 2730/10201
+Error Total: 0.740677
+Iteraciones dadas: 100
+Resultado: 191/441
+my_data500
+datos_P1_2_SD2014_n2000.txt
 Entrenando con 4 neuronas escondidas
-Error Total: 0.126621
-Iteraciones dadas: 10000
-Resultado: 676/10201
+Error Total: 0.567767
+Iteraciones dadas: 100
+Resultado: 337/441
+my_data1000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 4 neuronas escondidas
+Error Total: 1.28486
+Iteraciones dadas: 100
+Resultado: 380/880
+my_data1000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 4 neuronas escondidas
+Error Total: 0.740677
+Iteraciones dadas: 100
+Resultado: 380/880
+my_data1000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 4 neuronas escondidas
+Error Total: 0.567767
+Iteraciones dadas: 100
+Resultado: 679/880
+my_data2000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 4 neuronas escondidas
+Error Total: 1.28486
+Iteraciones dadas: 100
+Resultado: 753/1753
+my_data2000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 4 neuronas escondidas
+Error Total: 0.740677
+Iteraciones dadas: 100
+Resultado: 753/1753
+my_data2000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 4 neuronas escondidas
+Error Total: 0.567767
+Iteraciones dadas: 100
+Resultado: 1310/1753
+my_data500
+datos_P1_2_SD2014_n500.txt
 Entrenando con 5 neuronas escondidas
-Error Total: 1.01307
-Iteraciones dadas: 10000
-Resultado: 4406/10201
+Error Total: 0.014042
+Iteraciones dadas: 100
+Resultado: 416/441
+my_data500
+datos_P1_2_SD2014_n1000.txt
 Entrenando con 5 neuronas escondidas
-Error Total: 0.32527
-Iteraciones dadas: 10000
-Resultado: 2715/10201
+Error Total: 0.0268325
+Iteraciones dadas: 100
+Resultado: 416/441
+my_data500
+datos_P1_2_SD2014_n2000.txt
 Entrenando con 5 neuronas escondidas
-Error Total: 0.14927
-Iteraciones dadas: 10000
-Resultado: 731/10201
+Error Total: 0.101671
+Iteraciones dadas: 100
+Resultado: 430/441
+my_data1000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 5 neuronas escondidas
+Error Total: 0.014042
+Iteraciones dadas: 100
+Resultado: 831/880
+my_data1000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 5 neuronas escondidas
+Error Total: 0.0268325
+Iteraciones dadas: 100
+Resultado: 824/880
+my_data1000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 5 neuronas escondidas
+Error Total: 0.101671
+Iteraciones dadas: 100
+Resultado: 850/880
+my_data2000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 5 neuronas escondidas
+Error Total: 0.014042
+Iteraciones dadas: 100
+Resultado: 1647/1753
+my_data2000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 5 neuronas escondidas
+Error Total: 0.0268325
+Iteraciones dadas: 100
+Resultado: 1631/1753
+my_data2000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 5 neuronas escondidas
+Error Total: 0.101671
+Iteraciones dadas: 100
+Resultado: 1704/1753
+my_data500
+datos_P1_2_SD2014_n500.txt
 Entrenando con 6 neuronas escondidas
-Error Total: 0.891042
-Iteraciones dadas: 10000
-Resultado: 5341/10201
+Error Total: 0.0935896
+Iteraciones dadas: 100
+Resultado: 413/441
+my_data500
+datos_P1_2_SD2014_n1000.txt
 Entrenando con 6 neuronas escondidas
-Error Total: 1.11371
-Iteraciones dadas: 10000
-Resultado: 2873/10201
+Error Total: 0.0819895
+Iteraciones dadas: 100
+Resultado: 405/441
+my_data500
+datos_P1_2_SD2014_n2000.txt
 Entrenando con 6 neuronas escondidas
-Error Total: 0.101705
-Iteraciones dadas: 10000
-Resultado: 580/10201
+Error Total: 0.101703
+Iteraciones dadas: 100
+Resultado: 428/441
+my_data1000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 6 neuronas escondidas
+Error Total: 0.0935896
+Iteraciones dadas: 100
+Resultado: 816/880
+my_data1000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 6 neuronas escondidas
+Error Total: 0.0819895
+Iteraciones dadas: 100
+Resultado: 803/880
+my_data1000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 6 neuronas escondidas
+Error Total: 0.101703
+Iteraciones dadas: 100
+Resultado: 856/880
+my_data2000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 6 neuronas escondidas
+Error Total: 0.0935896
+Iteraciones dadas: 100
+Resultado: 1627/1753
+my_data2000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 6 neuronas escondidas
+Error Total: 0.0819895
+Iteraciones dadas: 100
+Resultado: 1593/1753
+my_data2000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 6 neuronas escondidas
+Error Total: 0.101703
+Iteraciones dadas: 100
+Resultado: 1721/1753
+my_data500
+datos_P1_2_SD2014_n500.txt
 Entrenando con 7 neuronas escondidas
-Error Total: 0.698393
-Iteraciones dadas: 10000
-Resultado: 2975/10201
+Error Total: 0.808889
+Iteraciones dadas: 100
+Resultado: 316/441
+my_data500
+datos_P1_2_SD2014_n1000.txt
 Entrenando con 7 neuronas escondidas
-Error Total: 0.0987581
-Iteraciones dadas: 10000
-Resultado: 1278/10201
+Error Total: 0.371055
+Iteraciones dadas: 100
+Resultado: 315/441
+my_data500
+datos_P1_2_SD2014_n2000.txt
 Entrenando con 7 neuronas escondidas
-Error Total: 0.0689421
-Iteraciones dadas: 10000
-Resultado: 555/10201
+Error Total: 0.123035
+Iteraciones dadas: 100
+Resultado: 427/441
+my_data1000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 7 neuronas escondidas
+Error Total: 0.808889
+Iteraciones dadas: 100
+Resultado: 661/880
+my_data1000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 7 neuronas escondidas
+Error Total: 0.371055
+Iteraciones dadas: 100
+Resultado: 636/880
+my_data1000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 7 neuronas escondidas
+Error Total: 0.123035
+Iteraciones dadas: 100
+Resultado: 859/880
+my_data2000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 7 neuronas escondidas
+Error Total: 0.808889
+Iteraciones dadas: 100
+Resultado: 1294/1753
+my_data2000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 7 neuronas escondidas
+Error Total: 0.371055
+Iteraciones dadas: 100
+Resultado: 1251/1753
+my_data2000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 7 neuronas escondidas
+Error Total: 0.123035
+Iteraciones dadas: 100
+Resultado: 1712/1753
+my_data500
+datos_P1_2_SD2014_n500.txt
 Entrenando con 8 neuronas escondidas
-Error Total: 1.34174
-Iteraciones dadas: 10000
-Resultado: 6348/10201
+Error Total: 0.271937
+Iteraciones dadas: 100
+Resultado: 355/441
+my_data500
+datos_P1_2_SD2014_n1000.txt
 Entrenando con 8 neuronas escondidas
-Error Total: 0.751913
-Iteraciones dadas: 10000
-Resultado: 6348/10201
+Error Total: 0.0650907
+Iteraciones dadas: 100
+Resultado: 408/441
+my_data500
+datos_P1_2_SD2014_n2000.txt
 Entrenando con 8 neuronas escondidas
-Error Total: 0.221437
-Iteraciones dadas: 10000
-Resultado: 680/10201
+Error Total: 0.102631
+Iteraciones dadas: 100
+Resultado: 431/441
+my_data1000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 8 neuronas escondidas
+Error Total: 0.271937
+Iteraciones dadas: 100
+Resultado: 714/880
+my_data1000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 8 neuronas escondidas
+Error Total: 0.0650907
+Iteraciones dadas: 100
+Resultado: 806/880
+my_data1000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 8 neuronas escondidas
+Error Total: 0.102631
+Iteraciones dadas: 100
+Resultado: 858/880
+my_data2000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 8 neuronas escondidas
+Error Total: 0.271937
+Iteraciones dadas: 100
+Resultado: 1403/1753
+my_data2000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 8 neuronas escondidas
+Error Total: 0.0650907
+Iteraciones dadas: 100
+Resultado: 1597/1753
+my_data2000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 8 neuronas escondidas
+Error Total: 0.102631
+Iteraciones dadas: 100
+Resultado: 1724/1753
+my_data500
+datos_P1_2_SD2014_n500.txt
 Entrenando con 9 neuronas escondidas
-Error Total: 0.827501
-Iteraciones dadas: 10000
-Resultado: 4590/10201
+Error Total: 0.192048
+Iteraciones dadas: 100
+Resultado: 369/441
+my_data500
+datos_P1_2_SD2014_n1000.txt
 Entrenando con 9 neuronas escondidas
-Error Total: 0.0684393
-Iteraciones dadas: 10000
-Resultado: 958/10201
+Error Total: 0.0545684
+Iteraciones dadas: 100
+Resultado: 406/441
+my_data500
+datos_P1_2_SD2014_n2000.txt
 Entrenando con 9 neuronas escondidas
-Error Total: 0.0833887
-Iteraciones dadas: 10000
-Resultado: 527/10201
+Error Total: 0.0811421
+Iteraciones dadas: 100
+Resultado: 427/441
+my_data1000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 9 neuronas escondidas
+Error Total: 0.192048
+Iteraciones dadas: 100
+Resultado: 723/880
+my_data1000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 9 neuronas escondidas
+Error Total: 0.0545684
+Iteraciones dadas: 100
+Resultado: 806/880
+my_data1000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 9 neuronas escondidas
+Error Total: 0.0811421
+Iteraciones dadas: 100
+Resultado: 857/880
+my_data2000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 9 neuronas escondidas
+Error Total: 0.192048
+Iteraciones dadas: 100
+Resultado: 1428/1753
+my_data2000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 9 neuronas escondidas
+Error Total: 0.0545684
+Iteraciones dadas: 100
+Resultado: 1587/1753
+my_data2000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 9 neuronas escondidas
+Error Total: 0.0811421
+Iteraciones dadas: 100
+Resultado: 1722/1753
+my_data500
+datos_P1_2_SD2014_n500.txt
 Entrenando con 10 neuronas escondidas
-Error Total: 0.979442
-Iteraciones dadas: 10000
-Resultado: 4723/10201
+Error Total: 0.00999912
+Iteraciones dadas: 91
+Resultado: 424/441
+my_data500
+datos_P1_2_SD2014_n1000.txt
 Entrenando con 10 neuronas escondidas
-Error Total: 0.32101
-Iteraciones dadas: 10000
-Resultado: 2714/10201
+Error Total: 0.0456027
+Iteraciones dadas: 100
+Resultado: 411/441
+my_data500
+datos_P1_2_SD2014_n2000.txt
 Entrenando con 10 neuronas escondidas
-Error Total: 0.069041
-Iteraciones dadas: 10000
-Resultado: 590/10201
+Error Total: 0.0960908
+Iteraciones dadas: 100
+Resultado: 425/441
+my_data1000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 10 neuronas escondidas
+Error Total: 0.00999912
+Iteraciones dadas: 91
+Resultado: 841/880
+my_data1000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 10 neuronas escondidas
+Error Total: 0.0456027
+Iteraciones dadas: 100
+Resultado: 818/880
+my_data1000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 10 neuronas escondidas
+Error Total: 0.0960908
+Iteraciones dadas: 100
+Resultado: 858/880
+my_data2000
+datos_P1_2_SD2014_n500.txt
+Entrenando con 10 neuronas escondidas
+Error Total: 0.00999912
+Iteraciones dadas: 91
+Resultado: 1670/1753
+my_data2000
+datos_P1_2_SD2014_n1000.txt
+Entrenando con 10 neuronas escondidas
+Error Total: 0.0456027
+Iteraciones dadas: 100
+Resultado: 1610/1753
+my_data2000
+datos_P1_2_SD2014_n2000.txt
+Entrenando con 10 neuronas escondidas
+Error Total: 0.0960908
+Iteraciones dadas: 100
+Resultado: 1710/1753

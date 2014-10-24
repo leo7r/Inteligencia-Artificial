@@ -2,7 +2,7 @@
 
 entrenamientos=(datos_P1_2_SD2014_n500.txt datos_P1_2_SD2014_n1000.txt  datos_P1_2_SD2014_n2000.txt)
 
-pruebas=(grid-circulo)
+pruebas=(my_data500 my_data1000 my_data2000)
 
 entrenamientos_iris=(entrenamiento_iris50 entrenamiento_iris60 entrenamiento_iris70 entrenamiento_iris80 entrenamiento_iris90)
 
@@ -21,16 +21,16 @@ do
     for entrenamiento in ${entrenamientos[*]}
     do
     echo $i
-    echo $prueba
-    echo  $entrenamiento
-    ./punto $entrenamiento $pruebas $i >> resultados_puntos
+    echo $prueba >> resultados_puntos
+    echo  $entrenamiento >> resultados_puntos
+    ./punto $entrenamiento $prueba $i >> resultados_puntos
     done
   done
 done
 
-echo "Pruebas para iris"
+#echo "Pruebas para iris"
 
-echo "" > resultados_iris
+#echo "" > resultados_iris
 
 
 #for i in {4..10} #Estoy probando todos las neuronas posibles
