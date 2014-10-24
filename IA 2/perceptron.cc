@@ -264,7 +264,7 @@ void printvector(std::vector<float> in){
  * @param ejemplos Un vector que contiene los ejemplos para el entrenamiento con el valor esperado.
  * @param iteraciones Numero de iteraciones maximo.
  */
-void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , int iteraciones){
+void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , int iteraciones, float error_minimo){
     int iter = 0;
     float error_total;
     float error_inicial;
@@ -337,12 +337,12 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
         }
         iter++;
 
-        std::cout << "Error Total Medio : " << error_total << std::endl;
-        float porcentaje = ( (float) iter / (float) iteraciones) * 100.0 ;
+        //std::cout << "Error Total Medio : " << error_total << std::endl;
+        //float porcentaje = ( (float) iter / (float) iteraciones) * 100.0 ;
         //std::cout << "porcentaje: " << porcentaje << std::endl;
 
 
-    } while (iter < iteraciones && error_total >= 0.01 );
+    } while (iter < iteraciones && error_total >= error_minimo );
 
     std::cout << "Error Total: " << error_total << std::endl;
     std::cout << "Iteraciones dadas: " << iter << std::endl;

@@ -23,8 +23,11 @@
 #include <vector>
 #include <stdlib.h>
 #include <iostream>
-#define ITERACIONES_MAX 1000
+#define ITERACIONES_MAX 100000
 #define TASA_APRENDIZAJE 0.05
+#define RANDOM_MAX 4
+#define DIVISOR 1.0
+#define ERROR_MINIMO 0.0001
 
 /**
  * Funcion que imprime una salida de vector
@@ -125,7 +128,7 @@ int main(int argc, char* argv[]){
     }
 
     if (nombre_arch_comp.compare(string("")) != 0){
-        file_comp.open(nombre_arch_datos);
+        file_comp.open(nombre_arch_comp);
         if (!file_comp.is_open()){
             cerr << "Archivo no existe o no fue posible abrirlo.\n";
             return -1;
@@ -146,7 +149,7 @@ int main(int argc, char* argv[]){
         cout << "Clasificador Binario Iris Setosa" << endl;
         cout << "Entrenando con " << neuronas << " neuronas " << endl;
 
-        Red_neuronal red (tamano_capas , TASA_APRENDIZAJE );
+        Red_neuronal red (tamano_capas , TASA_APRENDIZAJE, RANDOM_MAX, DIVISOR );
         vector<Ejemplo_red> ejemplos;
         //Obtengo todos los ejemplos.
         while ( getline (file_datos,line) ){
@@ -173,7 +176,7 @@ int main(int argc, char* argv[]){
             ejemplos.push_back(Ejemplo_red( entradas, salidas));
         }
         file_datos.close();
-        red.entrenar_backpropagation(ejemplos,ITERACIONES_MAX);
+        red.entrenar_backpropagation(ejemplos,ITERACIONES_MAX, ERROR_MINIMO);
 
         int correctas = 0;
         int lineas = 0;
@@ -216,16 +219,15 @@ int main(int argc, char* argv[]){
                 correctas++;
             }
 
-            //std::cin.get();
-            /*
+            
             cout << "Salida Red:";
             imprimir_salida(salida_red);
             cout << " Salida Archivo: ";
             imprimir_salida(salidas);
-            cout << endl;*/
+            cout << endl;
         }
 
-        std::cout << "Correctas = " << correctas << " | " << lineas << std::endl;
+        std::cout << "Correctas = " << correctas << " / " << lineas << std::endl;
         
 
     }else if (pregunta == 2){
@@ -242,7 +244,7 @@ int main(int argc, char* argv[]){
         vector<float> versicolor (array_versicolor, array_versicolor + sizeof(array_versicolor) / sizeof(float) );
         vector<float> virginica (array_virginica, array_virginica + sizeof(array_virginica) / sizeof(float) );
         
-        Red_neuronal red (tamano_capas , TASA_APRENDIZAJE );
+        Red_neuronal red (tamano_capas , TASA_APRENDIZAJE, RANDOM_MAX, DIVISOR );
         vector<Ejemplo_red> ejemplos;
         //Obtengo todos los ejemplos.
         while ( getline (file_datos,line) ){
@@ -276,7 +278,7 @@ int main(int argc, char* argv[]){
             ejemplos.push_back(Ejemplo_red( entradas, salidas));
         }
         file_datos.close();
-        red.entrenar_backpropagation(ejemplos,ITERACIONES_MAX);
+        red.entrenar_backpropagation(ejemplos,ITERACIONES_MAX, ERROR_MINIMO);
 
         int buenas = 0;
         int total = 0;
@@ -313,13 +315,13 @@ int main(int argc, char* argv[]){
                 buenas++;
             }
 
-            /*cout << "Salida Red:";
+            cout << "Salida Red:";
             imprimir_clasificacion(salida_red);
             cout << " Salida Archivo: ";
             imprimir_salida(salidas);
             cout << " ";
             imprimir_clasificacion(salidas);
-            cout << endl;*/
+            cout << endl;
         }
     
         std::cout << "buenas: " << buenas << " | " << total << std::endl;

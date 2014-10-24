@@ -2,7 +2,7 @@
 
 entrenamientos=(datos_P1_2_SD2014_n500.txt datos_P1_2_SD2014_n1000.txt  datos_P1_2_SD2014_n2000.txt)
 
-pruebas=(instancia_correcta500 instancia_correcta1000 instancia_correcta2000)
+pruebas=(grid-circulo)
 
 entrenamientos_iris=(entrenamiento_iris50 entrenamiento_iris60 entrenamiento_iris70 entrenamiento_iris80 entrenamiento_iris90)
 
@@ -33,20 +33,20 @@ echo "Pruebas para iris"
 echo "" > resultados_iris
 
 
-for i in {4..10} #Estoy probando todos las neuronas posibles
-do
-  for prueba in ${pruebas_iris[*]}
-  do
-    for entrenamiento in ${entrenamientos_iris[*]}
-    do
-    echo $i
-    echo $prueba
-    echo  $entrenamiento
-    for pregunta in {1..2}
-    do
-      echo $pregunta
-      ./iris -p $pregunta -n $i -f $entrenamiento -c $pruebas >> resultados_iris
-    done
-    done
-  done
-done
+#for i in {4..10} #Estoy probando todos las neuronas posibles
+#do
+#  for prueba_i in ${pruebas_iris[*]}
+#  do
+#    for entrenamiento_i in ${entrenamientos_iris[*]}
+#    do
+#    echo $i
+#    echo $prueba_i
+#    echo  $entrenamiento_i
+#    for pregunta_i in {1..2}
+#    do
+#      echo $pregunta_i
+#      ./iris -p $pregunta_i -n $i -f $entrenamiento_i -c $prueba_i >> resultados_iris 
+#    done
+#    done
+#  done
+#done

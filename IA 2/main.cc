@@ -23,8 +23,8 @@
 #include <vector>
 #include <math.h>
 #include <stdlib.h>
-#define TASA_APRENDIZAJE 0.01
-#define ITERACIONES_MAX 100
+#define TASA_APRENDIZAJE 0.0001 // 4 0 es chevere
+#define ITERACIONES_MAX 1000
 
 /** 
  * Compara dos vectores.
@@ -107,7 +107,7 @@ int main(int argc,char *argv[]){
         tamano_capas.push_back(i);
         tamano_capas.push_back(1);
 
-        Red_neuronal red( tamano_capas , TASA_APRENDIZAJE ,5.0, 4.0);
+        Red_neuronal red( tamano_capas , TASA_APRENDIZAJE ,2.0, 1.0);
         //red.probar_red();
         //std::cin.get();
         std::vector<Ejemplo_red> ejemplos;
@@ -157,7 +157,7 @@ int main(int argc,char *argv[]){
         red.entrenar_backpropagation( ejemplos , ITERACIONES_MAX );
         file.close();
 
-        /*std::ofstream myfile;
+        std::ofstream myfile;
         myfile.open ("circulo.txt", std::ios::out | std::ios::app );
         for ( int i = 0 ; i < 100 ; ++i ){
             for ( int j = 0 ; j < 100 ; ++j ){
@@ -175,7 +175,6 @@ int main(int argc,char *argv[]){
         }
 
         myfile.close();
-*/
         //return -1;
 
         if (argc > 2){
@@ -211,12 +210,12 @@ int main(int argc,char *argv[]){
                     //ejemplos.push_back( Ejemplo_red( entradas , salidas ) );
                     
                     std::vector<float> salida_red = red.procesar_red(entradas);
-                    std::cout << "Salida Red: ";
+                    /*std::cout << "Salida Red: ";
                     imprimir_salida(salida_red);
 
                     std::cout << " Salida Archivo: ";
                     imprimir_salida(salidas);
-                    std::cout << std::endl;
+                    std::cout << std::endl;*/
 
                     if (comparar(salidas,salida_red)){
                         correctas++;
