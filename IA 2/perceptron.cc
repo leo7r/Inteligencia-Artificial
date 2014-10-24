@@ -337,7 +337,7 @@ void Red_neuronal::entrenar_backpropagation(std::vector<Ejemplo_red> ejemplos , 
         }
         iter++;
 
-        //std::cout << "Error Total Medio : " << error_total << std::endl;
+        std::cout << "Error Total Medio : " << error_total << std::endl;
         //float porcentaje = ( (float) iter / (float) iteraciones) * 100.0 ;
         //std::cout << "porcentaje: " << porcentaje << std::endl;
 

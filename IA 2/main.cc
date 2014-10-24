@@ -23,8 +23,8 @@
 #include <vector>
 #include <math.h>
 #include <stdlib.h>
-#define TASA_APRENDIZAJE 0.0001 // 4 0 es chevere
-#define ITERACIONES_MAX 1000
+#define TASA_APRENDIZAJE 0.01 // 4 0 es chevere
+#define ITERACIONES_MAX 100
 
 /** 
  * Compara dos vectores.
@@ -107,7 +107,7 @@ int main(int argc,char *argv[]){
         tamano_capas.push_back(i);
         tamano_capas.push_back(1);
 
-        Red_neuronal red( tamano_capas , TASA_APRENDIZAJE ,2.0, 1.0);
+        Red_neuronal red( tamano_capas , TASA_APRENDIZAJE ,5.0, 1.0);
         //red.probar_red();
         //std::cin.get();
         std::vector<Ejemplo_red> ejemplos;
