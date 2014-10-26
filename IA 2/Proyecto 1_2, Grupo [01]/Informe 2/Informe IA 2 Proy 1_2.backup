@@ -48,7 +48,7 @@ Para compilar ambos programas tan solo es necesario realizar \verb|make|.
 
 \subsection{Clasificador de puntos}
 
-\indet Se realizaron pruebas con la red neuronal con datos proporcionados de 500, 1000 y 2000
+\indent Se realizaron pruebas con la red neuronal con datos proporcionados de 500, 1000 y 2000
 instancias aleatorias y se probó la efectividad de la red con datos aleatorios realizados de
 500, 1000 y 2000 puntos. Con los argumentos especificados anteriormente se obtuvo un mejor
 resultado con una red neuronal de 10 neuronas en la capa intermedia. Estos resultados se
@@ -78,16 +78,86 @@ Datos Prueba/Datos Entrenamiento & Error Total & Iteraciones Totales & Resultado
 2000/2000 & 0.09 & 100 & 97 \% \\
 \hline
 \end{tabular}
-\caption{Tabla de resultados para una red neuronal de 9 neuronas en la capa intermedia. \label{tabla}}
+\caption{Tabla de resultados para una red neuronal de 10 neuronas en la capa intermedia. \label{tabla}}
 
 \end{table}
 
+Se observa como con mayor cantidad de datos, mayor es la precisión con que clasifica los puntos.
+Por otro lado, se puede observar los resultados del entrenamiento gráficamente mediante la imagen 
+\ref{circulo}. Se realizó una prueba con 100*100 puntos en toda el área del rectángulo uniformemente
+separados y se coloreo un cuadrado con puntos negros cuando la red clasificaba un punto y
+con puntos blancos cuando clasificaba el rectángulo. 
+Los errores obtenidos en la clasificación se observan en la imagen \ref{error}
+
+\begin{figure}[!hbtp]
+\includegraphics{fru}
+\caption{Resultados de la prueba 100*100 con la red de 10 neuronas en la capa intermedia. \label{circulo}}
+\end{figure}
+
+
+\begin{figure}[!hbtp]
+\includegraphics{mapeo_de_errores}
+\caption{Errores de la prueba 100*100 con la red de 10 neuronas en la capa intermedia. \label{error}}
+\end{figure}
 
 
 \subsection{Clasificador de Iris}
 
 \indent Para este experimento se tomaron como datos de 50 \%, 60 \%, 70 \%, 80 \% y 90 \%
-del conjunto de datos \emph{Iris Data Set}. Para que los conjuntos de entrenamiento sean
+del conjunto de datos \emph{Iris Data Set}. Para que los conjuntos de entrenamiento fueran
+adecuados se eligió del conjunto de 50 instancias de cada una de las Iris (setosa, versicolor
+y virginica) el porcentaje adecuado, de esta forma el clasificador tenia un conjunto de
+ejemplos mas equilibrado según lo que tenia que hacer. Los resultados del primer clasificador se ven reflejados en
+la tabla \ref{tabla_clasificador_setosa}. Los resultados del clasificador de Iris se ven en \ref{tabla_clasificiador_iris}
+
+
+\begin{table}[!hbtp]
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+Datos Prueba/Datos Entrenamiento (\%) & Error Total & Iteraciones Totales & Resultado (\%)\\
+\hline
+100/50 & 9.70154e-05 & 10 & 100 \% \\
+\hline
+100/60 & 9.97123e-05 & 2 & 66 \%\\
+\hline
+100/70 & 9.96403e-05 & 11  & 100 \% \\
+\hline
+100/80 & 9.18244e-05 & 15 & 100 \% \\
+\hline
+100/90 & 6.79173e-05 & 4 & 100 \% \\
+\hline
+\end{tabular}
+\caption{Tabla de resultados para clasificador de Iris  
+para una red neuronal de 10 neuronas en la capa intermedia. \label{tabla_clasificador_setosa}}
+
+\end{table}
+
+
+\begin{table}[!hbtp]
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+Datos Prueba/Datos Entrenamiento (\%) & Error Total & Iteraciones Totales & Resultado (\%)\\
+\hline
+100/50 & 9.99977e-05 & 80450 & 95 \% \\
+\hline
+100/60 & 0.000316397  & 100000 & 98 \%\\
+\hline
+100/70 & 0.000514852 & 100000  & 98,6 \% \\
+\hline
+100/80 & 0.00489225 & 100000 & 99 \% \\
+\hline
+100/90 & 9.02974e-05 & 20915 & 98 \% \\
+\hline
+\end{tabular}
+\caption{Tabla de resultados para clasificador de Iris  
+para una red neuronal de 10 neuronas en la capa intermedia. \label{tabla_clasificador_iris}}
+
+\end{table}
+
+
+
+\end{table}
+
 
 
 

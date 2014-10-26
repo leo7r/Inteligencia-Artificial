@@ -220,11 +220,11 @@ int main(int argc, char* argv[]){
             }
 
             
-            cout << "Salida Red:";
+            /*cout << "Salida Red:";
             imprimir_salida(salida_red);
             cout << " Salida Archivo: ";
             imprimir_salida(salidas);
-            cout << endl;
+            cout << endl;*/
         }
 
         std::cout << "Correctas = " << correctas << " / " << lineas << std::endl;
@@ -315,13 +315,13 @@ int main(int argc, char* argv[]){
                 buenas++;
             }
 
-            cout << "Salida Red:";
+            /*cout << "Salida Red:";
             imprimir_clasificacion(salida_red);
             cout << " Salida Archivo: ";
             imprimir_salida(salidas);
             cout << " ";
             imprimir_clasificacion(salidas);
-            cout << endl;
+            cout << endl;*/
         }
     
         std::cout << "buenas: " << buenas << " | " << total << std::endl;

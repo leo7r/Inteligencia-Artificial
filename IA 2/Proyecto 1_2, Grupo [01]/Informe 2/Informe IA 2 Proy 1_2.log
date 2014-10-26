@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/TeX Live for SUSE Linux) (format=pdflatex 2014.7.14)  24 OCT 2014 12:18
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/TeX Live for SUSE Linux) (format=pdflatex 2014.2.13)  24 OCT 2014 13:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -376,15 +376,6 @@ Overfull \hbox (4.65623pt too wide) in paragraph at lines 27--27
 []\OT1/cmr/bx/n/14.4 Detalles de Im-ple-men-ta-ci^^Son/Experimentaci^^Son 
  []
 
-! Undefined control sequence.
-l.51 \indet
-            Se realizaron pruebas con la red neuronal con datos proporcionad...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 58.
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -396,27 +387,58 @@ Overfull \hbox (57.88951pt too wide) in paragraph at lines 58--81
 
 [1
 
-{/usr/share/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2]
-(./Informe IA 2 Proy 1_2.aux
+{/usr/share/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+<fru.png, id=10, 75.28125pt x 75.28125pt>
+File: fru.png Graphic file (type png)
+ <use fru.png>
+Package pdftex.def Info: fru.png used on input line 93.
+(pdftex.def)             Requested size: 75.28105pt x 75.28105pt.
+
+<mapeo_de_errores.png, id=11, 100.375pt x 100.375pt>
+File: mapeo_de_errores.png Graphic file (type png)
+
+<use mapeo_de_errores.png>
+Package pdftex.def Info: mapeo_de_errores.png used on input line 99.
+(pdftex.def)             Requested size: 100.37474pt x 100.37474pt.
+
+
+LaTeX Warning: Reference `tabla_clasificiador_iris' on page 2 undefined on inpu
+t line 111.
+
+[2 <./fru.png (PNG copy)> <./mapeo_de_errores.png (PNG copy)>]
+Overfull \hbox (79.61177pt too wide) in paragraph at lines 115--131
+[][] 
+ []
+
+
+Overfull \hbox (81.83403pt too wide) in paragraph at lines 144--160
+[][] 
+ []
+
+[3] (./Informe IA 2 Proy 1_2.aux
 LaTeX Info: Redefining \. on input line 6.
 LaTeX Info: Redefining \% on input line 6.
-) ) 
+)
+
+LaTeX Warning: There were undefined references.
+
+ ) 
 Here is how much of TeX's memory you used:
- 2372 strings out of 493315
- 30751 string characters out of 6145893
- 102552 words of memory out of 5000000
- 5814 multiletter control sequences out of 15000+600000
- 5364 words of font info for 20 fonts, out of 8000000 for 9000
+ 2392 strings out of 493315
+ 31059 string characters out of 6145893
+ 103584 words of memory out of 5000000
+ 5830 multiletter control sequences out of 15000+600000
+ 5672 words of font info for 21 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 37i,8n,26p,245b,215s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texmf/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texm
-f/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf/fonts/type1/public
-/amsfonts/cm/cmti10.pfb></usr/share/texmf/fonts/type1/public/amsfonts/cm/cmtt10
-.pfb>
-Output written on "Informe IA 2 Proy 1_2.pdf" (2 pages, 59069 bytes).
+ 37i,8n,26p,245b,221s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texmf/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf
+/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf/fonts/type1/public
+/amsfonts/cm/cmr10.pfb></usr/share/texmf/fonts/type1/public/amsfonts/cm/cmti10.
+pfb></usr/share/texmf/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on "Informe IA 2 Proy 1_2.pdf" (3 pages, 132122 bytes).
 PDF statistics:
- 27 PDF objects out of 1000 (max. 8388607)
- 18 compressed objects within 1 object stream
+ 36 PDF objects out of 1000 (max. 8388607)
+ 23 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
