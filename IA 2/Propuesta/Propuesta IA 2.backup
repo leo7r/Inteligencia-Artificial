@@ -1,0 +1,19 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+\begin{document}
+
+\begin{flushleft}
+%\begin{figure}
+% \includegraphics{logo}
+%\end{figure}
+ Universidad Simón Bolívar\\
+ Inteligencia Artificial II\\
+ Rubén Serradas\\
+ Bernardo Morales, Leonardo Ramos y Rubén Serradas\\
+\end{flushleft}
+
+
+
+\end{document}

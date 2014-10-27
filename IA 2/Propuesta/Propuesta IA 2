@@ -1,0 +1,36 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+\begin{document}
+
+\begin{flushleft}
+\begin{figure}
+ \includegraphics[scale=0.4]{logo}
+\end{figure}
+ Universidad Simón Bolívar\\
+ Inteligencia Artificial II\\
+ Grupo 01\\
+ Bernardo Morales, Leonardo Ramos y Rubén Serradas\\
+\end{flushleft}
+
+\section{Resumen}
+
+Predictor de las alzas y bajas de la bolsa.
+
+\section{Introducción}
+
+\section{Diseño de la solución}
+
+\begin{description}
+ \item [Técnica Aprendizaje] Maquina de Soporte de Vectores (SVM).
+ \item [Tarea] Predecir alzas y bajas en los valores de la bolsa.
+ \item [Experiencia] 
+ \item [Desempeño]
+\end{description}
+
+\section{Cronograma Actividades}
+
+\section{Bibliografía}
+
+\end{document}
