@@ -75,8 +75,9 @@ creator.create("Individual", list , fitness=creator.FitnessMax)
 toolbox = base.Toolbox()
 
 toolbox.register("attr_bool", random.randint, 0, 1)
-toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_bool, 28)
+toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_bool,28)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+
 
 toolbox.register("evaluate", fitness)
 toolbox.register("mate", tools.cxTwoPoint)

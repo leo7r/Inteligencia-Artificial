@@ -342,7 +342,7 @@ def escribir_instancia_sudoku(linea, tmp,dict_encoder, sector):
            :param sector: Clase que indica todos los sectores del tablero.
            :return clausulas_casilla: Retorna el numero de clausulas escritas.
         """
-	escribir_header(tmp)
+        escribir_header(tmp)
 	num_var      = len(dict_encoder)
 	tmp_casillas = []
 	tmp_numero   = []
