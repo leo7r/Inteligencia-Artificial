@@ -71,8 +71,22 @@ def initGabilI(container, func, n):
         """
         return tools.initRepeat(container,func,n*random.randint(1,4))
 
+global EJEMPLOS #Coloco esta variable como global.
+
 def fitness(individual):
-        return 0,
+        """Retorna el fitness de un individuo segun la siguiente formula:
+                fitness(individual) = (porcentaje aciertos) ** 2
+        """
+        fitness = 0
+        for i in EJEMPLOS:
+                next_ = 1
+                prev_ = 0
+                while (next_*23 <= len(individual)):
+                        if i in individual[prev_:next_]:
+                                fitness += 1
+                        prev_ = next_
+                        next_ += 1
+        return (fitness / len(EJEMPLOS))**2,
                         
 
 def main():
@@ -92,7 +106,7 @@ def main():
                 print "Faltan los archivos de entrenamiento o de prueba. Usa el argumento -h para obtener instrucciones."
                 return
 
-        ejemplos = leer_datos(arg.entrenamiento) 
+        EJEMPLOS = leer_datos(arg.entrenamiento) 
         
         creator.create("FitnessMax", base.Fitness, weights=(1.0,))
         creator.create("Individual", list , fitness=creator.FitnessMax)
