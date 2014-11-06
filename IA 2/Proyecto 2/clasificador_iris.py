@@ -5,6 +5,7 @@ import array, random
 import argparse
 from deap import creator, base, tools, algorithms
 import pdb
+RULE_SIZE = 24
 
 def mensaje_ayuda():
         """Imprime mensaje de ayuda"""
@@ -123,6 +124,21 @@ def fitness(individual):
                         fitness += 1
         return (fitness / len(EJEMPLOS))**2,
                         
+def crossOver(ind1,ind2):
+    news = tools.cxTwoPoint(ind1,ind2)
+    chanc = random.randint(1,10)
+    bigBrother = 0 if len(news[0]) > len(news[1]) else 1
+
+    if chanc < 3 and len(news[bigBrother]) >= RULE_SIZE*2:
+        newsT = (news[bigBrother][24:],news[not bigBrother])
+
+    elif chanc >= 9:
+        news2 = tools.cxTwoPoint(ind1,ind2)
+        newsT = (news[bigBrother] + news2[random.randint(0,1)][:24],news[not bigBrother])
+    else:
+        newsT = news
+    
+    return newsT
 
 def main():
         """Funcion principal de nuestro programa"""
