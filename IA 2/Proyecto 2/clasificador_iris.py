@@ -5,6 +5,7 @@ import array, random
 import argparse
 from deap import creator, base, tools, algorithms
 import pdb
+RULE_SIZE = 24
 
 def mensaje_ayuda():
         """Imprime mensaje de ayuda"""
@@ -74,10 +75,27 @@ def initGabilI(container, func, n):
 def fitness(individual):
         return 0,
                         
+def crossOver(ind1,ind2):
+    news = tools.cxTwoPoint(ind1,ind2)
+    chanc = random.randint(1,10)
+    bigBrother = 0 if len(news[0]) > len(news[1]) else 1
+
+    if chanc < 3 and len(news[bigBrother]) >= RULE_SIZE*2:
+        newsT = (news[bigBrother][24:],news[not bigBrother])
+
+    elif chanc >= 9:
+        news2 = tools.cxTwoPoint(ind1,ind2)
+        newsT = (news[bigBrother] + news2[random.randint(0,1)][:24],news[not bigBrother])
+    else:
+        newsT = news
+    
+    return newsT
 
 def main():
         """Funcion principal de nuestro programa"""
-
+        a = [ random.randint(0,1) for i in range(24) ]
+        a2 = [ random.randint(0,1) for i in range(48) ]
+        pdb.set_trace()
         parser = argparse.ArgumentParser(description='Clasificador de Iris.') 
 
         ejemplos = leer_datos(sys.argv[1]) 
