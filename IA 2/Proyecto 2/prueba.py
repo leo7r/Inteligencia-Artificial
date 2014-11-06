@@ -17,32 +17,7 @@ def myAnd( a ):
 	return a[0] or a[1]
 
 def fitness(individual):
-
-	count = 0
-	for ejemplo in ejemplos:
-		
-		and1 = andArray( ejemplo[0] , individual[:7] )
-		and2 = andArray( ejemplo[1] , individual[7:14] )
-		and3 = andArray( ejemplo[2] , individual[14:21] )
-		and4 = andArray( ejemplo[3] , individual[21:] )
-
-		num1 = int(''.join(str(x) for x in and1),2)
-		num2 = int(''.join(str(x) for x in and2),2)
-		num3 = int(''.join(str(x) for x in and3),2)
-		num4 = int(''.join(str(x) for x in and4),2)
-
-		num = (num1+num2+num3+num4) / 4
-
-		#pdb.set_trace()
-
-		if num <= 42 and ejemplo[4] == 'Iris-setosa\n':
-			count+=1
-		elif num > 42 and num <= 83 and ejemplo[4] == 'Iris-versicolor\n':
-			count+=1
-		elif num > 83 and ejemplo[4] == 'Iris-virginica\n':
-			count+=1
-
-	return count,
+        return 0,
 
 def mediaFitness( population ):
 	fitness_count = 0
@@ -74,10 +49,14 @@ creator.create("Individual", list , fitness=creator.FitnessMax)
 
 toolbox = base.Toolbox()
 
+def myInitRepeat(container, func, n):
+        return tools.initRepeat(container,func,n*random.randint(1,4))
+
 toolbox.register("attr_bool", random.randint, 0, 1)
-toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_bool,28)
+toolbox.register("individual", myInitRepeat, creator.Individual, toolbox.attr_bool,28)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
+pdb.set_trace()
 
 toolbox.register("evaluate", fitness)
 toolbox.register("mate", tools.cxTwoPoint)
@@ -86,7 +65,7 @@ toolbox.register("select", tools.selTournament, tournsize=3)
 
 population = toolbox.population(n=300)
 
-NGEN=101
+NGEN=1
 for gen in range(NGEN):
 	print 'Generacion %s' % gen
 	offspring = algorithms.varAnd(population, toolbox, cxpb=0.5, mutpb=0.1)
@@ -100,6 +79,6 @@ for gen in range(NGEN):
 
 population.sort( key = lambda ind: fitness(ind) , reverse = True )
 
-print population[0]
+print len(population[0])
 print population[1]
 print population[2]

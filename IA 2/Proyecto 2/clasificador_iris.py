@@ -2,12 +2,13 @@
 """ Clasificador de Iris"""
 import sys
 import array, random
+import argparse
 from deap import creator, base, tools, algorithms
 import pdb
 
 def mensaje_ayuda():
         """Imprime mensaje de ayuda"""
-        print "Clasificador de Iris."
+        print ""
         print "Uso:"
         print "clasificador_iris.py -e <conjunto entrenamiento> -f <conjunto prueba> -p <seleccion padre> -s <seleccion sobrevivientes>"
         print "-s: "
@@ -46,7 +47,6 @@ def leer_datos(file):
            @param file Nombre de archivo
            @return ejemplos
         """
-           
         ejemplos = []
         with open(file) as f:
                 for line in f:
@@ -62,19 +62,55 @@ def leer_datos(file):
                         bin3 = convertir_regla(n3,1,7,1)
                         bin4 = convertir_regla(n4,0.0,3.0,0.5)
 
-                        ejemplos.append( [ bin1+bin2+bin3+bin4 , convertir_clasificacion(tok[4]) ])
+                        ejemplos.append(bin1+bin2+bin3+bin4+convertir_clasificacion(tok[4]))
         return ejemplos
+
+
+def initGabilI(container, func, n):
+        """Consideramos que un individuo puede ser de 1 a 4 reglas.
+        """
+        return tools.initRepeat(container,func,n*random.randint(1,4))
+
+def fitness(individual):
+        return 0,
                         
 
 def main():
         """Funcion principal de nuestro programa"""
-        # Imprime mensaje de ayuda si no hay argumentos.
-        if (len(sys.argv) <= 1):
-                mensaje_ayuda() 
-                return 
+
+        parser = argparse.ArgumentParser(description='Clasificador de Iris.') 
+
+        ejemplos = leer_datos(sys.argv[1]) 
         
-        ejemplos = leer_datos(sys.argv[1])
-        pdb.set_trace()
+        creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+        creator.create("Individual", list , fitness=creator.FitnessMax)
+        
+        toolbox = base.Toolbox()
+
+        toolbox.register("attr_bool", random.randint, 0, 1)
+        toolbox.register("individual", myInitRepeat, creator.Individual, toolbox.attr_bool,24)
+        toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+
+        toolbox.register("mate", tools.cxTwoPoint)
+        toolbox.register("mutate", tools.mutFlipBit, indpb=0.05)
+        toolbox.register("select", tools.selTournament, tournsize=3)
+
+        population = toolbox.population(n=300)
+
+        NGEN=1
+        for gen in range(NGEN):
+	        print 'Generacion %s' % gen
+	        offspring = algorithms.varAnd(population, toolbox, cxpb=0.5, mutpb=0.1)
+	        fits = toolbox.map(toolbox.evaluate, offspring)
+                for fit, ind in zip(fits, offspring):
+                        ind.fitness.values = fit
+                population = offspring
+
+	print mediaFitness(population)
+
+        population.sort( key = lambda ind: fitness(ind) , reverse = True )
+
+        print population[0]
 
 if __name__ == "__main__":
 	main()
