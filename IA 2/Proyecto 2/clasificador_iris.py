@@ -23,7 +23,12 @@ def urange( bajo , alto , step ):
         return l
 
 def convertir_regla(valor, rango_bajo, rango_alto, intervalo):
-        """Convierte un flotante 
+        """Convierte un flotante a un regla con sentido en el programa 
+           Pendiente:
+                regla 1 [0, 1, 0, 0] es de esta forma [0:4]
+                regla 2 [0, 0, 0, 1, 0] es de esta forma [4:9]
+                regla 3 [1, 0, 0, 0, 0, 0] es de esta forma [9:15]
+                regla 4 [1, 0, 0, 0, 0, 0] es de esta forma [15:21]
         """
         ret = []
 
@@ -35,6 +40,9 @@ def convertir_regla(valor, rango_bajo, rango_alto, intervalo):
         return ret
 
 def convertir_clasificacion(clasificacion):
+        """Convierte clasificaciones.
+           Las clasificaciones son de tamano 3. [21:24]
+        """
         if clasificacion == "Iris-setosa\n":
                 return [1,0,0]
         elif clasificacion == "Iris-virginica\n":
@@ -73,19 +81,46 @@ def initGabilI(container, func, n):
 
 global EJEMPLOS #Coloco esta variable como global.
 
+def comparar_split(ejemplo,individuo,rango):
+        """Compara un pedazo de regla con otro"""
+        for i in rango:
+                for j in rango:
+                        if i == j
+                                if ejemplo[i] == 1:
+                                        if ejemplo[i] == individuo[i]:
+                                                return True
+                                        else:
+                                                return False
+
+def comparar(ejemplo,individuo):
+        """Retorna si un ejemplo es clasificado a un individuo 
+        """
+
+        if !comparar_split(ejemplo,individuo,range(0,4)):
+                return False
+
+        if !comparar_split(ejemplo,individuo,range(4,9)):
+                return False
+
+        if !comparar_split(ejemplo,individuo,range(9,15)):
+                return False
+
+        if !comparar_split(ejemplo,individuo,range(15,21)):
+                return False
+
+        if !ejemplo[21:24] == individuo[21:24]:
+                return False
+                        
+
+
 def fitness(individual):
         """Retorna el fitness de un individuo segun la siguiente formula:
                 fitness(individual) = (porcentaje aciertos) ** 2
         """
         fitness = 0
-        for i in EJEMPLOS:
-                next_ = 1
-                prev_ = 0
-                while (next_*23 <= len(individual)):
-                        if i in individual[prev_:next_]:
-                                fitness += 1
-                        prev_ = next_
-                        next_ += 1
+        for ejemplo in EJEMPLOS:
+                if comparar(ejemplo,individual):
+                        fitness += 1
         return (fitness / len(EJEMPLOS))**2,
                         
 
@@ -97,8 +132,8 @@ def main():
         #Agrego argumentos
         parser.add_argument("-e","--entrenamiento",type=str,help="Conjunto de datos de entrenamiento")
         parser.add_argument("-f","--prueba",type=str,help="Conjunto de datos de prueba")
-        parser.add_argument("-p","--padres",type=str,help="Metodo de seleccion de padres",choices=[])
-        parser.add_argument("-s","--sobrevivientes",type=str,help="Metodo de seleccion de sobrevivientes",choices=[])
+        parser.add_argument("-p","--padres",type=str,help="Metodo de seleccion de padres",choices=["ruleta","elitismo"])
+        parser.add_argument("-s","--sobrevivientes",type=str,help="Metodo de seleccion de sobrevivientes",choices=["ruleta","torneo"])
 
         arg = parser.parse_args()
         
@@ -107,6 +142,8 @@ def main():
                 return
 
         EJEMPLOS = leer_datos(arg.entrenamiento) 
+        print EJEMPLOS
+        return 
         
         creator.create("FitnessMax", base.Fitness, weights=(1.0,))
         creator.create("Individual", list , fitness=creator.FitnessMax)
@@ -123,7 +160,7 @@ def main():
 
         population = toolbox.population(n=300)
 
-        NGEN=1
+        NGEN=10
         for gen in range(NGEN):
 	        print 'Generacion %s' % gen
 	        offspring = algorithms.varAnd(population, toolbox, cxpb=0.5, mutpb=0.1)
