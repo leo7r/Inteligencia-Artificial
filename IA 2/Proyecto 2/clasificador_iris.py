@@ -72,8 +72,22 @@ def initGabilI(container, func, n):
         """
         return tools.initRepeat(container,func,n*random.randint(1,4))
 
+global EJEMPLOS #Coloco esta variable como global.
+
 def fitness(individual):
-        return 0,
+        """Retorna el fitness de un individuo segun la siguiente formula:
+                fitness(individual) = (porcentaje aciertos) ** 2
+        """
+        fitness = 0
+        for i in EJEMPLOS:
+                next_ = 1
+                prev_ = 0
+                while (next_*23 <= len(individual)):
+                        if i in individual[prev_:next_]:
+                                fitness += 1
+                        prev_ = next_
+                        next_ += 1
+        return (fitness / len(EJEMPLOS))**2,
                         
 def crossOver(ind1,ind2):
     news = tools.cxTwoPoint(ind1,ind2)
@@ -93,12 +107,22 @@ def crossOver(ind1,ind2):
 
 def main():
         """Funcion principal de nuestro programa"""
-        a = [ random.randint(0,1) for i in range(24) ]
-        a2 = [ random.randint(0,1) for i in range(48) ]
-        pdb.set_trace()
-        parser = argparse.ArgumentParser(description='Clasificador de Iris.') 
 
-        ejemplos = leer_datos(sys.argv[1]) 
+        #Creo el parser de argumentos
+        parser = argparse.ArgumentParser(description='Clasificador de Iris usando un sistema tipo GABIL.') 
+        #Agrego argumentos
+        parser.add_argument("-e","--entrenamiento",type=str,help="Conjunto de datos de entrenamiento")
+        parser.add_argument("-f","--prueba",type=str,help="Conjunto de datos de prueba")
+        parser.add_argument("-p","--padres",type=str,help="Metodo de seleccion de padres",choices=[])
+        parser.add_argument("-s","--sobrevivientes",type=str,help="Metodo de seleccion de sobrevivientes",choices=[])
+
+        arg = parser.parse_args()
+        
+        if (arg.entrenamiento == None or arg.prueba == None):
+                print "Faltan los archivos de entrenamiento o de prueba. Usa el argumento -h para obtener instrucciones."
+                return
+
+        EJEMPLOS = leer_datos(arg.entrenamiento) 
         
         creator.create("FitnessMax", base.Fitness, weights=(1.0,))
         creator.create("Individual", list , fitness=creator.FitnessMax)
