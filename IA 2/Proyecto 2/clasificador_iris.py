@@ -6,6 +6,7 @@ import argparse
 from deap import creator, base, tools, algorithms
 import pdb
 RULE_SIZE = 24
+EJEMPLOS = []
 
 def mensaje_ayuda():
         """Imprime mensaje de ayuda"""
@@ -50,7 +51,6 @@ def convertir_clasificacion(clasificacion):
                 return [0,1,0]
         return [0,0,1]
 
-
 def leer_datos(file):
         """Esta funcion lee los datos y los transforma en reglas.
            @param file Nombre de archivo
@@ -74,56 +74,98 @@ def leer_datos(file):
                         ejemplos.append(bin1+bin2+bin3+bin4+convertir_clasificacion(tok[4]))
         return ejemplos
 
-
 def initGabilI(container, func, n):
         """Consideramos que un individuo puede ser de 1 a 4 reglas.
         """
         return tools.initRepeat(container,func,n*random.randint(1,4))
 
-global EJEMPLOS #Coloco esta variable como global.
-
 def comparar_split(ejemplo,individuo,rango):
-        """Compara un pedazo de regla con otro"""
-        for i in rango:
-                for j in rango:
-                        if i == j
-                                if ejemplo[i] == 1:
-                                        if ejemplo[i] == individuo[i]:
-                                                return True
-                                        else:
-                                                return False
+    """Compara un pedazo de regla con otro"""
+    for i in rango:
+        if ejemplo[i % RULE_SIZE ] == 1:
+            if ejemplo[i % RULE_SIZE ] == individuo[i]:
+                return True
+            else:
+                return False
 
 def comparar(ejemplo,individuo):
         """Retorna si un ejemplo es clasificado a un individuo 
         """
 
-        if !comparar_split(ejemplo,individuo,range(0,4)):
-                return False
+        for regla in range( len(individuo)/ RULE_SIZE ):
 
-        if !comparar_split(ejemplo,individuo,range(4,9)):
-                return False
+            #print "%s\n%s" % ( ejemplo , individuo[regla:regla+RULE_SIZE], )
 
-        if !comparar_split(ejemplo,individuo,range(9,15)):
-                return False
+            #pdb.set_trace()
 
-        if !comparar_split(ejemplo,individuo,range(15,21)):
-                return False
+            if not comparar_split(ejemplo,individuo,range(regla*RULE_SIZE,regla*RULE_SIZE+4)):
+                continue
+            #print 'Pase 1er rasgo'
 
-        if !ejemplo[21:24] == individuo[21:24]:
-                return False
+            if not comparar_split(ejemplo,individuo,range(regla*RULE_SIZE+4,regla*RULE_SIZE+9)):
+                continue
+            #print 'Pase 2 rasgo'
+
+            if not comparar_split(ejemplo,individuo,range(regla*RULE_SIZE+9,regla*RULE_SIZE+15)):
+                continue
+            #print 'Pase 3 rasgo'
+
+            if not comparar_split(ejemplo,individuo,range(regla*RULE_SIZE+15,regla*RULE_SIZE+21)):
+                continue
+            #print 'Pase 4 rasgo'
+
+            if not ejemplo[21:24] == individuo[regla*RULE_SIZE+21:regla*RULE_SIZE+24]:
+                continue
+            #print 'Pase clasif'
+            
+            return True
+
+        return False
                         
-
-
 def fitness(individual):
-        """Retorna el fitness de un individuo segun la siguiente formula:
-                fitness(individual) = (porcentaje aciertos) ** 2
-        """
-        fitness = 0
-        for ejemplo in EJEMPLOS:
-                if comparar(ejemplo,individual):
-                        fitness += 1
-        return (fitness / len(EJEMPLOS))**2,
-                        
+    """Retorna el fitness de un individuo segun la siguiente formula:
+            fitness(individual) = (porcentaje aciertos) ** 2
+    """
+    global EJEMPLOS
+
+    fitness = 0
+    for ejemplo in EJEMPLOS:
+        
+        #pdb.set_trace()
+        #raw_input('Habla..')
+
+        if comparar(ejemplo,individual):
+            fitness += 1
+
+    #if fitness != 0:
+    #    pdb.set_trace()
+
+    return (fitness / float(len(EJEMPLOS)))**2,
+
+def mediaFitness( population ):
+    fitness_count = 0
+    for ind in population:
+        fitness_count+= fitness(ind)[0]
+
+    return fitness_count / float(len(population))
+
+def crossOver2(ind1,ind2):
+
+    c1 = random.randint(0,RULE_SIZE)
+    c2 = random.randint(c1,RULE_SIZE)
+
+    r11 = random.randint(0,(len(ind1)/RULE_SIZE)-1)
+    r12 = random.randint(r11,(len(ind1)/RULE_SIZE)-1)
+
+    r21 = random.randint(0,(len(ind2)/RULE_SIZE)-1)
+    r22 = random.randint(r21,(len(ind2)/RULE_SIZE)-1)
+
+    #pdb.set_trace()
+    new1 = ind1[0:r11*RULE_SIZE+c1] + ind2[ r21*RULE_SIZE+c1 : r22*RULE_SIZE+c2 ] + ind1[r12*RULE_SIZE+c2:]
+    new2 = ind2[0:r21*RULE_SIZE+c1] + ind1[ r11*RULE_SIZE+c1 : r12*RULE_SIZE+c2 ] + ind2[r22*RULE_SIZE+c2:]
+
+    return (creator.Individual(new1),creator.Individual(new2))
+
 def crossOver(ind1,ind2):
     news = tools.cxTwoPoint(ind1,ind2)
     chanc = random.randint(1,10)
@@ -138,58 +180,63 @@ def crossOver(ind1,ind2):
     else:
         newsT = news
     
-    return newsT
+
+    return ( creator.Individual(newsT[0]) , creator.Individual(newsT[1]) )
+    #return newsT
 
 def main():
-        """Funcion principal de nuestro programa"""
+    """Funcion principal de nuestro programa"""
+    global EJEMPLOS
 
-        #Creo el parser de argumentos
-        parser = argparse.ArgumentParser(description='Clasificador de Iris usando un sistema tipo GABIL.') 
-        #Agrego argumentos
-        parser.add_argument("-e","--entrenamiento",type=str,help="Conjunto de datos de entrenamiento")
-        parser.add_argument("-f","--prueba",type=str,help="Conjunto de datos de prueba")
-        parser.add_argument("-p","--padres",type=str,help="Metodo de seleccion de padres",choices=["ruleta","elitismo"])
-        parser.add_argument("-s","--sobrevivientes",type=str,help="Metodo de seleccion de sobrevivientes",choices=["ruleta","torneo"])
+    #Creo el parser de argumentos
+    parser = argparse.ArgumentParser(description='Clasificador de Iris usando un sistema tipo GABIL.') 
+    #Agrego argumentos
+    parser.add_argument("-e","--entrenamiento",type=str,help="Conjunto de datos de entrenamiento")
+    parser.add_argument("-f","--prueba",type=str,help="Conjunto de datos de prueba")
+    parser.add_argument("-p","--padres",type=str,help="Metodo de seleccion de padres",choices=["ruleta","elitismo"])
+    parser.add_argument("-s","--sobrevivientes",type=str,help="Metodo de seleccion de sobrevivientes",choices=["ruleta","torneo"])
 
-        arg = parser.parse_args()
-        
-        if (arg.entrenamiento == None or arg.prueba == None):
-                print "Faltan los archivos de entrenamiento o de prueba. Usa el argumento -h para obtener instrucciones."
-                return
+    arg = parser.parse_args()
+    
+    if (arg.entrenamiento == None or arg.prueba == None):
+            print "Faltan los archivos de entrenamiento o de prueba. Usa el argumento -h para obtener instrucciones."
+            return
 
-        EJEMPLOS = leer_datos(arg.entrenamiento) 
-        print EJEMPLOS
-        return 
-        
-        creator.create("FitnessMax", base.Fitness, weights=(1.0,))
-        creator.create("Individual", list , fitness=creator.FitnessMax)
-        
-        toolbox = base.Toolbox()
+    EJEMPLOS = leer_datos(arg.entrenamiento) 
+    
+    creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+    creator.create("Individual", list , fitness=creator.FitnessMax)
+    
+    toolbox = base.Toolbox()
 
-        toolbox.register("attr_bool", random.randint, 0, 1)
-        toolbox.register("individual", myInitRepeat, creator.Individual, toolbox.attr_bool,24)
-        toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+    toolbox.register("attr_bool", random.randint, 0, 1)
+    toolbox.register("individual", initGabilI, creator.Individual, toolbox.attr_bool,24)
+    toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+    
+    toolbox.register("evaluate",fitness)
+    toolbox.register("mate", crossOver2 )
+    toolbox.register("mutate", tools.mutFlipBit, indpb=0.05)
+    toolbox.register("select", tools.selBest, k=5)
 
-        toolbox.register("mate", tools.cxTwoPoint)
-        toolbox.register("mutate", tools.mutFlipBit, indpb=0.05)
-        toolbox.register("select", tools.selTournament, tournsize=3)
+    population = toolbox.population(n=100)
 
-        population = toolbox.population(n=300)
+    NGEN=500
+    for gen in range(NGEN):
+        #print 'Generacion %s' % gen
+        #print mediaFitness(population)**(1/2.0)
 
-        NGEN=10
-        for gen in range(NGEN):
-	        print 'Generacion %s' % gen
-	        offspring = algorithms.varAnd(population, toolbox, cxpb=0.5, mutpb=0.1)
-	        fits = toolbox.map(toolbox.evaluate, offspring)
-                for fit, ind in zip(fits, offspring):
-                        ind.fitness.values = fit
-                population = offspring
-
-	print mediaFitness(population)
+        offspring = algorithms.varAnd(population, toolbox, cxpb=0.8, mutpb=0.1)
+        fits = toolbox.map(toolbox.evaluate, offspring)
+        for fit, ind in zip(fits, offspring):
+            ind.fitness.values = fit
 
         population.sort( key = lambda ind: fitness(ind) , reverse = True )
+        print fitness(population[0])[0]**(1/2.0)
 
-        print population[0]
+        population = offspring
+
+    population.sort( key = lambda ind: fitness(ind) , reverse = True )
+    print population[0]
 
 if __name__ == "__main__":
-	main()
+    main()
