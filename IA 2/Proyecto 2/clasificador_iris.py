@@ -226,12 +226,22 @@ def main():
         #print mediaFitness(population)**(1/2.0)
 
         offspring = algorithms.varAnd(population, toolbox, cxpb=0.8, mutpb=0.1)
+
+        # Elitismo
+        population.sort( key = lambda ind: fitness(ind) , reverse = True )
+        print "Fitness =  %s | Poblacion %s" % (fitness(population[0])[0]**(1/2.0),len(population))
+
+        if fitness(population[0])[0] == 1.0:
+            print "Num gen %s" % gen
+            break
+
+        for i in range(5):
+            rnd = random.randint(0,len(offspring)-1)
+            offspring[ rnd ] = population[i]
+
         fits = toolbox.map(toolbox.evaluate, offspring)
         for fit, ind in zip(fits, offspring):
             ind.fitness.values = fit
-
-        population.sort( key = lambda ind: fitness(ind) , reverse = True )
-        print fitness(population[0])[0]**(1/2.0)
 
         population = offspring
 
