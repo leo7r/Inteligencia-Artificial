@@ -1,0 +1,46 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[utf8]{inputenc}
+
+%opening
+
+\begin{document}
+
+\begin{flushleft}
+\begin{figure}
+ \includegraphics[scale=0.4]{logo}
+\end{figure}
+ Universidad Simón Bolívar\\
+ Inteligencia Artificial II\\
+ Grupo 01 \\
+ Bernardo Morales, Leonardo Ramos y Rubén Serradas\\
+\end{flushleft}
+
+\begin{abstract}
+
+\end{abstract}
+
+\section{Descripción de la implementación}
+
+\indent Se utilizó el lenguaje de programación \verb|Python| para la realización del 
+clasificador de las tres clases de la flor Iris (Setosa, Versicolor y Virginica), 
+partiendo del sistema GABIL realizado por Kenneth A. De Jong et al. (\emph{Using Ge-
+netic Algorithms for Concept Learning}). Aprovechamos la librería DEAP (\emph{Distributed Evolutionary Algorithms in Python})
+para poder concentrarnos en conceptos fundamentales del algoritmo genético realizado. Sin embargo, se realizó
+la función de Fitness y Crossover pues la librería no contaba con estas para un sistema GABIL.\\
+\indent Algo que es bastante relevante para el desarrollo de un sistema GABIL es la transformación de 
+los datos, se analizaron cada uno de estos con un script en el lenguaje de programación R
+realizando un histograma de frecuencias y dividendo los datos de la manera expresada
+por las gráficas mostradas por el script.\\
+\indent Para utilizar el clasificador tan solo es necesario escribir \verb|python clasificador_iris.py| y 
+el programa imprimirá un mensaje de ayuda para su uso.
+
+\section{Descripción del Algoritmo Genético}
+
+\section{Descripción de Experimentos Realizados}
+
+\section{Discusión}
+
+
+
+\end{document}
