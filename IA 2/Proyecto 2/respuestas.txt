@@ -7,25 +7,41 @@ a) La mejor configuracion es seleccion padres "best", seleccion sobrevivientes "
 {'Resultado': 92.02898550724623, 'Tipo': 'Mut: 0.02 | CX: 0.1 | Pen: None'}
 
 b) El mejor conjunto de reglas es (maximo 20 reglas):
-
-[0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1]
+regla 1---- regla 2-------- regla 3---------- regla 4---------|| 
+[0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1] 
+Sin importar el largo del sepalo, con anchura de 2-2.5 o 3-4, petalo de largo 1-3 o 4-5, petalo de ancho 0.5 a 1.5 o 2-2.5 puede ser Iris Setosa o Versicolor
 [0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1]
+Con largo de sepalo 7-8, anchura 2-2.5 o 3-4; largo del petalo 1-2 o 3-4 y ancho 0.0 a 1.0, 1.5-2.0 y 2.5 en adelante tenemos Iris virginica o versicolor.
 [0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1]
+Con largo de sepalo 6-7 , anchura de 2-3 o 3,5 en adelante; largo del petalo 2-3 o 6-7 y ancho 0.0-0.5, 1.0-1.5 y 2.0-2.5 puede ser cualquier clase.
 [0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1]
+Con largo de sepalo 5-6, 7-8, con anchura de 2-2.5 o 3-4; petalo de largo 1-3 o 4-5, petalo de ancho 0.5-1.5 2-2.5 puede ser cualquier clase 
 [1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1]
+Con largo de sepalo 4-5, 6-8; ancho de sepalo 2.5-3.5 y 4.0-4.5; largo de petalo 4-6 y anco 0.0-0.5,1.0-1,2.0-3.0 puede ser cualquier clase
 [0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1]
+largo de sepalo 5-7, ancho sepalo 2.0-3.0, 3.5-4.0; largo de petalo 3-7 , ancho de petalo 1.5-3.0 puede ser cualquier clase
 [1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1]
+Largo de sepalo 4-8, ancho de sepalo 2.0-2.5, 3.0-3.5 ; largo de petalo 2-6 y ancho 0.0-0.5 o 1.0-3.0 puede ser cualquier clase
 [1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+largo de sepalo 4-8 , ancho del sepalo 2.5-3.0, largo del petalo 1-3, 4-5 o 6-7 y ancho del petalo 0.5-2.5 puede ser de cualquier clase.
 [0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+largo del sepalo 5-7, ancho del sepalo 2.0-2.5 o 4.0-4.5, largo del petalo 1-2 o 3-4 o 5-6 o 0.0-3.0 puede ser cualquier clase
 [1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]
+largo del sepalo 4-6 o 7-8 , ancho del sepalo 3.5-4.5, largo del petalo 2-3 o 4-5 o 6-7, ancho de petalo 0.0-3.0 puede ser iris setosa o iris virginica.
 [1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]
+largo del sepalo 4-5 o 6-7, ancho del sepalo 3.0-4.0, largo del petalo 1-2 o 3-4 o 5-7, ancho del petalo 0.0-3.0 puede ser iris setosa o versicolor
 [0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1]
+largo del sepalo 5-6, ancho del sepalo 2.5-3.5 o 4.0-4.5, largo del petalo 2-3 o 4-7 y ancho del petalo 0.0-3.0 puede ser virginica o versicolor.
 [1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0]
+largo del sepalo 4-5, ancho del sepalo 2.0-3.0 o 3.5-4.0, largo del petalo 1-2 o 3-7 y ancho del petalo 0.0-2.5 puede ser iris setosa o virginica
 [0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1]
-[0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0]
+largo del sepalo 7-8, con ancho del sepalo 2.0-2.5 o 3.0-3.5 o 4.0-4.5, largo del petalo2-7 y ancho del petalo 0.0-3.0 puede ser iris setosa o versicolor
 [0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0]
+largo del sepalo 6-8, 2.5-3.0 o 3.5-4.0, largo del petalo 1-7, ancho del petalo 0.0-1.5 y 2.0-3-0 es iriv virgnica
 [1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0]
+largo del sepalo 4-8, ancho del sepalo 2.5-3.0 o 3.5-4.5, largo del petalo 1-7 y ancho del petalo 1.0-2.0 o 2.5-3.0 no pertenece a ninguna clase de iris
 [1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1]
+largo del sepalo 4-5 o 6-7, ancho del sepalo 2.0-2.5 o 3.0-4.5, largo del petalo 1-7, ancho del petalo 0.5-2.5 puede ser iris versicolor.
 
 
 c) La funcion de fitness compara para cada ejemplo, si alguna de las reglas del individuo hace match con los features del ejemplo

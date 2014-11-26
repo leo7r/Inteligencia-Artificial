@@ -1,6 +1,8 @@
 \documentclass[a4paper,10pt]{article}
 \usepackage[spanish,es-tabla]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
 
 %opening
 
@@ -18,6 +20,11 @@
 
 \begin{abstract}
 
+\indent Se realizó un clasificador para las tres clases de flores de Iris del conjunto de datos de Iris Setosa
+utilizando un algoritmo genético. Se partió  del sistema GABIL realizado por Kenneth A. De Jong et al.\\
+\indent Se llegó hasta una precisión de hasta 92 \% con los datos de prueba. La descripción de la implementación,
+mejor algoritmo genético obtenido, experimentos realizados y discusión se encuentra a continuación.
+
 \end{abstract}
 
 \section{Descripción de la implementación}
@@ -32,15 +39,134 @@ la función de Fitness y Crossover pues la librería no contaba con estas para u
 los datos, se analizaron cada uno de estos con un script en el lenguaje de programación R
 realizando un histograma de frecuencias y dividendo los datos de la manera expresada
 por las gráficas mostradas por el script.\\
-\indent Para utilizar el clasificador tan solo es necesario escribir \verb|python clasificador_iris.py| y 
+\indent Para utilizar el clasificador tan solo es necesario escribir \verb|python| \\ \verb|clasificador_iris.py| y 
 el programa imprimirá un mensaje de ayuda para su uso.
 
 \section{Descripción del Algoritmo Genético}
 
+\indent Del conjunto de experimentos realizados se observó que la mejor manera de elegir
+padres para nuestro caso de estudio es elegir los mejores para su reproducción y una vez
+obtenido los hijos de estos la mejor manera de elegir a los sobrevivientes es mediante el
+método del elitismo. Esto probablemente sea debido a que el conjunto de prueba no era 
+muy grande y no era tan importante mantener una gran diversidad en nuestro caso de estudio.\\
+\indent El programa \verb|clasificador_iris.py| nos permite elegir entre varias opciones 
+para la elección de padres (ruleta y mejor) y sobrevivientes (elitismo o ruleta).\\
+\indent La tasa de mutación usada por la mejor configuración fue de 0.02 y la de 
+crossover 0.1. Nuestra función de fitness era la misma que la del sistema GABIL presentada
+en el artículo de Kenneth A. De Jong et al., $fitness(individuo) = (porcentajeCorrecto)^2$ , 
+con la particularidad de que podíamos penalizar una longitud determinada de individuo. La mejor
+configuración no usaba la opción de la penalización.
+
 \section{Descripción de Experimentos Realizados}
+
+\indent Se hicieron 100 ejecuciones para cada una de las configuraciones usadas tomando
+el promedio del resultado, los resultados junto con las configuraciones 
+usadas se encuentras en la tabla \ref{tabla}. Para el entrenamiento del algoritmo
+se usó un conjunto de 12 ejemplos bien representativos, 4 por cada tipo de Iris, esto
+demuestra la gran capacidad que tiene un sistema GABIL para la clasificación pues
+los resultados de la mejor configuración se acercan a los obtenidos en el proyecto
+anterior por una red neuronal.
+
+\begin{table}[!hbtp]
+\begin{tabular}{|l|p{2.4cm}|p{2.4cm}|p{2.4cm}|}
+\hline
+Resultados & Tasa de Mutación & Tasa de Crossover & Comienzo Penalización \\
+\hline
+92.02898550724623 & 0.02 & 0.1 & Ninguna \\
+\hline
+86.95652173913025 & 0.02 & 0.1 & 10 \\
+\hline
+80.43478260869578 & 0.02 & 0.1 & 20 \\
+\hline
+90.57971014492776 & 0.02 & 0.4 & Ninguna \\
+\hline
+86.95652173913025 & 0.02 & 0.4 & 10 \\
+\hline
+77.53623188405798 & 0.02 & 0.4 & 20 \\
+\hline
+78.26086956521726 & 0.02 & 0.8 & Ninguna \\
+\hline
+67.39130434782602 & 0.02 & 0.8 & 10 \\
+\hline
+66.66666666666674 & 0.02 & 0.8 & 20 \\
+\hline
+23.920289855072486 & 0.05 & 0.1 & Ninguna \\
+\hline
+86.95652173913025 & 0.05 & 0.1 & 10 \\
+\hline
+22.2753623188406 & 0.05 & 0.1 & 20 \\
+\hline
+91.30434782608688 & 0.05 & 0.4 & Ninguna \\
+\hline
+78.98550724637693 & 0.05 & 0.4 & 10 \\
+\hline
+84.0579710144929 & 0.05 & 0.4 & 20 \\
+\hline
+82.60869565217398 & 0.05 & 0.8 & Ninguna \\
+\hline
+84.78260869565207 & 0.05 & 0.8 & 10 \\
+\hline
+79.71014492753608 & 0.05 & 0.8 & 20 \\
+\hline
+66.66666666666674 & 0.1 & 0.1 & Ninguna \\
+\hline
+76.08695652173905 & 0.1 & 0.1 & 10 \\
+\hline
+90.57971014492776 & 0.1 & 0.1 & 20 \\
+\hline
+60.86956521739126 & 0.1 & 0.4 & Ninguna \\
+\hline
+81.15942028985502 & 0.1 & 0.4 & 10 \\
+\hline
+86.95652173913025 & 0.1 & 0.4 & 20 \\
+\hline
+78.26086956521726 & 0.1 & 0.8 & Ninguna \\
+\hline
+85.50724637681176 & 0.1 & 0.8 & 10 \\
+\hline
+86.95652173913025 & 0.1 & 0.8 & 20 \\
+\hline
+\end{tabular}
+\caption{Tabla de resultados para el sistema GABIL con distintas configuraciones usando los mejores 
+padres y elitismo com``o método de selección de sobrevivientes. \label{tabla}}
+\end{table}
 
 \section{Discusión}
 
+\indent Observando la tabla \ref{tabla} la mejor configuración obtenida para nuestro caso de estudio 
+fue la de selección de los mejores padres con elitismo para método de selección de sobrevivientes con 
+tasa de mutación 0.02, crossover 0.1 y función fitness sin ningún tipo de penalización.\\
+\indent La función fitness usada, como se explicó anteriormente, es la misma que la del articulo 
+del sistema GABIL. Esta compara  para cada ejemplo, si alguna de las reglas del individuo tiene los mismas características 
+del ejemplo con el resultado esperado se le suma un punto. Al final se saca el promedio de los aciertos dividido entre
+el total y este resultado se eleva al cuadrado. Si se esta considerando la penalización se observa que la regla 
+no sea mayor que una longitud deseada, si esta se pasa entonces el fitness de la regla muy larga es 0. 
+Esta penalización puede ser útil para clasificadores muy grandes que tengan muchos ejemplos a considerar y 
+características ya que se podría tener un ``overfitting'' con las reglas muy largas y el clasificador
+se convertiría en una especie de árbol de decisiones.\\ 
+\indent Por último, el mejor conjunto de reglas hallado por el algoritmo genético se describe a continuación:
+
+\begin{itemize}
+ \item Sin importar el largo del sépalo, con anchura 2-2.5 o 3-4 cm. Pétalo de largo 1-3 cm y ancho 0.5 a 1.5 o 2-2.5 puede ser Iris Setosa o Versicolor.   
+ \item Con largo de sépalo 7-8 cm., anchura 2-2.5 o 3-4 cm. Largo del pétalo 1-2 o 3-4  cm. y ancho 0.0 a 1.0 o 1.5-2.0 o 2.5 en adelante 
+ tenemos Iris Virginica o Versicolor.
+ \item Con largo de sépalo 6-7 cm., anchura de 2-3 o 3.5 cm. en adelante. Largo del pétalo 2-3 o 6-7 cm. y ancho 0.0-0.5 o 1.0-1.5 o 2.0-2.5 cm. 
+ puede ser cualquier clase.
+ \item Con largo de sépalo 5-6 o 7-8 cm. con anchura de 2-2.5 o 3-4 cm. Pétalo de largo 1-3 o 4-5 cm. con ancho 0.5-1.5 o 2-2.5 puede ser cualquier clase. 
+ \item Con largo de sépalo 4-5 o 6-8 cm. ancho de 2.5-3.5 o 4.0-4.5 cm. Largo de pétalo 4-6 y ancho 0.0-0.5 o 1.0-1 o 2.0-3.0 puede ser cualquier clase.
+ \item Largo de sépalo 5-7 cm., ancho 2.0-3.0 o 3.5-4.0 cm. Largo de pétalo 3-7 cm., ancho de 1.5-3.0 cm. puede ser cualquier clase.
+ \item Largo de sépalo 4-8 cm. ancho de  2.0-2.5 o 3.0-3.5 cm. Largo de pétalo 2-6 cm. y ancho 0.0-0.5 o 1.0-3.0 cm. puede ser cualquier clase.
+ \item Largo de sépalo 4-8 cm., ancho de 2.5-3.0 cm. Largo del pétalo 1-3, 4-5 o 6-7  cm. y ancho de 0.5-2.5 cm. puede ser de cualquier clase.
+ \item Largo del sépalo 5-7 cm., ancho de 2.0-2.5 o 4.0-4.5 cm., largo del pétalo 1-2 o 3-4 o 5-6 cm. y 0.0-3.0 de ancho puede ser cualquier clase.
+ \item Largo del sépalo 4-6 o 7-8 cm., ancho de 3.5-4.5 cm. Largo del pétalo 2-3 o 4-5 o 6-7 cm., ancho de 0.0-3.0 cm. puede ser Iris Setosa o Virginica.
+ \item Largo del sépalo 4-5 o 6-7 cm., ancho de 3.0-4.0 cm. Largo del pétalo 1-2 o 3-4 o 5-7 cm., ancho de 0.0-3.0 cm. puede ser Iris Setosa o Versicolor.
+ \item Largo del sépalo 5-6 cm., ancho de 2.5-3.5 o 4.0-4.5 cm. Largo del pétalo 2-3 o 4-7 con ancho de 0.0-3.0 cm. puede ser Iris Virginica o Versicolor.
+ \item Largo del sépalo 4-5 cm., ancho de 2.0-3.0 o 3.5-4.0 cm. Largo del pétalo 1-2 o 3-7 cm. y ancho de 0.0-2.5 cm. puede ser Iris Setosa o Virginica
+ \item Largo del sépalo 7-8 cm. con ancho de  2.0-2.5 o 3.0-3.5 o 4.0-4.5 cm. Largo del pétalo 2-7 cm. y ancho de 0.0-3.0 cm. puede ser Iris Setosa o Versicolor
+ \item Largo del sépalo 6-8 cm. con ancho de 2.5-3.0 o 3.5-4.0 cm. Largo del pétalo 1-7 cm. y ancho de 0.0-1.5 o 2.0-3-0 cm. es una Iris Virginica.
+ \item Largo del sépalo 4-8 cm. con ancho de 2.5-3.0 o 3.5-4.5 cm. Largo del pétalo 1-7 cm. y ancho de este de 1.0-2.0 o 2.5-3.0 cm. no pertenece a ninguna clase de Iris.
+ \item Largo del sépalo 4-5 o 6-7 cm., ancho de 2.0-2.5 o 3.0-4.5 cm. Largo del pétalo 1-7 cm., ancho de este de 0.5-2.5 cm. es Iris Versicolor.
+\end{itemize}
 
 
 \end{document}

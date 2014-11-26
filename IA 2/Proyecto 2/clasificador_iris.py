@@ -9,13 +9,6 @@ RULE_SIZE = 24
 EJEMPLOS = []
 RULE_LIMIT = 3 # None en caso de no querer esto
 
-def mensaje_ayuda():
-        """Imprime mensaje de ayuda"""
-        print ""
-        print "Uso:"
-        print "clasificador_iris.py -e <conjunto entrenamiento> -f <conjunto prueba> -p <seleccion padre> -s <seleccion sobrevivientes>"
-        print "-s: "
-        print "-p: "
 
 def urange( bajo , alto , step ):
         v = bajo
@@ -24,6 +17,69 @@ def urange( bajo , alto , step ):
                 l.append(v)
                 v+=step
         return l
+
+def individuo_regla(individuo):
+        for i in range(0,len(individuo)):
+                if i >= 0 and i < 4:
+                        print "sepal length: "
+                        if individuo[i] == 1 and i == 0:
+                                print "4-5"
+                        elif individuo[i] == 1 and i == 1:
+                                print "5-6"
+                        elif individuo[i] == 1 and i == 2:
+                                print "6-7"
+                        elif individuo[i] == 1 and i == 3:
+                                print "7-8"
+                elif i >= 4 and i < 9:
+                        print "sepal width: "
+                        if individuo[i] == 1 and i == 4:
+                                print "2.0-2.5"
+                        elif individuo[i] == 1 and i == 5:
+                                print "2.5-3.0"
+                        elif individuo[i] == 1 and i == 6:
+                                print "3.0-3.5"
+                        elif individuo[i] == 1 and i == 7:
+                                print "3.5-4.0"
+                        elif individuo[i] == 1 and i == 8:
+                                print "4.0-4.5"
+                elif i >= 9 and i < 15:
+                        print "petal length: "
+                        if individuo[i] == 1 and i == 9:
+                                print "1-2"
+                        elif individuo[i] == 1 and i == 10:
+                                print "2-3"
+                        elif individuo[i] == 1 and i == 11:
+                                print "3-4"
+                        elif individuo[i] == 1 and i == 12:
+                                print "4-5"
+                        elif individuo[i] == 1 and i == 13:
+                                print "5-6"
+                        elif individuo[i] == 1 and i == 14:
+                                print "6-7"
+                elif i >= 15 and i < 21:
+                        print "petal width: "
+                        if individuo[i] == 1 and i == 15:
+                                print "0.0-0.5"
+                        elif individuo[i] == 1 and i == 16:
+                                print "0.5-1.0"
+                        elif individuo[i] == 1 and i == 17:
+                                print "1.0-1.5"
+                        elif individuo[i] == 1 and i == 18:
+                                print "1.5-2.0"
+                        elif individuo[i] == 1 and i == 19:
+                                print "2.0-2.5"
+                        elif individuo[i] == 1 and i == 20:
+                                print "2.5-3.0"
+        if individuo[21] == 1:
+                print "iris setosa"
+        if individuo[22] == 1:
+                print "iris virginica"
+        if individuo[23] == 1:
+                print "iris versicolor"
+                
+                
+
+
 
 def convertir_regla(valor, rango_bajo, rango_alto, intervalo):
         """Convierte un flotante a un regla con sentido en el programa 
