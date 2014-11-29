@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 import pdb
 import Quandl
 import math
-import pdb
+
+###############################################################################
+sample_size = 100
 """Predictor de los precios del oro.
 """
 
@@ -84,20 +86,24 @@ datos_deseados = ["BUNDESBANK/BBK01_WT5511","LBMA/SILVER.1", "JOHNMATT/PLAT.3", 
 
 print "Descargando Datos..."
 
-mydata = Quandl.get(datos_deseados, trim_start="2013-01-01", trim_end="2014-6-30",returns="numpy",transformation="diff" , authtoken=tok)
+
+mydata = Quandl.get(datos_deseados, trim_start="2013-01-01", trim_end="2014-11-25",returns="numpy",transformation="diff" , authtoken=tok)
 
 ''' DATOS DE PRUEBA '''
 
-mydata2 = Quandl.get(datos_deseados, trim_start="2014-7-01", trim_end="2014-11-25",returns="numpy",transformation="diff" , authtoken=tok)
-
 print "Realizando calculos..."
+
 print len(mydata)
+mydata2 = mydata[len(mydata)-sample_size:]
+mydata = mydata[0:len(mydata)-sample_size]
+
 X= append_age_feature(mydata)
 print len(mydata)
 X = delete_nan(X)
 y = obtain_gold_value1(mydata)
 X = normalize(X)
-print X
+
+''' DATOS DE PRUEBA '''
 
 X2 = append_age_feature(mydata2)
 X2 = delete_nan(X2)
