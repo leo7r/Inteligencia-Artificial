@@ -29,7 +29,8 @@ def append_age_feature(mydata):
         for i in range(len(mydata)-1):
                 tmp = []
                 for j in range(1,len(mydata[i])):
-                        tmp.append(mydata[i][j])
+                	tmp.append(mydata[i][j])
+                
                 tmp.append( i / float(len(mydata)))
                 X.append(tmp)
         return X
@@ -44,8 +45,8 @@ def delete_nan(X2):
         result = []
         for i in range(len(X2)):
                 tmp = []
-                for j in range(1, len(X2[i])):
-                        tmp.append(X2[i][j] if not math.isnan(X2[i][j]) else 0)
+                for j in range(0, len(X2[i])):
+                	tmp.append(X2[i][j] if not math.isnan(X2[i][j]) else 0)
                 result.append(tmp)
         return result
 
@@ -82,10 +83,9 @@ def simple_normalize(y):
 
 ''' DATOS DE ENTRENAMIENTO '''
 
-datos_deseados = ["BUNDESBANK/BBK01_WT5511","LBMA/SILVER.1", "JOHNMATT/PLAT.3", "CURRFX/USDAUD.1", "CURRFX/USDCNY.1"]
+datos_deseados = ["BUNDESBANK/BBK01_WT5511","LBMA/SILVER.1", "JOHNMATT/PLAT.3",]# "CURRFX/USDAUD.1", "CURRFX/USDCNY.1"]
 
 print "Descargando Datos..."
-
 
 mydata = Quandl.get(datos_deseados, trim_start="2013-01-01", trim_end="2014-11-25",returns="numpy",transformation="diff" , authtoken=tok)
 
@@ -101,7 +101,7 @@ X= append_age_feature(mydata)
 print len(mydata)
 X = delete_nan(X)
 y = obtain_gold_value1(mydata)
-X = normalize(X)
+#X = normalize(X)
 
 ''' DATOS DE PRUEBA '''
 
@@ -110,8 +110,8 @@ X2 = delete_nan(X2)
 y2 = obtain_gold_value1(mydata2)
 y2 = delete_nan_simple(y2)
 
-X2 = normalize(X2)
-
+#pdb.set_trace()
+#X2 = normalize(X2)
 ###############################################################################
 # Fit regression model
 svr_rbf = SVR(kernel='rbf', C=1e1, gamma=1.0)
@@ -125,7 +125,7 @@ for datos in X2:
 	y_rbf = svr_rbf.fit(X + X2[0:i] , y + y2[0:i] )
 	pred = y_rbf.predict([ datos ])
 	print "%s -> %s  |  %s" % (i,pred[0],y2[i])
-        error_cuadratico_medio += (pred - y2[i])**2
+        error_cuadratico_medio += (pred[0] - y2[i])**2
 
 	if (pred[0] < 0 and y2[i] < 0) or (pred[0] > 0 and y2[i] > 0):
 		buenos+=1
