@@ -1,4 +1,3 @@
-
 import numpy as np
 from sklearn.svm import SVR
 import matplotlib.pyplot as plt
@@ -8,32 +7,100 @@ import math
 
 ###############################################################################
 sample_size = 100
+"""Predictor de los precios del oro.
+"""
+
 tok = 'uAzFhTzQixa5Mfns-min'
+
+def obtain_gold_value1(mydata):
+        """ Obtiene el valor del oro.
+           @return y Retorna el valor del oro.
+        """
+        y = []
+        for i in range(len(mydata)-1):
+                y.append( mydata[i+1][1] )
+        return y
+
+def append_age_feature(mydata):
+        """ Funcion que obtiene la data y le agrega el feature de vejez.
+            @return X Retorna la data con la vejez agregada.
+        """
+        X = []
+        for i in range(len(mydata)-1):
+                tmp = []
+                for j in range(1,len(mydata[i])):
+                        tmp.append(mydata[i][j])
+                tmp.append( i / float(len(mydata)))
+                X.append(tmp)
+        return X
+
+def delete_nan(X2):
+        """Funcion que elimina los NaN de los datos. 
+           Vamos a considerar que datos que no se encuentren son los mismos que el dia anterior.
+           En un lenguaje mas tecnico esto es 'extrapolar'.
+           Por ultimo se le agrega el valor del tiempo como 1.0 para representar que son datos del presente.
+           @param mydata2 Data obtenida de Quand
+        """
+        result = []
+        for i in range(len(X2)):
+                tmp = []
+                for j in range(1, len(X2[i])):
+                        tmp.append(X2[i][j] if not math.isnan(X2[i][j]) else 0)
+                result.append(tmp)
+        return result
+
+def delete_nan_simple(y):
+        """ Elimina los nan como la funcion anterior pero 
+            con un arreglo unidimensional
+            @param y Arreglo unidimensional posiblemente con NaN
+            @return result Arreglo unidimensional sin Nan
+        """
+        result = []
+        for i in range(len(y)):
+                result.append(y[i] if not math.isnan(y[i]) else 0)
+        return result
+
+def normalize(X2):
+        """ Funcion que normaliza los datos.
+            Los datos vamos a normalizarnos de la siguiente manera:
+            dato[i][j] / abs(dato[i][j])
+        """
+        result = []
+        for i in range(len(X2)):
+                tmp = []
+                for j in range(1, len(X2[i])):
+                        tmp.append(X2[i][j] / (abs(X2[i][j])) if X2[i][j] != 0 else 0)
+                result.append(tmp)
+        return result
+
+def simple_normalize(y):
+        result = []
+        for i in range(len(y)):
+                result.append( y[i] / abs(y[i]) if y[i] != 0 else y[i] )
+        return result
+
 
 ''' DATOS DE ENTRENAMIENTO '''
 
 mydata = Quandl.get(["BUNDESBANK/BBK01_WT5511","LBMA/SILVER.1"], trim_start="2013-01-01", trim_end="2014-11-25",returns="numpy",transformation="diff" , authtoken=tok)
 mydata2 = mydata[len(mydata)-sample_size:]
 mydata = mydata[0:len(mydata)-sample_size]
-X = []
-y = []
-for i in range(len(mydata)-1):
-	X.append( [ mydata[i][1] , mydata[i][2] , i/float(len(mydata)) ] )
-	y.append( mydata[i+1][1] )
+
+X= append_age_feature(mydata)
+X = delete_nan(X)
+y = obtain_gold_value1(mydata)
+#X = normalize(X)
+#y = simple_normalize(y)
 
 ''' DATOS DE PRUEBA '''
 
-#mydata2 = Quandl.get(["BUNDESBANK/BBK01_WT5511","LBMA/SILVER.1"], trim_start="2014-7-01", trim_end="2014-11-25",returns="numpy",transformation="diff" , authtoken=tok)
-X2 = []
-y2 = []
-
-for i in range(len(mydata2)-1):
-	X2.append( [ mydata2[i][1] if not math.isnan(mydata2[i][1]) else 0  , mydata2[i][2] if not math.isnan(mydata2[i][2]) else 0 , 1.0 ] )
-	y2.append( mydata2[i+1][1] if not math.isnan(mydata2[i+1][1]) else 0 )
-
-# Generate sample data
-#X = np.sort(5 * np.random.rand(40, 1), axis=0)
-#y = np.sin(X).ravel()
+X2 = append_age_feature(mydata2)
+X2 = delete_nan(X2)
+y2 = obtain_gold_value1(mydata2)
+y2 = delete_nan_simple(y2)
+pdb.set_trace()
+#X2 = normalize(X2)
+#y2 = simple_normalize(y2)
 
 ###############################################################################
 # Fit regression model
