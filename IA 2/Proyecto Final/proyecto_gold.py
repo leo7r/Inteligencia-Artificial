@@ -12,6 +12,31 @@ sample_size = 100
 
 tok = 'SGhcp7jtU_SqUxpRcGxg'
 
+
+class QuandGetter:
+        """Clase que sirve para obtener los datos en Quandl
+           y de esa forma usar el minimo numero de consultas.
+        """
+        def __init__(self, fuentes_, trim_start_, trim_end_, returns_, transformation_, authtoken_, arch_args_,arch_result_):
+                """Inicializador de la clase.
+                """
+                file_args = open(arch_args_,"r")
+                if file_args.read() == 'Quandl.get({0}, trim_start={1}, trim_end={2},returns={3},transformation={4} ,authtoken={5})'.format(fuentes_,trim_start_,trim_end_,returns_,transformation_,authtoken_):
+                        self.results = np.load(arch_result_+".npy")
+                else:
+                        file_args.close()
+                        file_args = open(arch_args_,"w")
+                        file_args.write('Quandl.get({0}, trim_start={1}, trim_end={2},returns={3},transformation={4} ,authtoken={5})'.format(fuentes_,trim_start_,trim_end_,returns_,transformation_,authtoken_))
+                        file_args.close()
+                        self.results = Quandl.get(fuentes_, trim_start=trim_start_, trim_end=trim_end_,returns=returns_,transformation=transformation_ ,authtoken=authtoken_)
+                        np.save(arch_result_,self.results)
+
+        def get_data(self):
+                """Obtiene la data
+                """
+                return self.results
+
+
 def obtain_gold_value1(mydata):
         """ Obtiene el valor del oro.
            @return y Retorna el valor del oro.
@@ -83,11 +108,13 @@ def simple_normalize(y):
 
 ''' DATOS DE ENTRENAMIENTO '''
 
-datos_deseados = ["BUNDESBANK/BBK01_WT5511","LBMA/SILVER.1", "JOHNMATT/PLAT.3",]# "CURRFX/USDAUD.1", "CURRFX/USDCNY.1"]
+datos_deseados = ["BUNDESBANK/BBK01_WT5511","LBMA/SILVER.1", "JOHNMATT/PLAT.3",]# "CURRFX/USDAUD.1",i "CURRFX/USDCNY.1"]
 
 print "Descargando Datos..."
 
-mydata = Quandl.get(datos_deseados, trim_start="2013-01-01", trim_end="2014-11-25",returns="numpy",transformation="diff" , authtoken=tok)
+data_getter = QuandGetter(datos_deseados,"2013-01-01","2014-11-25","numpy","diff",tok,"args_quand.txt","results_quand.txt")
+
+mydata = data_getter.get_data()
 
 ''' DATOS DE PRUEBA '''
 
@@ -101,7 +128,6 @@ X= append_age_feature(mydata)
 print len(mydata)
 X = delete_nan(X)
 y = obtain_gold_value1(mydata)
-#X = normalize(X)
 
 ''' DATOS DE PRUEBA '''
 
@@ -110,8 +136,6 @@ X2 = delete_nan(X2)
 y2 = obtain_gold_value1(mydata2)
 y2 = delete_nan_simple(y2)
 
-#pdb.set_trace()
-#X2 = normalize(X2)
 ###############################################################################
 # Fit regression model
 svr_rbf = SVR(kernel='rbf', C=1e1, gamma=1.0)

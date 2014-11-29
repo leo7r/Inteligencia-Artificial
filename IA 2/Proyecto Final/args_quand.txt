@@ -1,0 +1,1 @@
+Quandl.get(['BUNDESBANK/BBK01_WT5511', 'LBMA/SILVER.1', 'JOHNMATT/PLAT.3'], trim_start=2013-01-01, trim_end=2014-11-25,returns=numpy,transformation=diff ,authtoken=SGhcp7jtU_SqUxpRcGxg)
