@@ -1,17 +1,13 @@
 import numpy as np
-from sklearn.svm import SVR
 import matplotlib.pyplot as plt
+from sklearn import svm, datasets
 import pdb
+from random import shuffle
 import Quandl
 import math
 
-###############################################################################
-sample_size = 100
-"""Predictor de los precios del oro.
-"""
-
 tok = 'SGhcp7jtU_SqUxpRcGxg'
-
+sample_size = 100
 
 class QuandGetter:
         """Clase que sirve para obtener los datos en Quandl
@@ -36,14 +32,13 @@ class QuandGetter:
                 """
                 return self.results
 
-
 def obtain_gold_value1(mydata):
         """ Obtiene el valor del oro.
            @return y Retorna el valor del oro.
         """
         y = []
         for i in range(len(mydata)-1):
-                y.append( mydata[i+1][1] )
+        	y.append( mydata[i+1][1] )
         return y
 
 def append_age_feature(mydata):
@@ -71,7 +66,11 @@ def delete_nan(X2):
         for i in range(len(X2)):
                 tmp = []
                 for j in range(0, len(X2[i])):
-                	tmp.append(X2[i][j] if not math.isnan(X2[i][j]) else 0)
+                	if not math.isnan(X2[i][j]):
+                		tmp.append(X2[i][j])
+                	else:
+                		tmp.append(1.0)
+
                 result.append(tmp)
         return result
 
@@ -86,27 +85,6 @@ def delete_nan_simple(y):
                 result.append(y[i] if not math.isnan(y[i]) else 0)
         return result
 
-def normalize(X2):
-        """ Funcion que normaliza los datos.
-            Los datos vamos a normalizarnos de la siguiente manera:
-            dato[i][j] / abs(dato[i][j])
-        """
-        result = []
-        for i in range(len(X2)):
-                tmp = []
-                for j in range(1, len(X2[i])):
-                        tmp.append(X2[i][j] / abs(X2[i][j]) if X2[i][j] != 0 else 0.0)
-                result.append(tmp)
-        return result
-
-def simple_normalize(y):
-        result = []
-        for i in range(len(y)):
-                result.append( y[i] / float(abs(y[i])) if y[i] != 0 else y[i] )
-        return result
-
-
-''' DATOS DE ENTRENAMIENTO '''
 
 datos_deseados = [
 "NASDAQOMX/NQASPA.1", # Nasdaq
@@ -114,58 +92,41 @@ datos_deseados = [
 "YAHOO/INDEX_GDAXI.4", # DAX
 "CURRFX/AUDEUR.1", # AUD
 "CHRIS/ICE_B1.1", # Oil
+]
 
-]# "CURRFX/USDAUD.1",i "CURRFX/USDCNY.1"]
-
-print "Descargando Datos..."
-
-data_getter = QuandGetter(datos_deseados,"2012-01-01","2014-11-25","numpy","diff",tok,"args_quand.txt","results_quand.txt")
-
+data_getter = QuandGetter(datos_deseados,"2013-01-04","2014-11-25","numpy","diff",tok,"args_quand.txt","results_quand.txt")
 mydata = data_getter.get_data()
 
-''' DATOS DE PRUEBA '''
-
-print "Realizando calculos..."
-
-print len(mydata)
 mydata2 = mydata[len(mydata)-sample_size:]
 mydata = mydata[0:len(mydata)-sample_size]
 
-X= append_age_feature(mydata)
-print len(mydata)
-X = delete_nan(X)
-y = obtain_gold_value1(mydata)
 
-''' DATOS DE PRUEBA '''
+X = append_age_feature(mydata)
+X = delete_nan(X)
+y = [ 1 if x >= 0 else -1 for x in obtain_gold_value1(mydata) ]
 
 X2 = append_age_feature(mydata2)
 X2 = delete_nan(X2)
-y2 = obtain_gold_value1(mydata2)
-y2 = delete_nan_simple(y2)
+y2 = [ 1 if x >= 0 else -1 for x in obtain_gold_value1(mydata2) ]
 
-pdb.set_trace()
+#pdb.set_trace()
+### AQUI EL ALG ###
 
-###############################################################################
-# Fit regression model
-svr_rbf = SVR(kernel='rbf', C=1e1, gamma=1.0)
+C = 3.0
+h = .1  # step size in the mesh
 
-malos = 0
-buenos = 0
+rbf_svc = svm.SVC(kernel='rbf', gamma=0.1, C=C).fit(X, y)
+
 i = 0
-error_cuadratico_medio = 0
-for datos in X2:
+buenos = 0
+malos = 0
+for x in X2:
+	res = rbf_svc.predict(x)
+	print "%s | %s" % (res[0],y2[i])
 
-	y_rbf = svr_rbf.fit(X + X2[0:i] , y + y2[0:i] )
-	pred = y_rbf.predict([ datos ])
-	print "%s -> %s  |  %s" % (i,pred[0],y2[i])
-        error_cuadratico_medio += (pred[0] - y2[i])**2
-
-	if (pred[0] < 0 and y2[i] < 0) or (pred[0] > 0 and y2[i] > 0):
+	if res[0] == y2[i]:
 		buenos+=1
 	else:
 		malos+=1
-
 	i+=1
-
-error_cuadratico_medio = error_cuadratico_medio / float(i)
-print "Buenos: %s | Malos: %s | Porc: %s | Error Cuadratico Medio: %s" % ( buenos , malos , buenos/float(buenos+malos), error_cuadratico_medio )
+print "Buenos: %s | Malos: %s | Porc: %s" % ( buenos , malos , buenos/float(buenos+malos) )
