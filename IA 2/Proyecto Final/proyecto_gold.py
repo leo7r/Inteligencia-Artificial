@@ -80,7 +80,17 @@ def simple_normalize(y):
 
 ''' DATOS DE ENTRENAMIENTO '''
 
-mydata = Quandl.get(["BUNDESBANK/BBK01_WT5511","LBMA/SILVER.1", "JOHNMATT/PLAT.3", "CURRFX/USDAUD.1", "CURRFX/USDCNY.1"], trim_start="2013-01-01", trim_end="2014-6-30",returns="numpy",transformation="diff" , authtoken=tok)
+datos_deseados = ["BUNDESBANK/BBK01_WT5511","LBMA/SILVER.1", "JOHNMATT/PLAT.3", "CURRFX/USDAUD.1", "CURRFX/USDCNY.1"]
+
+print "Descargando Datos..."
+
+mydata = Quandl.get(datos_deseados, trim_start="2013-01-01", trim_end="2014-6-30",returns="numpy",transformation="diff" , authtoken=tok)
+
+''' DATOS DE PRUEBA '''
+
+mydata2 = Quandl.get(datos_deseados, trim_start="2014-7-01", trim_end="2014-11-25",returns="numpy",transformation="diff" , authtoken=tok)
+
+print "Realizando calculos..."
 
 X= append_age_feature(mydata)
 X = delete_nan(X)
@@ -90,9 +100,6 @@ y = simple_normalize(y)
 
 
 
-''' DATOS DE PRUEBA '''
-
-mydata2 = Quandl.get(["BUNDESBANK/BBK01_WT5511","LBMA/SILVER.1", "JOHNMATT/PLAT.3", "CURRFX/USDAUD.1","CURRFX/USDCNY.1"], trim_start="2014-7-01", trim_end="2014-11-25",returns="numpy",transformation="diff" , authtoken=tok)
 
 X2 = append_age_feature(mydata2)
 X2 = delete_nan(X2)
