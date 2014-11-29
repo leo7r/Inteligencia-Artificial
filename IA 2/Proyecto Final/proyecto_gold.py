@@ -8,7 +8,7 @@ import pdb
 """Predictor de los precios del oro.
 """
 
-tok = 'uAzFhTzQixa5Mfns-min'
+tok = 'SGhcp7jtU_SqUxpRcGxg'
 
 def obtain_gold_value1(mydata):
         """ Obtiene el valor del oro.
@@ -67,14 +67,14 @@ def normalize(X2):
         for i in range(len(X2)):
                 tmp = []
                 for j in range(1, len(X2[i])):
-                        tmp.append(X2[i][j] / (abs(X2[i][j])) if X2[i][j] != 0 else 0)
+                        tmp.append(X2[i][j] / abs(X2[i][j]) if X2[i][j] != 0 else 0.0)
                 result.append(tmp)
         return result
 
 def simple_normalize(y):
         result = []
         for i in range(len(y)):
-                result.append( y[i] / abs(y[i]) if y[i] != 0 else y[i] )
+                result.append( y[i] / float(abs(y[i])) if y[i] != 0 else y[i] )
         return result
 
 
@@ -91,15 +91,13 @@ mydata = Quandl.get(datos_deseados, trim_start="2013-01-01", trim_end="2014-6-30
 mydata2 = Quandl.get(datos_deseados, trim_start="2014-7-01", trim_end="2014-11-25",returns="numpy",transformation="diff" , authtoken=tok)
 
 print "Realizando calculos..."
-
+print len(mydata)
 X= append_age_feature(mydata)
+print len(mydata)
 X = delete_nan(X)
 y = obtain_gold_value1(mydata)
 X = normalize(X)
-y = simple_normalize(y)
-
-
-
+print X
 
 X2 = append_age_feature(mydata2)
 X2 = delete_nan(X2)
@@ -107,7 +105,6 @@ y2 = obtain_gold_value1(mydata2)
 y2 = delete_nan_simple(y2)
 
 X2 = normalize(X2)
-y2 = simple_normalize(y2)
 
 ###############################################################################
 # Fit regression model
@@ -116,11 +113,13 @@ svr_rbf = SVR(kernel='rbf', C=1e1, gamma=1.0)
 malos = 0
 buenos = 0
 i = 0
+error_cuadratico_medio = 0
 for datos in X2:
 
 	y_rbf = svr_rbf.fit(X + X2[0:i] , y + y2[0:i] )
 	pred = y_rbf.predict([ datos ])
 	print "%s -> %s  |  %s" % (i,pred[0],y2[i])
+        error_cuadratico_medio += (pred - y2[i])**2
 
 	if (pred[0] < 0 and y2[i] < 0) or (pred[0] > 0 and y2[i] > 0):
 		buenos+=1
@@ -129,4 +128,5 @@ for datos in X2:
 
 	i+=1
 
-print "Buenos: %s | Malos: %s | Porc: %s" % ( buenos , malos , buenos/float(buenos+malos) )
+error_cuadratico_medio = error_cuadratico_medio / float(i)
+print "Buenos: %s | Malos: %s | Porc: %s | Error Cuadratico Medio: %s" % ( buenos , malos , buenos/float(buenos+malos), error_cuadratico_medio )
