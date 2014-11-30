@@ -105,6 +105,31 @@ def simple_normalize(y):
                 result.append( y[i] / float(abs(y[i])) if y[i] != 0 else y[i] )
         return result
 
+def predict(svr, X, y, X2, y2):
+        """Realiza predicciones con el svr dado.
+           @param svr 
+        """
+        malos = 0
+        buenos = 0
+        i = 0
+        error_cuadratico_medio = 0
+        for datos in X2:
+
+                y_rbf = svr.fit(X + X2[0:i] , y + y2[0:i] )
+                pred = y_rbf.predict([ datos ])
+                print "%s -> %s  |  %s" % (i,pred[0],y2[i])
+                error_cuadratico_medio += (pred[0] - y2[i])**2
+
+                if (pred[0] < 0 and y2[i] < 0) or (pred[0] > 0 and y2[i] > 0):
+                        buenos+=1
+                else:
+                        malos+=1
+
+                i+=1
+
+        error_cuadratico_medio = error_cuadratico_medio / float(i)
+        print "Buenos: %s | Malos: %s | Porc: %s | Error Cuadratico Medio: %s" % ( buenos , malos , buenos/float(buenos+malos), error_cuadratico_medio )
+
 
 ''' DATOS DE ENTRENAMIENTO '''
 
@@ -122,17 +147,16 @@ print "Descargando Datos..."
 data_getter = QuandGetter(datos_deseados,"2012-01-01","2014-11-25","numpy","diff",tok,"args_quand.txt","results_quand.txt")
 
 mydata = data_getter.get_data()
+print mydata
 
 ''' DATOS DE PRUEBA '''
 
 print "Realizando calculos..."
 
-print len(mydata)
 mydata2 = mydata[len(mydata)-sample_size:]
 mydata = mydata[0:len(mydata)-sample_size]
 
 X= append_age_feature(mydata)
-print len(mydata)
 X = delete_nan(X)
 y = obtain_gold_value1(mydata)
 
@@ -143,29 +167,10 @@ X2 = delete_nan(X2)
 y2 = obtain_gold_value1(mydata2)
 y2 = delete_nan_simple(y2)
 
-pdb.set_trace()
 
 ###############################################################################
 # Fit regression model
-svr_rbf = SVR(kernel='rbf', C=1e1, gamma=1.0)
 
-malos = 0
-buenos = 0
-i = 0
-error_cuadratico_medio = 0
-for datos in X2:
+svr_rbf = SVR(kernel='rbf', C=1.04, gamma=2**-9)
+predict(svr_rbf,X,y,X2,y2)
 
-	y_rbf = svr_rbf.fit(X + X2[0:i] , y + y2[0:i] )
-	pred = y_rbf.predict([ datos ])
-	print "%s -> %s  |  %s" % (i,pred[0],y2[i])
-        error_cuadratico_medio += (pred[0] - y2[i])**2
-
-	if (pred[0] < 0 and y2[i] < 0) or (pred[0] > 0 and y2[i] > 0):
-		buenos+=1
-	else:
-		malos+=1
-
-	i+=1
-
-error_cuadratico_medio = error_cuadratico_medio / float(i)
-print "Buenos: %s | Malos: %s | Porc: %s | Error Cuadratico Medio: %s" % ( buenos , malos , buenos/float(buenos+malos), error_cuadratico_medio )

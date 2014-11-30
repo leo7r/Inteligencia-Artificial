@@ -1,1 +1,1 @@
-Quandl.get(['NASDAQOMX/NQASPA.1', 'YAHOO/INDEX_FTSE.4', 'YAHOO/INDEX_GDAXI.4', 'CURRFX/AUDEUR.1', 'CHRIS/ICE_B1.1'], trim_start=2013-01-04, trim_end=2014-11-25,returns=numpy,transformation=diff ,authtoken=SGhcp7jtU_SqUxpRcGxg)
+Quandl.get(['NASDAQOMX/NQASPA.1', 'YAHOO/INDEX_FTSE.4', 'YAHOO/INDEX_GDAXI.4', 'CURRFX/AUDEUR.1', 'CHRIS/ICE_B1.1'], trim_start=2012-01-01, trim_end=2014-11-25,returns=numpy,transformation=diff ,authtoken=SGhcp7jtU_SqUxpRcGxg)
