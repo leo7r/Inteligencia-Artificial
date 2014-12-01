@@ -56,7 +56,7 @@ def append_age_feature(mydata):
                 for j in range(1,len(mydata[i])):
                 	tmp.append(mydata[i][j])
                 
-                #tmp.append( i / float(len(mydata)))
+                tmp.append( i / float(len(mydata)))
                 X.append(tmp)
         return X
 
@@ -86,24 +86,24 @@ def delete_nan_simple(y):
                 result.append(y[i] if not math.isnan(y[i]) else 0)
         return result
 
-def normalize(X2):
+def normalize(data):
         """ Funcion que normaliza los datos.
-            Los datos vamos a normalizarnos de la siguiente manera:
-            dato[i][j] / abs(dato[i][j])
+            La normalizacion se hara de la siguiente manera:
+            N(x(t)) = (x(t) - x(t-d))/x(t-d)
+            Donde t es dia actual y d es el dia anterior.
+            @param data Datos obtenidos para normalizar
+            @return ndata Datos normalizados.
         """
-        result = []
-        for i in range(len(X2)):
+        ndata = []
+        ndata.append(data[0])
+        for i in range(1,len(data)):
                 tmp = []
-                for j in range(1, len(X2[i])):
-                        tmp.append(X2[i][j] / abs(X2[i][j]) if X2[i][j] != 0 else 0.0)
-                result.append(tmp)
-        return result
+                tmp.append(data[i][0])
+                for j in range(1,len(data[0])):
+                        tmp.append((data[i][j]-data[i-1][j])/float(abs(data[i-1][j])))
+                ndata.append(tmp)
+        return ndata
 
-def simple_normalize(y):
-        result = []
-        for i in range(len(y)):
-                result.append( y[i] / float(abs(y[i])) if y[i] != 0 else y[i] )
-        return result
 
 def predict(svr, X, y, X2, y2):
         """Realiza predicciones con el svr dado.
@@ -131,46 +131,65 @@ def predict(svr, X, y, X2, y2):
         print "Buenos: %s | Malos: %s | Porc: %s | Error Cuadratico Medio: %s" % ( buenos , malos , buenos/float(buenos+malos), error_cuadratico_medio )
 
 
-''' DATOS DE ENTRENAMIENTO '''
 
 datos_deseados = [
-"NASDAQOMX/NQASPA.1", # Nasdaq
-"YAHOO/INDEX_FTSE.4", # FTSE 100
-"YAHOO/INDEX_GDAXI.4", # DAX
-"CURRFX/AUDEUR.1", # AUD
-"CHRIS/ICE_B1.1", # Oil
-
-]# "CURRFX/USDAUD.1",i "CURRFX/USDCNY.1"]
+"BUNDESBANK/BBK01_WT5511.1", #GOLD Bundesbank. Este es el que queremos predecir.
+"OFDP/GOLD_2.1", #LBMA London Price Gold PM
+"WSJ/AU_EIB.1", #Gold Engelhard industrial bulliard
+"WSJ/AU_EFP",   #Gol Engelhard fabricated product
+"OFDP/GOLD_1", #Gold LBMA London Price AM
+"WSJ/AU_HHB", #Gold Handy and Harman base price
+"WSJ/AU_HHF", #Gold Handy and Harman fabricated price
+"WSJ/AU_ZAR", #Krugerrand
+"WSJ/AU_MPL", #Maple leaf
+"WSJ/AU_EGL", #American Eagle
+"WSJ/AU_MXP", #Mexican Pesos (Hijole)
+"WSJ/AU_CRN", #Austria Crown
+"WSJ/AU_PHL", #Austria Phil
+"WGC/GOLD_DAILY_USD", #WORLD GOLD COUNCIL
+"WORLDBANK/WLD_GOLD", #WORLD BANK
+"OFDP/SILVER_5.1",    #London Silver
+"WSJ/AG_EIB", #Silver Engelhard industrial bullion
+"WSJ/AG_EFP", #Silver Engelhard Fabricated Products
+"WSJ/AG_HHB", #Silver Engelhard Base
+"WSJ/AG_HHF" #Silver Engelhard fabric base
+]
 
 print "Descargando Datos..."
 
 data_getter = QuandGetter(datos_deseados,"2012-01-01","2014-11-25","numpy","diff",tok,"args_quand.txt","results_quand.txt")
 
 mydata = data_getter.get_data()
-print mydata
 
-''' DATOS DE PRUEBA '''
+print mydata
 
 print "Realizando calculos..."
 
 mydata2 = mydata[len(mydata)-sample_size:]
 mydata = mydata[0:len(mydata)-sample_size]
 
+y = obtain_gold_value1(mydata) 
+y2 = obtain_gold_value1(mydata2)
+y2 = delete_nan_simple(y2)
+
+
 X= append_age_feature(mydata)
 X = delete_nan(X)
-y = obtain_gold_value1(mydata)
 
-''' DATOS DE PRUEBA '''
 
 X2 = append_age_feature(mydata2)
 X2 = delete_nan(X2)
-y2 = obtain_gold_value1(mydata2)
-y2 = delete_nan_simple(y2)
 
 
 ###############################################################################
 # Fit regression model
 
-svr_rbf = SVR(kernel='rbf', C=1.04, gamma=2**-9)
-predict(svr_rbf,X,y,X2,y2)
+#C: 6.6
+#gamma 2**-11
+for c in np.arange(4.4,8.4,0.1):
+        for g in range(-16,-9):
+                print "C: " + str(c)
+                print "gamma: 2**" +str(g)
+                svr_rbf = SVR(kernel='rbf', C=c, gamma=2**g)
+                predict(svr_rbf,X,y,X2,y2)
 
