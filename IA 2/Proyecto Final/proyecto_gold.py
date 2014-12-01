@@ -1,3 +1,13 @@
+"""Predictor de los precios del oro.
+   Se necesitan las siguientes librerias para ejecutarlo:
+   Quandl
+   numpy
+   Scikit-learn
+   Una vez instaladas las librerias tan solo es necesario realizar:
+   python proyecto_gold.py
+"""
+print(__doc__)
+
 import numpy as np
 from sklearn.svm import SVR
 import matplotlib.pyplot as plt
@@ -5,20 +15,28 @@ import pdb
 import Quandl
 import math
 
-###############################################################################
 sample_size = 100
-"""Predictor de los precios del oro.
-"""
+
 
 tok = 'SGhcp7jtU_SqUxpRcGxg'
 
-
+#Clases
 class QuandGetter:
         """Clase que sirve para obtener los datos en Quandl
            y de esa forma usar el minimo numero de consultas.
+           @attr results Datos obtenidos
         """
         def __init__(self, fuentes_, trim_start_, trim_end_, returns_, transformation_, authtoken_, arch_args_,arch_result_):
                 """Inicializador de la clase.
+                   Utiliza los mismos argumentos que Quandl.get, revisar eso.
+                   @param fuentes_ Datos a buscar de Quandl
+                   @param trim_start_ Cuando debe empezar a buscar los datos
+                   @param trim_end_ Cuando debe terminar de buscar los datos
+                   @param returns_ El tipo que debe retornar QuandGetter 
+                   @param transformation_ La transformacion que se le debe aplicar a los datos.
+                   @param authtoken_ El token del autor de Quandl. Ese es Ruben. Mas de 500 no pueden hacerse.
+                   @param arch_args_ Nombre del archivo de argumentos
+                   @param arch_results_ Nombre del archivo que debe guardarse.
                 """
                 file_args = open(arch_args_,"r")
                 if file_args.read() == 'Quandl.get({0}, trim_start={1}, trim_end={2},returns={3},transformation={4} ,authtoken={5})'.format(fuentes_,trim_start_,trim_end_,returns_,transformation_,authtoken_):
@@ -33,9 +51,12 @@ class QuandGetter:
 
         def get_data(self):
                 """Obtiene la data
+                   @return self.results
                 """
                 return self.results
 
+
+#Funciones auxiliares
 
 def obtain_gold_value1(mydata):
         """ Obtiene el valor del oro.
@@ -48,6 +69,7 @@ def obtain_gold_value1(mydata):
 
 def append_age_feature(mydata):
         """ Funcion que obtiene la data y le agrega el feature de vejez.
+            @param mydata Datos a agregarle la vejez.
             @return X Retorna la data con la vejez agregada.
         """
         X = []
@@ -107,8 +129,15 @@ def normalize(data):
 
 def predict(svr, X, y, X2, y2):
         """Realiza predicciones con el svr dado.
-           @param svr 
+           @param svr Tipo de svr a utilizar
+           @param X Datos de entrenamiento
+           @param y Datos de target para entrenamiento
+           @param X2 Datos de prueba
+           @param y2 Datos de target de prueba
+           @return predicciones, target
         """
+        predicciones = []
+        targets = []
         malos = 0
         buenos = 0
         i = 0
@@ -117,21 +146,24 @@ def predict(svr, X, y, X2, y2):
 
                 y_rbf = svr.fit(X + X2[0:i] , y + y2[0:i] )
                 pred = y_rbf.predict([ datos ])
+                predicciones.append(pred[0])
+                targets.append(y2[i])
                 print "%s -> %s  |  %s" % (i,pred[0],y2[i])
                 error_cuadratico_medio += (pred[0] - y2[i])**2
 
                 if (pred[0] < 0 and y2[i] < 0) or (pred[0] > 0 and y2[i] > 0):
                         buenos+=1
-                else:
+                elif (y2[i] != 0): 
                         malos+=1
 
                 i+=1
 
         error_cuadratico_medio = error_cuadratico_medio / float(i)
         print "Buenos: %s | Malos: %s | Porc: %s | Error Cuadratico Medio: %s" % ( buenos , malos , buenos/float(buenos+malos), error_cuadratico_medio )
+        return predicciones,targets
 
 
-
+#Datos obtenidos del Quandl
 datos_deseados = [
 "BUNDESBANK/BBK01_WT5511.1", #GOLD Bundesbank. Este es el que queremos predecir.
 "OFDP/GOLD_2.1", #LBMA London Price Gold PM
@@ -152,16 +184,26 @@ datos_deseados = [
 "WSJ/AG_EIB", #Silver Engelhard industrial bullion
 "WSJ/AG_EFP", #Silver Engelhard Fabricated Products
 "WSJ/AG_HHB", #Silver Engelhard Base
-"WSJ/AG_HHF" #Silver Engelhard fabric base
+"WSJ/AG_HHF", #Silver Engelhard fabric base
+"WSJ/PL_MKT", #Free market Platinum
+"WSJ/PL_EIB", #Platinum Engelhard industrial bullion
+"WSJ/PL_EFP", #Platinum Engelhard fabricated
+"JOHNMATT/PLAT.3", #John Matt Platinum 
+"DOE/RWTC", #WTI Crude Oil Spot Price
+"DOE/RBRTE", #Europe Brent Crude Oil Spot Price
+"OPEC/ORB",  #OPEC Base Price
+"CURRFX/USDAUD.1", #USD/Australian dollars
+"CURRFX/USDCNY.1",  #USD/YEN
+"CURRFX/USDEUR.1"  #USD/EUR
 ]
+
+#Main
 
 print "Descargando Datos..."
 
 data_getter = QuandGetter(datos_deseados,"2012-01-01","2014-11-25","numpy","diff",tok,"args_quand.txt","results_quand.txt")
 
 mydata = data_getter.get_data()
-
-print mydata
 
 print "Realizando calculos..."
 
@@ -180,16 +222,15 @@ X = delete_nan(X)
 X2 = append_age_feature(mydata2)
 X2 = delete_nan(X2)
 
+#El mejor hasta ahora es:
+#C: 7.5
+#gamma: 2**-13
 
-###############################################################################
-# Fit regression model
+svr_rbf = SVR(kernel='rbf', C=7.5, gamma=2**-13)
+predicciones, target = predict(svr_rbf,X,y,X2,y2)
 
-#C: 6.6
-#gamma 2**-11
-for c in np.arange(4.4,8.4,0.1):
-        for g in range(-16,-9):
-                print "C: " + str(c)
-                print "gamma: 2**" +str(g)
-                svr_rbf = SVR(kernel='rbf', C=c, gamma=2**g)
-                predict(svr_rbf,X,y,X2,y2)
-
+plt.plot(predicciones,color="red")
+plt.ylabel("Diferencia del precio del oro")
+plt.xlabel("Dias")
+plt.plot(target)
+plt.show()
